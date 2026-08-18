@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ChevronRightIcon, ChevronLeftIcon } from '../icons'
-import { Sparkles as SparklesIcon } from 'lucide-react'
+import { Sparkles, ChevronRight, ChevronLeft, Shield, CheckCircle2, Lock, Cpu, Bot } from 'lucide-react'
 import MetricBadge from '../ui/MetricBadge'
 
 interface AgentStatusItem {
@@ -157,97 +156,130 @@ export default function RightAIPanel() {
 
   return (
     <aside
-      className={`bg-[#0b0f19]/80 border-l border-slate-800 flex flex-col justify-between transition-all duration-300 relative z-[30] backdrop-blur-xl shadow-2xl ${
-        collapsed ? 'w-16' : 'w-96'
+      className={`bg-[#0b0f19]/95 border-l border-slate-800/80 flex flex-col justify-between transition-all duration-300 relative z-[30] backdrop-blur-xl shadow-2xl shrink-0 h-full ${
+        collapsed ? 'w-14' : 'w-80 xl:w-92'
       }`}
     >
       {/* Header */}
-      <div className="flex h-16 items-center justify-between px-4 border-b border-slate-800 shrink-0">
+      <div className="flex h-16 items-center justify-between px-3.5 border-b border-slate-800 shrink-0">
         <div className="flex items-center space-x-2.5 overflow-hidden">
           <div className="h-8 w-8 rounded-xl bg-purple-950/60 border border-purple-800/40 flex items-center justify-center text-purple-400 shrink-0">
-            <SparklesIcon className="h-4 w-4 animate-pulse" />
+            <Sparkles className="h-4 w-4 animate-pulse" />
           </div>
           {!collapsed && (
-            <div>
-              <h3 className="text-xs font-extrabold text-white tracking-wider uppercase font-mono-data">Multi-Agent AI Engine</h3>
-              <p className="text-[10px] text-purple-400 font-mono-data">Gemini 2.5 Pro • DEMO SCENARIO</p>
+            <div className="min-w-0">
+              <h3 className="text-xs font-extrabold text-white tracking-wider uppercase font-mono truncate">AI Advisory Engine</h3>
+              <p className="text-[10px] text-purple-400 font-mono truncate">LangGraph • AI-DERIVED</p>
             </div>
           )}
         </div>
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-800 bg-[#050816] text-slate-400 hover:text-white"
+          title={collapsed ? "Expand AI Panel" : "Collapse AI Panel"}
+          className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-800 bg-[#050816] text-slate-400 hover:text-white transition-all shrink-0 cursor-pointer"
         >
-          {collapsed ? <ChevronLeftIcon className="h-4 w-4" /> : <ChevronRightIcon className="h-4 w-4" />}
+          {collapsed ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
         </button>
       </div>
 
-      {!collapsed && (
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {collapsed ? (
+        /* Collapsed Vertical Quick Strip */
+        <div className="flex-1 flex flex-col items-center py-4 space-y-4">
+          <button
+            onClick={() => setCollapsed(false)}
+            className="p-2 rounded-lg bg-purple-950/40 border border-purple-800/40 text-purple-400 hover:text-white transition-all"
+            title="Expand Multi-Agent Cluster"
+          >
+            <Bot className="w-4 h-4" />
+          </button>
+          <div className="writing-mode-vertical text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest rotate-180 select-none">
+            AI DECISION SUPPORT
+          </div>
+        </div>
+      ) : (
+        /* Expanded Full Agent Telemetry Panel */
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 text-left">
+          
           {/* Mandatory Human Approval Banner */}
-          <div className="rounded-xl border border-amber-800/40 bg-amber-950/30 p-3 text-xs space-y-1">
+          <div className="rounded-xl border border-amber-800/50 bg-amber-950/30 p-3 text-xs space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-extrabold text-amber-400 uppercase tracking-wider text-[10px] font-mono-data">Safety Guarantee</span>
-              <MetricBadge value="Mandatory Officer Approval" type="high" />
+              <span className="font-extrabold text-amber-400 uppercase tracking-wider text-[10px] font-mono flex items-center space-x-1">
+                <Shield className="w-3.5 h-3.5" />
+                <span>SAFETY PROTOCOL</span>
+              </span>
+              <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-900/60 border border-amber-700 text-amber-300">
+                HUMAN-IN-THE-LOOP
+              </span>
             </div>
-            <p className="text-[11px] text-amber-200/80 leading-relaxed">
-              AI recommendations require explicit command sign-off before dispatching field units.
+            <div className="text-[10px] font-mono font-bold text-slate-300 flex items-center justify-between pt-1 border-t border-amber-900/30">
+              <span className="text-purple-300">AI RECOMMENDS</span>
+              <span className="text-slate-500">➔</span>
+              <span className="text-amber-300">HUMAN APPROVES</span>
+              <span className="text-slate-500">➔</span>
+              <span className="text-emerald-400">DISPATCH</span>
+            </div>
+            <p className="text-[10px] text-amber-200/70 leading-normal">
+              Autonomous dispatch is blocked. Operator sign-off is mandatory.
             </p>
           </div>
 
           {/* Active Agent Cluster Selection */}
           <div className="space-y-2">
-            <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono-data">
-              Active Agent Cluster ({agents.length})
-            </h4>
+            <div className="flex items-center justify-between">
+              <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono">
+                Active Agents ({agents.length})
+              </h4>
+              <span className="text-[9px] font-mono text-purple-400">Gemini 2.5 Pro</span>
+            </div>
 
             <div className="grid grid-cols-2 gap-1.5 text-[10px]">
               {agents.map((ag) => (
                 <button
                   key={ag.name}
                   onClick={() => setSelectedAgent(ag.name)}
-                  className={`px-2.5 py-1.5 h-8 rounded-lg border text-left truncate transition-all flex items-center min-w-0 ${
+                  className={`px-2 py-1.5 rounded-lg border text-left truncate transition-all flex items-center min-w-0 ${
                     selectedAgent === ag.name
-                      ? 'bg-purple-950/50 border-purple-500 text-purple-200'
+                      ? 'bg-purple-950/60 border-purple-500 text-purple-200 shadow-sm'
                       : 'bg-slate-950/40 border-slate-900 text-slate-400 hover:text-white'
                   }`}
                 >
-                  <span className="truncate w-full block">{ag.name}</span>
+                  <span className="truncate w-full block font-semibold">{ag.name}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Expanded Selected Agent Telemetry Panel */}
+          {/* Selected Agent Detailed Reasoning Card */}
           {activeAgent && (
-            <div className="p-4 rounded-xl border border-purple-500/30 bg-purple-950/10 space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-900 pb-2">
-                <h5 className="text-xs font-bold text-white truncate max-w-[180px]">{activeAgent.name}</h5>
-                <span className="text-[9px] font-mono text-purple-400 font-bold bg-purple-950 border border-purple-900/40 px-1.5 py-0.5 rounded shrink-0 ml-2">
+            <div className="p-3.5 rounded-xl border border-purple-500/30 bg-purple-950/15 space-y-2.5">
+              <div className="flex items-center justify-between border-b border-purple-900/40 pb-2">
+                <h5 className="text-xs font-bold text-white truncate max-w-[170px]">{activeAgent.name}</h5>
+                <span className="text-[9px] font-mono text-purple-400 font-bold bg-purple-950 border border-purple-900/40 px-1.5 py-0.5 rounded shrink-0">
                   {activeAgent.confidence}% Conf
                 </span>
               </div>
 
-              <div className="space-y-3 text-[11px] leading-relaxed break-words whitespace-normal text-left">
+              <div className="space-y-2.5 text-[11px] leading-relaxed">
                 <div>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block font-mono">Current Task</span>
-                  <p className="text-slate-300 font-mono text-[11px] break-words whitespace-normal leading-normal">{activeAgent.task}</p>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block font-mono">Assigned Task</span>
+                  <p className="text-slate-300 font-mono text-[10.5px] leading-normal">{activeAgent.task}</p>
                 </div>
                 <div>
                   <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block font-mono">Explainable Reasoning</span>
-                  <p className="text-slate-300 text-[11px] break-words whitespace-normal leading-normal">{activeAgent.reasoning}</p>
+                  <p className="text-slate-300 text-[10.5px] leading-normal">{activeAgent.reasoning}</p>
                 </div>
                 <div>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block font-mono">Government SOP Used</span>
-                  <p className="text-emerald-400 font-mono text-[11px] break-words whitespace-normal leading-normal">{activeAgent.sopUsed}</p>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block font-mono">Government SOP Reference</span>
+                  <p className="text-emerald-400 font-mono text-[10px] leading-normal">{activeAgent.sopUsed}</p>
                 </div>
                 <div>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block font-mono">MCP Tool Call</span>
-                  <code className="text-blue-400 font-mono text-[10px] block bg-slate-950 p-1.5 rounded border border-slate-900 break-all overflow-x-auto">{activeAgent.toolCall}</code>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block font-mono">Tool / Execution Hook</span>
+                  <code className="text-sky-400 font-mono text-[9.5px] block bg-slate-950 p-1.5 rounded border border-slate-900 break-all">{activeAgent.toolCall}</code>
                 </div>
               </div>
             </div>
           )}
+
         </div>
       )}
     </aside>

@@ -169,7 +169,18 @@ export default function SensorWidget() {
               >
                 <div className="flex items-center justify-between w-full">
                   <div className="min-w-0 flex-1 pr-2">
-                    <h5 className="text-xs font-bold text-white truncate">{node.name}</h5>
+                    <div className="flex items-center space-x-1.5 truncate">
+                      <h5 className="text-xs font-bold text-white truncate">{node.name}</h5>
+                      {node.last_telemetry?.source_type === 'REAL_IOT' || node.id === '847ac10b-58cc-4372-a567-0e02b2c3d486' ? (
+                        <span className="text-[8px] font-bold px-1.5 py-0.2 rounded bg-emerald-950 border border-emerald-700 text-emerald-300 font-mono shrink-0">
+                          REAL IoT
+                        </span>
+                      ) : (
+                        <span className="text-[8px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-slate-800 text-slate-500 shrink-0">
+                          SIMULATED
+                        </span>
+                      )}
+                    </div>
                     <p className="text-[10px] text-slate-400 mt-0.5 font-mono">
                       Telemetry: <span className="text-blue-400 font-bold">{getReadingText(node)}</span>
                     </p>

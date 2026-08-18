@@ -466,7 +466,7 @@ export default function LoginPage() {
             {/* TAB SELECTOR: Premium slider indicator using layoutId */}
             <div className="grid grid-cols-3 gap-1 p-1 mb-8 rounded-xl bg-slate-950/60 border border-slate-900 relative">
               {(['nic-portal', 'sso-gateway', 'smart-card'] as LoginTab[]).map((tab) => {
-                const label = tab === 'nic-portal' ? 'NIC Secure' : tab === 'sso-gateway' ? 'Aadhaar SSO' : 'Staff Card'
+                const label = tab === 'nic-portal' ? 'Officer Login' : tab === 'sso-gateway' ? 'SSO Gateway (Ready)' : 'Token (Demo)'
                 const isActive = activeTab === tab
                 return (
                   <button
@@ -475,7 +475,7 @@ export default function LoginPage() {
                       setActiveTab(tab)
                       setErrorMsg(null)
                     }}
-                    className={`relative py-2.5 text-xs font-semibold uppercase tracking-wider rounded-lg transition-colors z-10 ${
+                    className={`relative py-2.5 text-[11px] font-semibold uppercase tracking-wider rounded-lg transition-colors z-10 ${
                       isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
@@ -794,7 +794,7 @@ export default function LoginPage() {
           {/* Secure compliance disclaimer banner */}
           <div className="flex items-center justify-center space-x-2.5 text-[10px] text-slate-500 text-center font-mono">
             <Shield className="w-4.5 h-4.5 text-slate-600" />
-            <span>FIPS-140-3 Compliant • Secure SSL Channel Node Handshake</span>
+            <span>DEMO AUTH CONSOLE • PRODUCTION INTEGRATION READY • TLS 1.3 SECURE</span>
           </div>
 
         </div>

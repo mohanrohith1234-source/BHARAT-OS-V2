@@ -106,13 +106,18 @@ export default function DigitalTwinPage() {
     }
   })
 
-  const nodeMarkers: MapMarker[] = nodes.map(node => ({
-    id: `node-${node.id}`,
-    position: [node.latitude, node.longitude] as [number, number],
-    title: node.type === 'weather' ? `⛈️ [Weather Station] ${node.name}` : `🌊 [IoT Runoff Gauge] ${node.name}`,
-    description: `Hydrological Sensor Node • Status: ${node.status} • Value: ${node.last_telemetry || 'N/A'}`,
-    category: node.status === 'critical' ? 'critical' as const : node.status === 'warning' ? 'high' as const : 'info' as const
-  }))
+  const nodeMarkers: MapMarker[] = nodes.map(node => {
+    const isRealIoT = node.id === '847ac10b-58cc-4372-a567-0e02b2c3d486' || node.name?.toLowerCase().includes('beach road')
+    return {
+      id: `node-${node.id}`,
+      position: [node.latitude, node.longitude] as [number, number],
+      title: isRealIoT 
+        ? `⚡ [REAL IoT] ${node.name}` 
+        : (node.type === 'weather' ? `⛈️ [OPEN DATA] ${node.name}` : `🌊 [SIMULATED] ${node.name}`),
+      description: `Hydrological Sensor Node • Status: ${node.status} • Source: ${isRealIoT ? 'REAL_IOT' : 'SIMULATED'} • Value: ${typeof node.last_telemetry === 'object' ? JSON.stringify(node.last_telemetry) : (node.last_telemetry || 'N/A')}`,
+      category: node.status === 'critical' ? 'critical' as const : node.status === 'warning' ? 'high' as const : 'info' as const
+    }
+  })
 
   const allMarkers = [
     ...incidentMarkers,
