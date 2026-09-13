@@ -21,7 +21,7 @@ import {
 } from 'lucide-react'
 
 export default function TrafficOperationsPage() {
-  const { trafficCorridors, resources, incident, updateCorridorStatus } = useVizagDataStore()
+  const { trafficCorridors, resources, incident, demoStage, simulationTime, updateCorridorStatus } = useVizagDataStore()
   const [selectedCorridorId, setSelectedCorridorId] = useState('beach-road')
   const [currentTime, setCurrentTime] = useState('')
   const [signalOverrideActive, setSignalOverrideActive] = useState(false)
@@ -36,39 +36,46 @@ export default function TrafficOperationsPage() {
     return () => clearInterval(timer)
   }, [])
 
+  // Dynamic moving map markers from useVizagDataStore
   const mapMarkers: MapMarker[] = [
     {
       id: 'beach-block',
       position: [17.7210, 83.3180],
-      title: 'Beach Road Inundation Barrier',
-      description: 'Sector 4 Sump flooded. Traffic diversion in effect.',
+      title: '🚨 Beach Road Inundation Barrier (Sector 4)',
+      description: `Sector 4 Sump flooded (${incident.waterDepthCm}cm). Traffic diversion in effect. Status: ${incident.status}`,
       category: 'critical'
     },
     {
       id: 'nh16-node',
       position: [17.7400, 83.3100],
-      title: 'NH16 Detour Entry Junction',
-      description: 'Signage illuminated. Evacuation & detour open.',
+      title: '🔄 NH16 Detour Entry Junction',
+      description: 'Signage illuminated. Evacuation & detour route open.',
       category: 'low'
     },
     {
       id: 'siripuram-junction',
       position: [17.7202, 83.3156],
-      title: 'Siripuram Circle',
-      description: 'Transit bottleneck. Signal override ready.',
+      title: '🚦 Siripuram Circle Signal Node',
+      description: `Transit bottleneck. Signal Override: ${signalOverrideActive ? 'GREEN WAVE ENGAGED' : 'NORMAL CYCLE'}`,
+      category: 'high'
+    },
+    {
+      id: 'police-p305',
+      position: resources['P-305']?.coords || [17.7050, 83.2850],
+      title: `🚓 Police Patrol P-305 (${resources['P-305']?.callSign})`,
+      description: `Status: ${resources['P-305']?.status.toUpperCase()} • Location: ${resources['P-305']?.location} • Speed: ${resources['P-305']?.speed}`,
       category: 'high'
     },
     {
       id: 'ambulance-a21',
-      position: [17.7180, 83.3120],
-      title: 'Ambulance A-21 (Green Corridor Active)',
-      description: 'Transit to Beach Road. Speed: 42 km/h',
+      position: resources['A-21']?.coords || [17.7120, 83.3050],
+      title: `🚑 Ambulance A-21 (${resources['A-21']?.callSign})`,
+      description: `Transit to Beach Road via Ram Nagar. Speed: ${resources['A-21']?.speed} • Status: ${resources['A-21']?.status.toUpperCase()}`,
       category: 'high'
     }
   ]
 
   const corridorsList = Object.values(trafficCorridors)
-  const selectedCorridor = trafficCorridors[selectedCorridorId] || corridorsList[0]
 
   const toggleCorridor = (id: string) => {
     const current = trafficCorridors[id]?.status
@@ -90,15 +97,25 @@ export default function TrafficOperationsPage() {
             { label: 'Operations', path: '/dashboard/city' },
             { label: 'Traffic & Corridors' }
           ]}
+          actions={
+            <div className="flex items-center space-x-2">
+              <span className="text-[10px] font-bold px-2.5 py-1 rounded bg-amber-950/70 border border-amber-700/60 text-amber-300 font-mono tracking-wider animate-pulse">
+                SIMULATION — TRAFFIC ENGINE
+              </span>
+              <span className="text-[10px] font-bold px-2 py-1 rounded bg-blue-950 border border-blue-800 text-blue-300 font-mono tracking-wider">
+                CLOCK: {simulationTime}
+              </span>
+            </div>
+          }
         />
 
-        {/* Real-time Status KPI Grid */}
+        {/* Real-time Status KPI Grid with Honest Provenance */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="rounded-2xl border border-slate-800 bg-[#0B0F19]/80 p-4 relative overflow-hidden backdrop-blur-md">
             <div className="flex items-center justify-between text-xs text-slate-400">
               <span className="font-mono">NETWORK STATUS</span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-900/40 text-emerald-400">
-                LIVE TELEMETRY
+              <span className="text-[9.5px] font-bold px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/40 text-amber-300 font-mono">
+                SIMULATION
               </span>
             </div>
             <div className="mt-2 text-2xl font-black text-white">4 Corridors Monitored</div>
@@ -108,8 +125,8 @@ export default function TrafficOperationsPage() {
           <div className="rounded-2xl border border-slate-800 bg-[#0B0F19]/80 p-4 relative overflow-hidden backdrop-blur-md">
             <div className="flex items-center justify-between text-xs text-slate-400">
               <span className="font-mono">FLOOD CLOSURES</span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-red-950/60 border border-red-900/40 text-red-400">
-                VERIFIED
+              <span className="text-[9.5px] font-bold px-2 py-0.5 rounded bg-red-950/60 border border-red-900/40 text-red-400 font-mono">
+                {incident.status !== 'resolved' ? 'ACTIVE BLOCK' : 'REOPENED'}
               </span>
             </div>
             <div className="mt-2 text-2xl font-black text-red-400">
@@ -121,23 +138,25 @@ export default function TrafficOperationsPage() {
           <div className="rounded-2xl border border-slate-800 bg-[#0B0F19]/80 p-4 relative overflow-hidden backdrop-blur-md">
             <div className="flex items-center justify-between text-xs text-slate-400">
               <span className="font-mono">EMERGENCY CORRIDOR</span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-950/60 border border-sky-900/40 text-sky-400">
-                ACTIVE
+              <span className="text-[9.5px] font-bold px-2 py-0.5 rounded bg-sky-950/60 border border-sky-900/40 text-sky-400 font-mono">
+                {trafficCorridors['ram-nagar']?.status === 'EMERGENCY_CORRIDOR' ? 'ACTIVE' : 'STANDBY'}
               </span>
             </div>
             <div className="mt-2 text-2xl font-black text-sky-400">Green Wave Priority</div>
-            <p className="text-xs text-slate-400 mt-1">Clear path for A-21 & FT-12</p>
+            <p className="text-xs text-slate-400 mt-1">Priority path for A-21 & FT-12</p>
           </div>
 
           <div className="rounded-2xl border border-slate-800 bg-[#0B0F19]/80 p-4 relative overflow-hidden backdrop-blur-md">
             <div className="flex items-center justify-between text-xs text-slate-400">
               <span className="font-mono">AVG EVAC SPEED</span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-950/60 border border-purple-900/40 text-purple-400">
-                ANALYTICS
+              <span className="text-[9.5px] font-bold px-2 py-0.5 rounded bg-purple-950/60 border border-purple-900/40 text-purple-400 font-mono">
+                SIMULATED
               </span>
             </div>
-            <div className="mt-2 text-2xl font-black text-white">38 km/h</div>
-            <p className="text-xs text-slate-400 mt-1">Detour flowing at 86% normal speed</p>
+            <div className="mt-2 text-2xl font-black text-white">
+              {trafficCorridors['nh16-bypass']?.speedKmH || 52} km/h
+            </div>
+            <p className="text-xs text-slate-400 mt-1">NH16 Detour flowing at 86% normal speed</p>
           </div>
         </div>
 
@@ -190,7 +209,9 @@ export default function TrafficOperationsPage() {
                       <div className="flex items-center justify-between text-[11px] text-slate-400 mt-2 font-mono">
                         <span>Speed: <strong className="text-slate-200">{c.speedKmH} km/h</strong></span>
                         <span>Est. Transit: <strong className="text-slate-200">{c.travelTimeMins} mins</strong></span>
-                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">{c.provenance}</span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-950/60 border border-amber-800/40 text-amber-300 font-bold font-mono">
+                          {c.provenance}
+                        </span>
                       </div>
 
                       {/* Manual Toggle Switch */}
@@ -256,14 +277,16 @@ export default function TrafficOperationsPage() {
                     Corridor Geometry & Live Unit Transits
                   </h3>
                 </div>
-                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-900/40 px-2 py-0.5 rounded">
-                  GPS TRACKING ACTIVE
-                </span>
+                <div className="flex items-center space-x-2">
+                  <span className="text-[9px] font-mono text-amber-300 bg-amber-950/60 border border-amber-800/40 px-2 py-0.5 rounded font-bold">
+                    GPS SOURCE: SIMULATION
+                  </span>
+                </div>
               </div>
 
               <div className="h-[460px] rounded-xl overflow-hidden border border-slate-800 relative">
                 <MapContainer
-                  center={[17.7250, 83.3150]}
+                  center={[17.7210, 83.3180]}
                   zoom={13}
                   markers={mapMarkers}
                 />

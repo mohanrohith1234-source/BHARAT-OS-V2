@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import DashboardLayout from '../../../components/layout/DashboardLayout'
 import MapContainer, { MapMarker } from '../../../components/ui/MapContainer'
+import StandardIncidentCard from '../../../components/ui/StandardIncidentCard'
+import { useVizagDataStore } from '../../../store/useVizagDataStore'
 import { 
   Shield, 
   Clock, 
@@ -20,22 +22,9 @@ import {
   Play
 } from 'lucide-react'
 
-const policeUnits = [
-  { id: 'P-101', name: 'Patrol Unit 101', officer: 'Inspector K. Raju', team: '3 Officers', vehicle: 'Tata Nexon EV', callSign: 'CHARLIE-1', location: 'MVP Colony Sector 2', speed: '32 km/h', lastUpdate: '10s ago', status: 'Patrolling', route: 'Beach Road -> MVP Colony', progress: '65%', eta: '4 mins', nextCheckpoint: 'MVP Double Road' },
-  { id: 'P-114', name: 'Patrol Unit 114', officer: 'Sub-Inspector M. Srinivas', team: '2 Officers', vehicle: 'Mahindra Scorpio', callSign: 'DELTA-4', location: 'Dwaraka Nagar BRTS', speed: '45 km/h', lastUpdate: '45s ago', status: 'En Route', route: 'RTC Complex -> BRTS Lane', progress: '82%', eta: '2 mins', nextCheckpoint: 'Dwaraka Junction' },
-  { id: 'P-305', name: 'Patrol Unit 305', officer: 'Inspector S. Lakshmi', team: '3 Officers', vehicle: 'Tata Nexon EV', callSign: 'ALPHA-2', location: 'Beach Road', speed: '0 km/h', lastUpdate: '2m ago', status: 'On Scene', route: 'Beach Road Bypass', progress: '100%', eta: 'Reached', nextCheckpoint: 'None' },
-  { id: 'P-207', name: 'Patrol Unit 207', officer: 'Inspector G. Prasad', team: '2 Officers', vehicle: 'Mahindra Scorpio', callSign: 'SIERRA-3', location: 'Gajuwaka Junction', speed: '18 km/h', lastUpdate: '1m ago', status: 'Congested', route: 'NH16 -> Gajuwaka Sump', progress: '40%', eta: '12 mins', nextCheckpoint: 'Gajuwaka Industrial Hub' },
-  { id: 'P-110', name: 'Patrol Unit 110', officer: 'SI A. Harsha', team: '2 Officers', vehicle: 'Tata Nexon EV', callSign: 'KILO-1', location: 'VIP Road', speed: '52 km/h', lastUpdate: '5s ago', status: 'Patrolling', route: 'VIP Road -> Siripuram', progress: '10%', eta: '8 mins', nextCheckpoint: 'Siripuram Circle' }
-]
-
-const policeIncidents = [
-  { ticket: 'POL-3982', title: 'Road Blockage Bypass', location: 'Beach Road Sector 4', priority: 'High', status: 'Assigned', unit: 'P-305', time: '12:42' },
-  { ticket: 'POL-3983', title: 'Municipal Sump Security', location: 'Mudasarlova Sump', priority: 'Medium', status: 'Patrolling', unit: 'P-101', time: '12:44' },
-  { ticket: 'POL-3984', title: 'Traffic Escort NH16', location: 'NH16 bypass north', priority: 'High', status: 'En Route', unit: 'P-114', time: '12:45' }
-]
-
 export default function PoliceOperationsPage() {
-  const [selectedUnitId, setSelectedUnitId] = useState('P-101')
+  const { resources, incident, approveIncidentAction, simulationTime, demoStage } = useVizagDataStore()
+  const [selectedUnitId, setSelectedUnitId] = useState('P-305')
   const [currentTime, setCurrentTime] = useState('')
   const [currentDate, setCurrentDate] = useState('')
 
@@ -50,29 +39,130 @@ export default function PoliceOperationsPage() {
     return () => clearInterval(timer)
   }, [])
 
+  // Dynamic police units merging store state
+  const policeUnits = [
+    { 
+      id: 'P-305', 
+      name: 'Patrol Unit 305', 
+      officer: 'Inspector S. Lakshmi', 
+      team: '3 Officers', 
+      vehicle: 'Tata Nexon EV', 
+      callSign: 'ALPHA-2', 
+      location: resources['P-305']?.location || 'Beach Road Bypass Junction', 
+      speed: resources['P-305']?.speed || '0 km/h', 
+      lastUpdate: 'Real-time telemetry', 
+      status: resources['P-305']?.status === 'on_scene' ? 'On Scene' : resources['P-305']?.status === 'en_route' ? 'En Route' : resources['P-305']?.status === 'dispatched' ? 'Dispatched' : 'Standby', 
+      route: 'Beach Road Bypass & Diversion', 
+      progress: resources['P-305']?.status === 'on_scene' ? '100%' : resources['P-305']?.status === 'en_route' ? '70%' : 'Standby', 
+      eta: resources['P-305']?.eta || 'On Scene', 
+      nextCheckpoint: 'Beach Road Sector 4 Culvert' 
+    },
+    { 
+      id: 'P-101', 
+      name: 'Patrol Unit 101', 
+      officer: 'Inspector K. Raju', 
+      team: '3 Officers', 
+      vehicle: 'Tata Nexon EV', 
+      callSign: 'CHARLIE-1', 
+      location: 'MVP Colony Sector 2', 
+      speed: '32 km/h', 
+      lastUpdate: '10s ago', 
+      status: 'Patrolling', 
+      route: 'Beach Road -> MVP Colony', 
+      progress: '65%', 
+      eta: '4 mins', 
+      nextCheckpoint: 'MVP Double Road' 
+    },
+    { 
+      id: 'P-114', 
+      name: 'Patrol Unit 114', 
+      officer: 'Sub-Inspector M. Srinivas', 
+      team: '2 Officers', 
+      vehicle: 'Mahindra Scorpio', 
+      callSign: 'DELTA-4', 
+      location: 'Dwaraka Nagar BRTS', 
+      speed: '45 km/h', 
+      lastUpdate: '45s ago', 
+      status: 'En Route', 
+      route: 'RTC Complex -> BRTS Lane', 
+      progress: '82%', 
+      eta: '2 mins', 
+      nextCheckpoint: 'Dwaraka Junction' 
+    },
+    { 
+      id: 'P-207', 
+      name: 'Patrol Unit 207', 
+      officer: 'Inspector G. Prasad', 
+      team: '2 Officers', 
+      vehicle: 'Mahindra Scorpio', 
+      callSign: 'SIERRA-3', 
+      location: 'Gajuwaka Junction', 
+      speed: '18 km/h', 
+      lastUpdate: '1m ago', 
+      status: 'Congested', 
+      route: 'NH16 -> Gajuwaka Sump', 
+      progress: '40%', 
+      eta: '12 mins', 
+      nextCheckpoint: 'Gajuwaka Industrial Hub' 
+    },
+    { 
+      id: 'P-110', 
+      name: 'Patrol Unit 110', 
+      officer: 'SI A. Harsha', 
+      team: '2 Officers', 
+      vehicle: 'Tata Nexon EV', 
+      callSign: 'KILO-1', 
+      location: 'VIP Road', 
+      speed: '52 km/h', 
+      lastUpdate: '5s ago', 
+      status: 'Patrolling', 
+      route: 'VIP Road -> Siripuram', 
+      progress: '10%', 
+      eta: '8 mins', 
+      nextCheckpoint: 'Siripuram Circle' 
+    }
+  ]
+
+  const policeIncidents = [
+    { ticket: 'POL-3982', title: 'Beach Road Inundation Bypass', location: 'Beach Road Sector 4', priority: 'Critical', status: incident.status.toUpperCase(), unit: 'P-305', time: '12:42' },
+    { ticket: 'POL-3983', title: 'Municipal Sump Security', location: 'Mudasarlova Sump', priority: 'Medium', status: 'Patrolling', unit: 'P-101', time: '12:44' },
+    { ticket: 'POL-3984', title: 'Traffic Escort NH16', location: 'NH16 bypass north', priority: 'High', status: 'En Route', unit: 'P-114', time: '12:45' }
+  ]
+
   const selectedUnit = policeUnits.find(u => u.id === selectedUnitId) || policeUnits[0]
 
-  const mapMarkers: MapMarker[] = policeUnits.map((u, idx) => {
-    const coords: Record<string, [number, number]> = {
-      'P-101': [17.7200, 83.3150],
-      'P-114': [17.7120, 83.3050],
-      'P-305': [17.7050, 83.2850],
-      'P-207': [17.6850, 83.2200],
-      'P-110': [17.7250, 83.3320]
-    }
+  const mapMarkers: MapMarker[] = policeUnits.map((u) => {
+    let position: [number, number] = [17.7200, 83.3150]
+    if (u.id === 'P-305') position = resources['P-305']?.coords || [17.7050, 83.2850]
+    else if (u.id === 'P-101') position = [17.7200, 83.3150]
+    else if (u.id === 'P-114') position = [17.7120, 83.3050]
+    else if (u.id === 'P-207') position = [17.6850, 83.2200]
+    else if (u.id === 'P-110') position = [17.7250, 83.3320]
+
     let cat: 'critical' | 'high' | 'medium' | 'low' = 'low'
     if (u.status === 'On Scene') cat = 'critical'
-    else if (u.status === 'Congested') cat = 'high'
+    else if (u.status === 'Congested' || u.status === 'Dispatched') cat = 'high'
     else if (u.status === 'En Route') cat = 'medium'
 
     return {
       id: u.id,
-      position: coords[u.id] || [17.7200 + idx * 0.015, 83.3150 + idx * 0.015],
+      position,
       title: `${u.id} - ${u.callSign}`,
       description: `Officer: ${u.officer} | Speed: ${u.speed} | Status: ${u.status}`,
       category: cat
     }
   })
+
+  // Add incident marker
+  if (incident.status !== 'resolved') {
+    mapMarkers.push({
+      id: 'inc-beach-road',
+      position: [17.7210, 83.3180],
+      title: `🚨 [FLOOD] INC-1042 Beach Road Sump`,
+      description: `Water Level: ${incident.waterDepthCm}cm • Assigned: P-305, FT-12, A-21`,
+      category: 'critical'
+    })
+  }
 
   return (
     <DashboardLayout 
@@ -95,16 +185,18 @@ export default function PoliceOperationsPage() {
             <div>
               <div className="flex items-center space-x-2">
                 <h2 className="text-xs font-extrabold tracking-widest text-slate-200 uppercase font-mono">POLICE OPERATIONS CENTER</h2>
-                <span className="bg-blue-600 text-white font-mono text-[8.5px] font-bold px-1.5 py-0.2 rounded animate-pulse uppercase tracking-wider">LIVE</span>
+                <span className="bg-blue-600 text-white font-mono text-[8.5px] font-bold px-1.5 py-0.2 rounded uppercase tracking-wider">
+                  SCENARIO {simulationTime}
+                </span>
               </div>
-              <p className="text-[10px] font-bold text-slate-400 font-mono tracking-wider mt-0.5">Real-time law enforcement monitoring & resource management</p>
+              <p className="text-[10px] font-bold text-slate-400 font-mono tracking-wider mt-0.5">Real-time law enforcement monitoring & emergency response coordination</p>
             </div>
           </div>
 
           <div className="flex items-center space-x-6">
-            <div className="hidden lg:flex items-center space-x-2 text-[10px] font-mono text-slate-450 bg-slate-950/60 border border-slate-900 rounded-lg px-2.5 py-1">
+            <div className="hidden lg:flex items-center space-x-2 text-[10px] font-mono text-slate-400 bg-slate-950/60 border border-slate-900 rounded-lg px-2.5 py-1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>AP-POLICE SECURED</span>
+              <span>AP-POLICE CAD CONNECTED</span>
             </div>
             <div className="hidden md:flex items-center space-x-1.5 text-[10px] font-mono text-slate-400">
               <CloudRain className="w-3.5 h-3.5 text-sky-400" />
@@ -114,7 +206,7 @@ export default function PoliceOperationsPage() {
               <Clock className="w-4 h-4 text-sky-400 shrink-0" />
               <span>{currentDate} {currentTime}</span>
             </div>
-            <div className="flex items-center space-x-2 text-xs font-bold border-l border-slate-855 pl-4">
+            <div className="flex items-center space-x-2 text-xs font-bold border-l border-slate-800 pl-4">
               <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-[10px] text-white font-mono font-bold border border-slate-700">
                 SP
               </div>
@@ -131,7 +223,7 @@ export default function PoliceOperationsPage() {
           <div className="p-3 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between h-[80px]">
             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">Total Units</span>
             <h3 className="text-lg font-black text-white font-mono leading-none mt-1">42 Units</h3>
-            <span className="text-[8px] text-slate-500 font-mono">Active registration roster</span>
+            <span className="text-[8px] text-slate-500 font-mono">District registration roster</span>
           </div>
           <div className="p-3 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between h-[80px]">
             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">On Duty</span>
@@ -146,22 +238,22 @@ export default function PoliceOperationsPage() {
           <div className="p-3 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between h-[80px]">
             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">Available</span>
             <h3 className="text-lg font-black text-white font-mono leading-none mt-1">12 Units</h3>
-            <span className="text-[8px] text-slate-450 font-mono">Standby in district reserves</span>
+            <span className="text-[8px] text-slate-500 font-mono">Standby in district reserves</span>
           </div>
           <div className="p-3 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between h-[80px]">
             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">Patrols Active</span>
             <h3 className="text-lg font-black text-white font-mono leading-none mt-1">18 Routes</h3>
-            <span className="text-[8px] text-slate-450 font-mono">Assigned key sectors</span>
+            <span className="text-[8px] text-slate-500 font-mono">Assigned key sectors</span>
           </div>
           <div className="p-3 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between h-[80px]">
-            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">Incidents Assigned</span>
-            <h3 className="text-lg font-black text-red-400 font-mono leading-none mt-1">8 incidents</h3>
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">Active Incidents</span>
+            <h3 className="text-lg font-black text-red-400 font-mono leading-none mt-1">{policeIncidents.length} Tickets</h3>
             <span className="text-[8px] text-red-500 font-mono">● Dispatching status</span>
           </div>
           <div className="p-3 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between h-[80px]">
             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">Avg Response Time</span>
             <h3 className="text-lg font-black text-white font-mono leading-none mt-1">4.2 mins</h3>
-            <span className="text-[8px] text-slate-450 font-mono">District average</span>
+            <span className="text-[8px] text-slate-500 font-mono">District CAD average</span>
           </div>
         </section>
 
@@ -175,9 +267,9 @@ export default function PoliceOperationsPage() {
                 <Shield className="w-4 h-4 text-sky-400 animate-pulse" />
                 <h4 className="font-bold text-white uppercase tracking-wider">LIVE UNIT TRACKING</h4>
               </div>
-              <div className="flex items-center space-x-2 text-[9px] text-slate-500 font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-900">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse inline-block mr-1.5" />
-                <span>GPS Feeds Linked</span>
+              <div className="flex items-center space-x-2 text-[9px] text-slate-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-900">
+                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse inline-block mr-1.5" />
+                <span>GPS Feeds Synchronized ({simulationTime})</span>
               </div>
             </div>
 
@@ -189,16 +281,16 @@ export default function PoliceOperationsPage() {
               />
               
               {/* Floating controls overlays */}
-              <div className="absolute top-4 right-4 z-[999] p-3 rounded-xl border border-slate-900 bg-[#060a13]/85 backdrop-blur-md shadow-2xl space-y-1.5 text-[8.5px] font-mono text-slate-350">
+              <div className="absolute top-4 right-4 z-[999] p-3 rounded-xl border border-slate-900 bg-[#060a13]/85 backdrop-blur-md shadow-2xl space-y-1.5 text-[8.5px] font-mono text-slate-300">
                 <h5 className="text-[8.5px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-900 pb-1">Units Status</h5>
                 <div className="space-y-1">
                   <div className="flex items-center space-x-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                    <span>Critical Alert</span>
+                    <span>Critical Incident</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-                    <span>High/Congested</span>
+                    <span>Dispatched / Moving</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
@@ -253,8 +345,8 @@ export default function PoliceOperationsPage() {
                   <span className="text-sky-400 font-bold">{selectedUnit.speed}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Last Telemetry:</span>
-                  <span className="text-slate-400">{selectedUnit.lastUpdate}</span>
+                  <span className="text-slate-500">Telemetry Source:</span>
+                  <span className="text-amber-400 font-bold">SIMULATION</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Status:</span>
@@ -279,17 +371,17 @@ export default function PoliceOperationsPage() {
                     <span className="text-slate-500">ETA Next Checkpoint:</span>
                     <span className="text-sky-400 font-bold">{selectedUnit.eta}</span>
                   </div>
-                  <p className="text-[8.5px] text-slate-450 italic mt-1 leading-normal">Checkpoint target: {selectedUnit.nextCheckpoint}</p>
+                  <p className="text-[8.5px] text-slate-400 italic mt-1 leading-normal">Checkpoint target: {selectedUnit.nextCheckpoint}</p>
                 </div>
               </div>
 
               {/* Action dispatch buttons */}
               <div className="flex flex-col space-y-1.5 pt-1.5 border-t border-slate-900/50 mt-2">
-                <button className="py-1.5 rounded-lg bg-sky-700 hover:bg-sky-600 text-white font-bold font-mono tracking-wider transition-all text-[9.5px] uppercase cursor-pointer text-center">
-                  📣 Dispatch Message
-                </button>
-                <button className="py-1.5 rounded-lg bg-slate-950 hover:bg-slate-900 text-slate-350 font-mono transition-all text-[9px] uppercase cursor-pointer text-center">
-                  ⚙️ Recalibrate Route
+                <button 
+                  onClick={() => setSelectedUnitId(selectedUnitId === 'P-305' ? 'P-101' : 'P-305')}
+                  className="py-1.5 rounded-lg bg-sky-700 hover:bg-sky-600 text-white font-bold font-mono tracking-wider transition-all text-[9.5px] uppercase cursor-pointer text-center"
+                >
+                  Switch to Unit {selectedUnitId === 'P-305' ? 'P-101' : 'P-305'}
                 </button>
               </div>
 
@@ -298,16 +390,45 @@ export default function PoliceOperationsPage() {
 
         </section>
 
-        {/* LOWER OPERATIONS WORKSPACE */}
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 shrink-0">
+        {/* LOWER OPERATIONS WORKSPACE: STANDARD INCIDENT CARD INTEGRATION */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 shrink-0">
           
+          {/* Synchronized Standard Incident Card INC-1042 */}
+          <div className="lg:col-span-6">
+            <StandardIncidentCard
+              id={incident.id}
+              ticketNumber={incident.ticketNumber}
+              category="LAW ENFORCEMENT & TRAFFIC ESCORT"
+              severity={incident.severity}
+              title={incident.title}
+              location={incident.location}
+              timestamp={`${simulationTime} Scenario`}
+              status={incident.status}
+              waterDepthCm={incident.waterDepthCm}
+              peopleAtRisk={incident.peopleAtRisk}
+              assignedUnits={incident.assignedUnits}
+              aiRecommendation={incident.aiRecommendation}
+              confidence={96}
+              humanSignOff={incident.humanSignOff}
+              signedBy={incident.signedBy}
+              provenance={incident.provenance}
+              technicalDetails={{
+                modelUsed: 'Gemini 2.5 Flash + LangGraph Flood Coordinator',
+                latencyMs: 142,
+                langGraphNodes: ['triage_eval', 'police_cad_divert', 'officer_auth_gate'],
+                rawTelemetrySnapshot: { waterDepthCm: incident.waterDepthCm, unitsAssigned: incident.assignedUnits }
+              }}
+              onAuthorize={() => approveIncidentAction('Duty Commander (Badge #104)')}
+            />
+          </div>
+
           {/* Active incidents queue */}
-          <div className="p-4 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between min-w-0">
+          <div className="lg:col-span-3 p-4 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between min-w-0">
             <span className="text-[8.5px] font-bold text-slate-500 uppercase tracking-widest font-mono border-b border-slate-900 pb-1.5 block">Active Law Incidents</span>
             <div className="overflow-x-auto mt-2 flex-1">
               <table className="w-full text-left text-[10px] font-mono">
                 <thead>
-                  <tr className="text-slate-450 border-b border-slate-900 pb-1">
+                  <tr className="text-slate-400 border-b border-slate-900 pb-1">
                     <th className="py-1">Ticket</th>
                     <th className="py-1">Incident</th>
                     <th className="py-1">Severity</th>
@@ -316,10 +437,10 @@ export default function PoliceOperationsPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-900/40 text-slate-300">
                   {policeIncidents.map((inc) => (
-                    <tr key={inc.ticket} className="hover:bg-slate-905/30">
+                    <tr key={inc.ticket} className="hover:bg-slate-900/30">
                       <td className="py-1.5 font-bold text-white">{inc.ticket}</td>
                       <td className="py-1.5 truncate max-w-[90px]">{inc.title}</td>
-                      <td className={`py-1.5 uppercase font-bold ${inc.priority === 'High' ? 'text-red-400' : 'text-yellow-400'}`}>{inc.priority}</td>
+                      <td className={`py-1.5 uppercase font-bold ${inc.priority === 'Critical' ? 'text-red-400' : 'text-yellow-400'}`}>{inc.priority}</td>
                       <td className="py-1.5 text-slate-200">{inc.unit}</td>
                     </tr>
                   ))}
@@ -328,56 +449,18 @@ export default function PoliceOperationsPage() {
             </div>
           </div>
 
-          {/* Unit Status Breakdown */}
-          <div className="p-4 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between min-w-0">
-            <span className="text-[8.5px] font-bold text-slate-500 uppercase tracking-widest font-mono border-b border-slate-900 pb-1.5 block">Unit Status Breakdown</span>
-            <div className="space-y-2 mt-2 text-[10px] font-mono text-slate-300 flex-1 flex flex-col justify-center">
-              <div className="flex justify-between border-b border-slate-900/50 pb-1">
-                <span>Active Patrolling:</span>
-                <span className="text-emerald-400 font-bold">18 units (42.8%)</span>
-              </div>
-              <div className="flex justify-between border-b border-slate-900/50 pb-1">
-                <span>Incident Response:</span>
-                <span className="text-sky-400 font-bold">12 units</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Standby Reserve:</span>
-                <span className="text-slate-400 font-bold">12 units</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Deployment Zones */}
-          <div className="p-4 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between min-w-0">
-            <span className="text-[8.5px] font-bold text-slate-500 uppercase tracking-widest font-mono border-b border-slate-900 pb-1.5 block">Sector Deployments</span>
-            <div className="space-y-2 mt-2 text-[10px] font-mono text-slate-300 flex-1 flex flex-col justify-center">
-              <div className="flex justify-between border-b border-slate-900/50 pb-1">
-                <span>MVP Colony Sector 4:</span>
-                <span className="text-red-405 font-bold">8 Units deploy</span>
-              </div>
-              <div className="flex justify-between border-b border-slate-900/50 pb-1">
-                <span>Gajuwaka Industrial:</span>
-                <span className="text-amber-500 font-bold">12 Units deploy</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Beach Road Arterial:</span>
-                <span className="text-slate-400">4 Units deploy</span>
-              </div>
-            </div>
-          </div>
-
           {/* Live Police Radio Log feed */}
-          <div className="p-4 rounded-xl border border-slate-900 bg-[#0B0F19]/60 space-y-2 min-w-0">
+          <div className="lg:col-span-3 p-4 rounded-xl border border-slate-900 bg-[#0B0F19]/60 space-y-2 min-w-0">
             <span className="text-[8.5px] font-bold text-slate-500 uppercase tracking-widest font-mono border-b border-slate-900 pb-1.5 block">Live Radio Feed Ticker</span>
-            <div className="space-y-1.5 text-[9.5px] font-mono text-slate-450 max-h-[85px] overflow-y-auto pr-0.5">
+            <div className="space-y-1.5 text-[9.5px] font-mono text-slate-400 max-h-[160px] overflow-y-auto pr-0.5">
               <p className="border-b border-slate-900/60 pb-1">
                 <span className="text-sky-400 font-bold mr-1">[P-101 12:44]:</span> Patrolling MVP colony Double Road. Traffic normal.
               </p>
               <p className="border-b border-slate-900/60 pb-1">
-                <span className="text-red-400 font-bold mr-1">[P-305 12:42]:</span> Arrived on scene at Beach road sector 4 blockage.
+                <span className="text-red-400 font-bold mr-1">[P-305 {simulationTime}]:</span> {resources['P-305']?.status === 'on_scene' ? 'On scene at Beach Road bypass. Road closed.' : 'En route to Beach Road Sector 4.'}
               </p>
               <p>
-                <span className="text-emerald-400 font-bold mr-1">[P-114 12:40]:</span> Dispatching to NH16 escort target.
+                <span className="text-emerald-400 font-bold mr-1">[CAD DISPATCH]:</span> INC-1042 status: {incident.status.toUpperCase()} ({incident.humanSignOff ? 'APPROVED' : 'AWAITING AUTH'}).
               </p>
             </div>
           </div>
@@ -407,7 +490,9 @@ export default function PoliceOperationsPage() {
             </div>
             <div className="flex items-center space-x-1.5">
               <span className="font-bold text-slate-500">SAFETY GATE:</span>
-              <span className="text-slate-200 uppercase">HUMAN SIGN-OFF</span>
+              <span className={incident.humanSignOff ? "text-emerald-400 font-bold" : "text-amber-400 font-bold"}>
+                {incident.humanSignOff ? "AUTHORIZED" : "OPERATOR APPROVAL REQUIRED"}
+              </span>
             </div>
           </div>
         </footer>

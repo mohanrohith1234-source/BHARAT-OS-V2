@@ -2,21 +2,31 @@
 
 import React from 'react'
 import { useVizagDataStore, DemoStage } from '../../store/useVizagDataStore'
-import { Play, Pause, StepForward, RotateCcw, ShieldAlert, Sparkles, Activity, CheckCircle2 } from 'lucide-react'
+import { Play, Pause, StepForward, RotateCcw, ShieldAlert, Sparkles, Activity, CheckCircle2, Clock } from 'lucide-react'
 
 export default function MasterDemoBar() {
-  const { demoStage, demoRunning, startDemo, pauseDemo, stepForward, resetDemo, approveIncidentAction, incident } = useVizagDataStore()
+  const { 
+    demoStage, 
+    simulationTime,
+    demoRunning, 
+    startDemo, 
+    pauseDemo, 
+    stepForward, 
+    resetDemo, 
+    approveIncidentAction, 
+    incident 
+  } = useVizagDataStore()
 
   const stageDescriptions: Record<DemoStage, { title: string; color: string; badge: string }> = {
-    IDLE: { title: 'Baseline Monitoring — Normal Sensor Readings', color: 'text-slate-400', badge: 'IDLE' },
-    HEAVY_RAIN: { title: 'Precipitation Spike (64mm/hr) — Mudasarlova & Beach Rd Inflow', color: 'text-blue-400', badge: 'HEAVY RAIN' },
+    IDLE: { title: 'Baseline Monitoring — Normal Hydrological & Traffic Flow', color: 'text-slate-400', badge: 'IDLE' },
+    HEAVY_RAIN: { title: 'Precipitation Inflow (64mm/hr) — Coastal Catchment Rising', color: 'text-blue-400', badge: 'HEAVY RAIN' },
     WATER_RISING: { title: 'Sensor #1 Culvert Level 42cm (Threshold 35cm) — Alert Triggered', color: 'text-amber-400', badge: 'WATER RISING' },
     INCIDENT_DETECTED: { title: 'INC-1042 Auto-Generated — Beach Road Outfall Flooded', color: 'text-red-400', badge: 'INCIDENT LOGGED' },
-    AI_TRIAGE: { title: 'AI Flood Agent Evaluates: Divert Traffic, Stage Dewatering Pump', color: 'text-purple-400', badge: 'AI TRIAGE' },
-    OFFICER_APPROVED: { title: 'Human Operator Sign-Off Confirmed — Dispatch Authorized', color: 'text-emerald-400', badge: 'OFFICER SIGN-OFF' },
-    UNITS_DISPATCHED: { title: 'Units En Route: P-305, FT-12 (Pump DP-04), A-21 Transit', color: 'text-cyan-400', badge: 'MULTI-AGENCY DISPATCH' },
-    WATER_DRAINED: { title: 'High-Volume Dewatering DP-04 Active — Water Receding to 18cm', color: 'text-teal-400', badge: 'PUMPING ACTIVE' },
-    RESOLVED: { title: 'Incident Resolved — Road Reopened, Baseline Restored', color: 'text-emerald-400', badge: 'RESOLVED' }
+    AI_TRIAGE: { title: 'AI Flood Agent Evaluates: Divert Traffic, Stage Dewatering Pump DP-04', color: 'text-purple-400', badge: 'AI TRIAGE' },
+    OFFICER_APPROVED: { title: 'Human Operator Sign-Off Confirmed — Emergency Dispatch Authorized', color: 'text-emerald-400', badge: 'OFFICER SIGN-OFF' },
+    UNITS_DISPATCHED: { title: 'Multi-Agency En Route: P-305 (Diversion), FT-12 (Pump), A-21 (EMS)', color: 'text-cyan-400', badge: 'UNITS EN ROUTE' },
+    WATER_DRAINED: { title: 'Dewatering Pump DP-04 Operating — Water Level Receding to 18cm', color: 'text-teal-400', badge: 'PUMPING ACTIVE' },
+    RESOLVED: { title: 'Incident Resolved — Road Reopened, Normal Drainage Restored', color: 'text-emerald-400', badge: 'RESOLVED' }
   }
 
   const currentInfo = stageDescriptions[demoStage] || stageDescriptions.IDLE
@@ -36,6 +46,11 @@ export default function MasterDemoBar() {
         </div>
 
         <div className="flex items-center space-x-2 font-mono text-[10px]">
+          {/* Timeline Clock Badge */}
+          <span className="px-2 py-0.5 rounded bg-blue-950/70 border border-blue-700/60 text-blue-300 font-bold flex items-center gap-1">
+            <Clock className="w-3 h-3 text-blue-400" />
+            {simulationTime}
+          </span>
           <span className="px-2 py-0.5 rounded bg-sky-950/60 border border-sky-800/60 text-sky-300 font-bold uppercase tracking-wider">
             {currentInfo.badge}
           </span>
@@ -64,7 +79,7 @@ export default function MasterDemoBar() {
           {!incident.humanSignOff && (demoStage === 'AI_TRIAGE' || demoStage === 'INCIDENT_DETECTED') && (
             <button
               onClick={() => approveIncidentAction('Duty Commander (Badge #104)')}
-              className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-[10px] font-bold flex items-center gap-1 shadow-lg shadow-emerald-900/30 transition-all active:scale-95"
+              className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-[10px] font-bold flex items-center gap-1 shadow-lg shadow-emerald-900/30 transition-all active:scale-95 animate-pulse"
               title="Human-in-the-loop Safety Gate Sign-Off"
             >
               <CheckCircle2 className="w-3 h-3" />
