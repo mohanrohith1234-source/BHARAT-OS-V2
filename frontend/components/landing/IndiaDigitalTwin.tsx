@@ -160,14 +160,17 @@ export default function IndiaDigitalTwin() {
   })
   const [activeLayerPanel, setActiveLayerPanel] = useState(false)
 
-  // Auto-fit & Projection configuration: uses D3 geoMercator fitted into a 600x700 viewport with 28px padding
+  // Auto-fit & Projection configuration: uses D3 geoMercator fitted into 640x760 with ~5-8% visual breathing room
   const { projectedStates, commandNodes, districtNodes, labelLayout } = useMemo(() => {
-    const width = 600
-    const height = 700
-    const padding = 28
+    const width = 640
+    const height = 760
+    const paddingLeft = 40
+    const paddingTop = 75 // Generous top clearance ensuring Ladakh/Siachen is not under the card header
+    const paddingRight = 45
+    const paddingBottom = 45
 
     const projection = geoMercator()
-      .fitExtent([[padding, padding], [width - padding, height - padding]], IndiaGeoJSON as any)
+      .fitExtent([[paddingLeft, paddingTop], [width - paddingRight, height - paddingBottom]], IndiaGeoJSON as any)
     const pathGenerator = geoPath().projection(projection)
 
     // 1. Process state shapes and centroids
@@ -332,6 +335,12 @@ export default function IndiaDigitalTwin() {
       }
     }
 
+    // Explicit boundary clamping to guarantee zero label clipping
+    labels.forEach(l => {
+      l.x = Math.max(35, Math.min(605, l.x))
+      l.y = Math.max(82, Math.min(725, l.y))
+    })
+
     return {
       projectedStates: statesList,
       commandNodes: nodesMap,
@@ -355,9 +364,9 @@ export default function IndiaDigitalTwin() {
   }, [commandNodes])
 
   return (
-    <div className="relative w-full h-[720px] bg-[#040815] rounded-2xl border border-slate-800/80 bg-gradient-to-b from-[#050918] to-[#02050e] p-6 backdrop-blur-xl overflow-hidden shadow-[0_24px_50px_-12px_rgba(0,0,0,0.85)] flex flex-col justify-between select-none">
+    <div className="relative w-full h-[730px] bg-[#040815] rounded-2xl border border-slate-800/80 bg-gradient-to-b from-[#050918] to-[#02050e] p-5 backdrop-blur-xl overflow-hidden shadow-[0_24px_50px_-12px_rgba(0,0,0,0.85)] flex flex-col justify-between select-none min-w-0">
       {/* Background patterns: reduced grid opacity and added soft radial light behind the map */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(18,24,38,0.22)_1px,transparent_1px),linear-gradient(90deg,rgba(18,24,38,0.22)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none z-0 opacity-18" /> {/* Reduced grid opacity slightly */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(18,24,38,0.22)_1px,transparent_1px),linear-gradient(90deg,rgba(18,24,38,0.22)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none z-0 opacity-18" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-sky-500/5 rounded-full filter blur-[100px] pointer-events-none z-0" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(18,24,38,0)_99%,rgba(34,211,238,0.03)_100%)] bg-[size:100%_8px] pointer-events-none z-10 animate-[pulse_3s_infinite_ease-in-out]" />
       
@@ -365,15 +374,25 @@ export default function IndiaDigitalTwin() {
       <div className="flex items-center justify-between border-b border-slate-900/60 pb-3 z-20 relative">
         <div className="flex items-center space-x-2">
           <Layers className="w-4 h-4 text-sky-500 animate-pulse" />
-          <span className="text-[10px] font-bold font-mono tracking-widest text-slate-300">GOI DIGITAL TWIN MESH</span>
+          <span className="text-[10px] font-bold font-mono tracking-widest text-slate-200">BHARATOS NATIONAL NETWORK</span>
+          <span className="text-[8px] font-mono px-2 py-0.5 rounded bg-blue-950/60 border border-blue-800/40 text-blue-400 font-bold hidden sm:inline">
+            INDIA-SCALE ARCHITECTURE
+          </span>
         </div>
-        <button 
-          onClick={() => setActiveLayerPanel(!activeLayerPanel)} 
-          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-800/80 bg-[#0B0F19]/90 text-[9px] font-mono font-bold text-slate-400 hover:text-white hover:bg-slate-950 transition-all duration-200"
-        >
-          <Layers className="w-3.5 h-3.5 text-sky-400" />
-          <span>GIS LAYERS</span>
-        </button>
+        <div className="flex items-center space-x-2">
+          <div className="hidden md:flex items-center space-x-2 text-[8px] font-mono text-slate-400 bg-slate-950/80 px-2.5 py-1 rounded-xl border border-slate-800/60">
+            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> LIVE</span>
+            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> VERIFIED</span>
+            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-400" /> SIMULATION</span>
+          </div>
+          <button 
+            onClick={() => setActiveLayerPanel(!activeLayerPanel)} 
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-800/80 bg-[#0B0F19]/90 text-[9px] font-mono font-bold text-slate-400 hover:text-white hover:bg-slate-950 transition-all duration-200"
+          >
+            <Layers className="w-3.5 h-3.5 text-sky-400" />
+            <span>GIS LAYERS</span>
+          </button>
+        </div>
       </div>
 
       {/* Layer Control Panel */}
@@ -401,7 +420,7 @@ export default function IndiaDigitalTwin() {
       </AnimatePresence>
 
       {/* Map Canvas */}
-      <svg className="absolute inset-0 w-full h-full z-10" viewBox="0 0 600 700">
+      <svg className="absolute inset-0 w-full h-full z-10" viewBox="0 0 640 760" preserveAspectRatio="xMidYMid meet">
         <defs>
           {/* Style element containing premium GPU-accelerated keyframe animations */}
           <style>{`
@@ -546,8 +565,8 @@ export default function IndiaDigitalTwin() {
 
         {/* Dynamic ambient scan grid telemetry */}
         <g id="bg-telemetry" className="opacity-25 pointer-events-none">
-          <circle cx="300" cy="350" r="250" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1" strokeDasharray="3 9" className="animate-[spin_32s_linear_infinite]" />
-          <circle cx="300" cy="350" r="160" fill="none" stroke="rgba(6,182,212,0.25)" strokeWidth="0.8" strokeDasharray="6 12" className="animate-[spin_18s_linear_infinite]" />
+          <circle cx="320" cy="385" r="260" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1" strokeDasharray="3 9" className="animate-[spin_32s_linear_infinite]" />
+          <circle cx="320" cy="385" r="170" fill="none" stroke="rgba(6,182,212,0.25)" strokeWidth="0.8" strokeDasharray="6 12" className="animate-[spin_18s_linear_infinite]" />
         </g>
 
         {/* Ambient radial glow centered on Delhi command room */}

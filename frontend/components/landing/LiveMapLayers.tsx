@@ -139,34 +139,39 @@ export default function LiveMapLayers() {
   }, [])
 
   return (
-    <div className="w-full space-y-6 flex flex-col justify-between h-full select-none">
+    <div className="w-full space-y-5 flex flex-col justify-between h-full select-none min-w-0">
       
-      {/* 1. Live Map Layers Selection Card */}
-      <div className="rounded-2xl border border-slate-800/80 bg-[#0B0F19]/65 backdrop-blur-xl p-5 shadow-xl space-y-4 flex-1 flex flex-col justify-between min-h-[360px]">
-        <h4 className="text-xs font-bold text-slate-200 tracking-wider uppercase font-mono flex items-center space-x-2">
-          <MapPin className="w-4 h-4 text-sky-500" />
-          <span>LIVE GIS MAP LAYERS</span>
-        </h4>
+      {/* 1. National Map Layers Selection Card */}
+      <div className="rounded-2xl border border-slate-800/80 bg-[#0B0F19]/65 backdrop-blur-xl p-5 shadow-xl space-y-4 flex-1 flex flex-col justify-between min-h-[350px]">
+        <div className="flex items-center justify-between border-b border-slate-900/60 pb-3">
+          <h4 className="text-xs font-bold text-slate-200 tracking-wider uppercase font-mono flex items-center space-x-2">
+            <MapPin className="w-4 h-4 text-sky-500" />
+            <span>NATIONAL GIS LAYERS</span>
+          </h4>
+          <span className="text-[9px] font-mono text-cyan-400 bg-cyan-950/40 border border-cyan-900/40 px-2 py-0.5 rounded font-bold">
+            VERIFIED MESH
+          </span>
+        </div>
         
         <div className="grid grid-cols-2 gap-2 flex-1 pt-2">
           {layers.map((layer, index) => (
             <button
               key={layer.name}
               onClick={() => toggleLayer(index)}
-              className={`flex items-center justify-between px-3 h-11 rounded-xl border text-[11px] font-bold tracking-wide transition-all select-none duration-300 hover:-translate-y-0.5 hover:shadow-lg ${
+              className={`flex items-center justify-between px-3 h-10 rounded-xl border text-[10.5px] font-bold tracking-wide transition-all select-none duration-300 hover:-translate-y-0.5 hover:shadow-lg ${
                 layer.active
-                  ? 'bg-slate-950/60 border-sky-500/40 text-slate-100 shadow-[0_0_12px_rgba(6,182,212,0.15),inset_0_1px_6px_rgba(30,144,255,0.1)] animate-[pulse_3s_infinite_ease-in-out]'
+                  ? 'bg-slate-950/60 border-sky-500/40 text-slate-100 shadow-[0_0_12px_rgba(6,182,212,0.15),inset_0_1px_6px_rgba(30,144,255,0.1)]'
                   : 'bg-transparent border-slate-900/50 text-slate-500 opacity-50 hover:opacity-100 hover:border-slate-800/60'
               }`}
             >
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 truncate">
                 <span className={layer.active ? layer.color : 'text-slate-600'}>
                   {layer.icon}
                 </span>
-                <span>{layer.name}</span>
+                <span className="truncate">{layer.name}</span>
               </div>
               <div 
-                className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center p-[2px] transition-all duration-300 ${
+                className={`w-3 h-3 rounded-full border flex items-center justify-center p-[2px] transition-all duration-300 shrink-0 ${
                   layer.active 
                     ? 'border-sky-500 bg-sky-500' 
                     : 'border-slate-800 bg-transparent'
@@ -177,21 +182,28 @@ export default function LiveMapLayers() {
             </button>
           ))}
         </div>
+
+        {/* Legend row */}
+        <div className="pt-2 border-t border-slate-900/60 flex items-center justify-between text-[8.5px] font-mono text-slate-500">
+          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> LIVE Weather</span>
+          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> VERIFIED Assets</span>
+          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-400" /> SIMULATION Ops</span>
+        </div>
       </div>
 
-      {/* 2. Real-Time Operations Telemetry Feed */}
-      <div className="rounded-2xl border border-slate-800/80 bg-[#0B0F19]/65 backdrop-blur-xl p-5 shadow-xl space-y-4 flex-1 flex flex-col justify-between min-h-[360px]">
+      {/* 2. Operations Telemetry Feed */}
+      <div className="rounded-2xl border border-slate-800/80 bg-[#0B0F19]/65 backdrop-blur-xl p-5 shadow-xl space-y-3 flex-1 flex flex-col justify-between min-h-[350px]">
         <div className="flex items-center justify-between border-b border-slate-900/60 pb-3">
           <h4 className="text-xs font-bold text-slate-200 tracking-wider uppercase font-mono flex items-center space-x-2">
             <Radio className="w-4 h-4 text-emerald-500 animate-pulse" />
-            <span>LIVE OPERATIONS FEED</span>
+            <span>NATIONAL OPERATIONS FEED</span>
           </h4>
-          <span className="text-[9px] font-mono text-slate-500 bg-slate-950 px-2.5 py-0.5 rounded-full border border-slate-900 tracking-wider">
-            AUTO-SYNCING
+          <span className="text-[9px] font-mono text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-900/40 tracking-wider font-bold">
+            SIMULATION
           </span>
         </div>
 
-        <div className="space-y-2.5 max-h-[220px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-900 scrollbar-track-transparent flex-1 pt-1">
+        <div className="space-y-2.5 max-h-[200px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-900 scrollbar-track-transparent flex-1 pt-1">
           {feed.map((item, index) => {
             const isLatest = index === 0
             

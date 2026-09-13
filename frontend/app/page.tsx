@@ -2,187 +2,244 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import {
-  Shield,
-  Flame,
-  HeartPulse,
-  Activity,
-  CloudRain,
-  Database,
-  Map,
-  Cpu,
-  Building,
-  Network,
-  ArrowRight,
-  Lock,
-  User,
-  CheckCircle2,
-  Zap,
-  Settings,
-  Layers,
-  Video,
-  Train,
-  Plane,
-  Power,
-  Radio,
-  FileText,
-  ExternalLink,
-  Eye,
-  Check,
-  Building2,
-  AlertTriangle,
-  Locate,
-  Maximize2,
-  Plus,
-  Minus,
-  Navigation,
-  Compass
+import { 
+  Shield, 
+  Flame, 
+  HeartPulse, 
+  Activity, 
+  CloudRain, 
+  Database, 
+  Map, 
+  Cpu, 
+  Building, 
+  Network, 
+  ArrowRight, 
+  Lock, 
+  User, 
+  CheckCircle2, 
+  Zap, 
+  Layers, 
+  Radio, 
+  FileText, 
+  ExternalLink, 
+  Check, 
+  Building2, 
+  AlertTriangle, 
+  Compass, 
+  Sparkles, 
+  Waves, 
+  Truck, 
+  Car, 
+  Navigation, 
+  PhoneCall, 
+  Sliders, 
+  MapPin, 
+  AlertCircle, 
+  Clock, 
+  Wheat, 
+  Bell, 
+  BookOpen, 
+  HelpCircle, 
+  CheckSquare 
 } from 'lucide-react'
 
 import BrandLogo from '../components/ui/BrandLogo'
 import IndiaDigitalTwin from '../components/landing/IndiaDigitalTwin'
 import LiveMapLayers from '../components/landing/LiveMapLayers'
-import NationalDigitalTwinMapSection from '../components/landing/NationalDigitalTwinMapSection'
 
 export default function HomeLandingPage() {
-  const [selectedScenario, setSelectedScenario] = useState<string | null>(null)
+  const [selectedScenario, setSelectedScenario] = useState<string>('flood')
+  const [hitlDecision, setHitlDecision] = useState<'pending' | 'approved' | 'modified' | 'rejected'>('pending')
+
+  const scenarios = [
+    {
+      id: 'flood',
+      title: 'Urban Flood Response',
+      badge: 'PRIMARY SIH FOCUS',
+      badgeColor: 'text-cyan-400 bg-cyan-950/60 border-cyan-800/50',
+      inputs: 'Open-Meteo Weather + Beach Road ESP32 IoT Gauge + Flood AI + Traffic Cameras',
+      outputs: 'Inundation forecast, storm culvert breach alert, emergency pump allocation, green corridor routing',
+      actionUrl: '/dashboard/city?scenario=flood',
+      actionText: 'RUN VIZAG FLOOD SCENARIO'
+    },
+    {
+      id: 'rural',
+      title: 'Rural Flood & Evacuation',
+      badge: 'HYDROLOGICAL & AGRI',
+      badgeColor: 'text-emerald-400 bg-emerald-950/60 border-emerald-800/50',
+      inputs: 'Precipitation Telemetry + NRSC VIC Historical Hydrology Baseline + Agricultural Risk Model',
+      outputs: 'Village inundation index, crop waterlogging damage projection, safe-exit evacuation paths, multilingual alerts',
+      actionUrl: '/dashboard/rural',
+      actionText: 'EXPLORE RURAL MODEL'
+    },
+    {
+      id: 'fire',
+      title: 'Fire & Hazmat Response',
+      badge: 'EMERGENCY SERVICES',
+      badgeColor: 'text-red-400 bg-red-950/60 border-red-800/50',
+      inputs: 'Thermal Sensor / Incident Call + Fire Intelligence + Hydrant Geospatial Mesh + Traffic',
+      outputs: 'Hydrant proximity routing, hazmat vapor isolation perimeter, burn-unit hospital staging, evacuation corridor',
+      actionUrl: '/dashboard/city?scenario=fire',
+      actionText: 'VIEW FIRE DISPATCH'
+    },
+    {
+      id: 'medical',
+      title: 'Medical Emergency & Surge',
+      badge: 'PUBLIC HEALTH',
+      badgeColor: 'text-teal-400 bg-teal-950/60 border-teal-800/50',
+      inputs: 'ERSS 112 SOS / Citizen Beacon + 108 Ambulance Fleet GPS + Hospital Bed Reserves',
+      outputs: 'Fastest transit corridor, King George Hospital ICU reserve lock, paramedic route dispatch',
+      actionUrl: '/dashboard/healthcare',
+      actionText: 'VIEW HEALTHCARE GRID'
+    },
+    {
+      id: 'traffic',
+      title: 'Traffic Emergency & Diversion',
+      badge: 'MOBILITY INTELLIGENCE',
+      badgeColor: 'text-amber-400 bg-amber-950/60 border-amber-800/50',
+      inputs: 'Simulated CCTV Feed + Vehicle Detection AI + Intersection Signal Telemetry',
+      outputs: 'Congestion heatmap, dynamic traffic signal override, green corridor for emergency responders',
+      actionUrl: '/dashboard/digital-twin',
+      actionText: 'VIEW TRAFFIC MESH'
+    }
+  ]
+
+  const activeScenarioData = scenarios.find(s => s.id === selectedScenario) || scenarios[0]
 
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 font-sans relative overflow-x-hidden selection:bg-sky-500/30 selection:text-white">
-
-      {/* 1. AMBIENT GLOW BACKDROPS */}
+      
+      {/* AMBIENT BACKGROUND GLOWS */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/5 rounded-full filter blur-[120px] pointer-events-none z-0" />
       <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-sky-500/5 rounded-full filter blur-[140px] pointer-events-none z-0" />
-      <div className="absolute bottom-1/4 left-10 w-[450px] h-[450px] bg-purple-500/3 rounded-full filter blur-[100px] pointer-events-none z-0" />
+      <div className="absolute bottom-1/4 left-10 w-[450px] h-[450px] bg-cyan-500/3 rounded-full filter blur-[100px] pointer-events-none z-0" />
 
-      {/* Grid overlay */}
+      {/* Subtle grid pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(18,24,38,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(18,24,38,0.12)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none z-0" />
 
-      {/* 2. STICKY STYLED GOVERNMENT HEADER */}
-      <header className="sticky top-0 z-50 w-full border-b border-slate-900/60 bg-[#030712]/80 backdrop-blur-xl select-none">
-        <div className="max-w-[1700px] mx-auto px-6 lg:px-12 h-28 flex items-center justify-between">
+      {/* HEADER NAVIGATION */}
+      <header className="sticky top-0 z-50 w-full border-b border-slate-900/80 bg-[#030712]/90 backdrop-blur-xl select-none">
+        <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-10 h-20 flex items-center justify-between">
+          
+          {/* Left Branding */}
+          <div className="flex items-center space-x-3">
+            <BrandLogo size="md" />
+            <span className="hidden sm:inline-block text-[9px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-sky-950/60 border border-sky-800/40 text-sky-400">
+              INDIA-SCALE PROTOTYPE
+            </span>
+          </div>
 
-          {/* Header Left Branding Block */}
-          <BrandLogo size="md" />
-
-          {/* Center Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-8 xl:space-x-10 text-[11px] font-semibold tracking-[0.15em] text-slate-400 font-mono antialiased">
-            <Link href="/" className="text-sky-400 border-b-2 border-sky-500 pb-1.5 px-0.5 transition-all duration-300">HOME</Link>
-            <a href="#supported-domains" className="hover:text-white transition-colors py-1">DOMAINS</a>
-            <a href="#national-stats" className="hover:text-white transition-colors py-1">STATISTICS</a>
+          {/* Center Nav Links */}
+          <nav className="hidden lg:flex items-center space-x-7 text-[11px] font-semibold tracking-[0.12em] text-slate-400 font-mono antialiased">
+            <Link href="/" className="text-sky-400 border-b-2 border-sky-500 pb-1 px-0.5">HOME</Link>
+            <a href="#national-network" className="hover:text-white transition-colors py-1">NATIONAL NETWORK</a>
+            <a href="#vizag-proof" className="hover:text-white transition-colors py-1">VIZAG DEMO</a>
+            <a href="#workflow" className="hover:text-white transition-colors py-1">AI WORKFLOW</a>
+            <a href="#flood-traffic" className="hover:text-white transition-colors py-1">FLOOD + TRAFFIC</a>
+            <a href="#human-in-the-loop" className="hover:text-white transition-colors py-1">SAFETY GATE</a>
             <a href="#digital-twin" className="hover:text-white transition-colors py-1">DIGITAL TWIN</a>
-            <Link href="/dashboard/national" className="hover:text-white transition-colors py-1 flex items-center space-x-1.5">
-              <span>COMMAND DECK</span>
-              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-            </Link>
-            <Link href="/citizen" className="hover:text-sky-400 transition-colors py-1 flex items-center space-x-1.5">
-              <span>CITIZEN PORTAL</span>
-              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-            </Link>
+            <a href="#rural-flood" className="hover:text-white transition-colors py-1">RURAL</a>
+            <a href="#citizen-os" className="hover:text-white transition-colors py-1">CITIZEN OS</a>
           </nav>
 
-          {/* Right Controls Area */}
+          {/* Right Action Controls */}
           <div className="flex items-center space-x-3">
-            <div className="hidden lg:flex items-center space-x-1.5 px-3 h-7 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold tracking-wider font-mono uppercase select-none">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>All Systems Operational</span>
-            </div>
+            <Link 
+              href="/dashboard/national" 
+              className="hidden sm:inline-flex items-center justify-center space-x-1.5 px-3.5 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-slate-700 text-xs font-bold font-mono transition-all"
+            >
+              <Compass className="w-3.5 h-3.5 text-sky-400" />
+              <span>COMMAND DECK</span>
+            </Link>
 
-            <Link
-              href="/citizen"
-              className="hidden sm:inline-flex items-center justify-center space-x-1.5 px-3.5 h-10 rounded-xl bg-sky-950/40 border border-sky-800/60 text-sky-300 hover:text-white hover:border-sky-500 text-xs font-bold transition-all duration-200 hover:-translate-y-[2px] backdrop-blur-md"
+            <Link 
+              href="/citizen" 
+              className="inline-flex items-center justify-center space-x-1.5 px-3.5 h-9 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white text-xs font-bold font-mono shadow-[0_2px_10px_rgba(14,165,233,0.3)] transition-all"
             >
               <User className="w-3.5 h-3.5" />
-              <span>Citizen Portal</span>
-            </Link>
-
-            <Link
-              href="/dashboard/national"
-              className="hidden sm:inline-flex items-center justify-center space-x-1.5 px-4 h-10 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-slate-700 text-xs font-bold shadow-[0_4px_12px_rgba(0,0,0,0.25)] hover:shadow-[0_6px_20px_rgba(30,41,59,0.4),0_0_12px_rgba(148,163,184,0.1)] transition-all duration-200 hover:-translate-y-[2px] backdrop-blur-md bg-opacity-40"
-            >
-              <Building2 className="w-3.5 h-3.5 text-sky-400" />
-              <span>Command Deck</span>
-            </Link>
-
-            <Link
-              href="/login"
-              className="inline-flex items-center justify-center space-x-1.5 px-4 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white text-xs font-bold shadow-[0_4px_12px_rgba(59,130,246,0.25)] hover:shadow-[0_6px_20px_rgba(59,130,246,0.45),0_0_12px_rgba(59,130,246,0.35)] transition-all duration-200 hover:-translate-y-[2px]"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span>Official Login</span>
+              <span>CITIZEN PORTAL</span>
             </Link>
           </div>
         </div>
       </header>
 
-      {/* 3. HERO CONTAINER - THREE PANEL LAYOUT */}
-      <main className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-16 relative z-10">
+      {/* MAIN CONTAINER */}
+      <main className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-24 relative z-10">
 
-        <section className="grid grid-cols-1 lg:grid-cols-[28fr_44fr_28fr] gap-8 items-start lg:h-[780px]">
-
-          {/* LEFT PANEL */}
-          <div className="h-full flex flex-col justify-start py-2 lg:pt-0 lg:-mt-4">
-            <div className="space-y-6 w-full lg:max-w-[380px] xl:max-w-[420px]">
-              <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[#3B82F6] text-[10px] font-bold tracking-wider font-mono uppercase">
+        {/* ========================================================================= */}
+        {/* 1. HERO SECTION & 2. INDIA-SCALE NATIONAL NETWORK */}
+        {/* ========================================================================= */}
+        <section id="national-network" className="space-y-6 scroll-mt-24">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8 items-start">
+            
+            {/* LEFT PANEL: BharatOS Positioning & Dual Entry CTA */}
+            <div className="lg:col-span-4 flex flex-col justify-start space-y-5 min-w-0">
+              
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-[10px] font-bold tracking-wider font-mono uppercase w-fit">
                 <Shield className="w-3 h-3" />
-                <span>Government of India AI Platform</span>
+                <span>AI-POWERED NATIONAL EMERGENCY OPERATIONS</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-[2.3rem] font-black tracking-tight leading-[1.15] text-white">
-                One Platform.<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Every Emergency.</span><br />
-                Every Department.<br />
-                Every Citizen.
-              </h1>
+              <div className="space-y-2">
+                <h1 className="text-3xl sm:text-4xl xl:text-[2.5rem] font-black tracking-tight leading-[1.12] text-white">
+                  BHARATOS<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500">
+                    AI-POWERED EMERGENCY COMMAND & DIGITAL TWIN OS
+                  </span>
+                </h1>
+                <p className="text-xs sm:text-sm font-bold font-mono text-cyan-400 tracking-wider">
+                  Detect. Predict. Decide. Approve. Respond. Resolve.
+                </p>
+              </div>
 
-              <p className="text-[12.5px] text-slate-300 leading-[1.7] font-medium max-w-[92%]">
-                BharatOS unifies multi-agent AI, spatial digital twin systems, and real-time operations across India to coordinate emergency dispatch, emergency decision-making, and resilient public governance.
+              <p className="text-xs sm:text-[13px] text-slate-300 leading-relaxed font-normal">
+                An AI-powered emergency operations platform connecting weather intelligence, flood and IoT sensing, traffic intelligence, emergency services, citizens and a spatial Digital Twin through a human-in-the-loop response workflow. Flood resilience is the primary SIH use case, coordinating multi-agency dispatch with mandatory operator verification.
               </p>
 
-              {/* Feature List */}
-              <div className="grid grid-cols-2 gap-y-3.5 gap-x-6 text-[10.5px] font-semibold font-mono tracking-wider text-slate-300 justify-items-start pl-1">
+              {/* Core Feature Checklist */}
+              <div className="grid grid-cols-2 gap-2 text-[10.5px] font-mono text-slate-300">
                 <div className="flex items-center space-x-1.5">
-                  <Check className="w-3 h-3 text-sky-400" />
-                  <span>Multi-Agent AI</span>
+                  <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                  <span>Real IoT Sensing</span>
                 </div>
                 <div className="flex items-center space-x-1.5">
-                  <Check className="w-3 h-3 text-sky-400" />
-                  <span>Emergency Actions</span>
+                  <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                  <span>LangGraph Multi-Agent</span>
                 </div>
                 <div className="flex items-center space-x-1.5">
-                  <Check className="w-3 h-3 text-sky-400" />
-                  <span>Digital Twin Mesh</span>
+                  <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                  <span>Human-in-the-Loop</span>
                 </div>
                 <div className="flex items-center space-x-1.5">
-                  <Check className="w-3 h-3 text-sky-400" />
-                  <span>Smart Governance</span>
+                  <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                  <span>Spatial Digital Twin</span>
                 </div>
               </div>
 
               {/* Access Portal Dual Entry CTA Block */}
               <div className="pt-2 space-y-3 w-full">
-                <div className="flex items-center space-x-2 text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold select-none">
-                  <span className="text-sky-400">CHOOSE ACCESS TYPE</span>
-                  <div className="h-px flex-1 bg-slate-800/80" />
+                <div className="flex items-center space-x-2 text-[9.5px] font-mono uppercase tracking-widest text-slate-400 font-bold select-none">
+                  <span className="text-sky-400">CHOOSE ACCESS PORTAL</span>
+                  <div className="h-px flex-1 bg-slate-800" />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2.5 w-full">
-                  {/* 🏛 GOVERNMENT COMMAND CENTER */}
+                <div className="grid grid-cols-1 gap-2.5 w-full">
+                  {/* GOVERNMENT COMMAND CENTER BUTTON */}
                   <Link
                     href="/dashboard/national"
-                    className="w-full group relative flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-blue-900/50 via-blue-950/40 to-slate-900/80 border border-blue-600/40 hover:border-blue-500 text-left shadow-[0_4px_16px_rgba(30,58,138,0.25)] hover:shadow-[0_8px_24px_rgba(59,130,246,0.35)] transition-all duration-200 hover:-translate-y-[2px]"
+                    className="w-full group flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-blue-900/40 via-blue-950/30 to-slate-900/80 border border-blue-600/40 hover:border-blue-400 text-left shadow-lg hover:shadow-blue-900/20 transition-all hover:-translate-y-0.5"
                   >
                     <div className="flex items-center space-x-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 text-lg shrink-0 shadow-inner">
+                      <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 text-lg shrink-0">
                         🏛
                       </div>
                       <div className="space-y-0.5 min-w-0">
                         <div className="text-xs sm:text-[13px] font-black tracking-wide text-white font-mono uppercase truncate">
                           GOVERNMENT COMMAND CENTER
                         </div>
-                        <p className="text-[10px] sm:text-[10.5px] text-slate-400 font-mono font-medium truncate">
-                          Monitor • Coordinate • Respond
+                        <p className="text-[10px] text-slate-400 font-mono truncate">
+                          National • State • District • City Operations
                         </p>
                       </div>
                     </div>
@@ -191,21 +248,21 @@ export default function HomeLandingPage() {
                     </div>
                   </Link>
 
-                  {/* 👤 CITIZEN PORTAL */}
+                  {/* CITIZEN PORTAL BUTTON */}
                   <Link
                     href="/citizen"
-                    className="w-full group relative flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-sky-950/60 via-slate-900/80 to-slate-900/90 border border-sky-600/40 hover:border-sky-400 text-left shadow-[0_4px_16px_rgba(14,165,233,0.2)] hover:shadow-[0_8px_24px_rgba(14,165,233,0.35)] transition-all duration-200 hover:-translate-y-[2px]"
+                    className="w-full group flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-sky-950/40 via-slate-900/70 to-slate-900/90 border border-sky-600/40 hover:border-sky-400 text-left shadow-lg hover:shadow-sky-900/20 transition-all hover:-translate-y-0.5"
                   >
                     <div className="flex items-center space-x-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-sky-400 text-lg shrink-0 shadow-inner">
+                      <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-sky-400 text-lg shrink-0">
                         👤
                       </div>
                       <div className="space-y-0.5 min-w-0">
                         <div className="text-xs sm:text-[13px] font-black tracking-wide text-white font-mono uppercase truncate">
                           CITIZEN PORTAL
                         </div>
-                        <p className="text-[10px] sm:text-[10.5px] text-slate-400 font-mono font-medium truncate">
-                          Report • Receive Alerts • Stay Safe
+                        <p className="text-[10px] text-slate-400 font-mono truncate">
+                          Crowdsourced Reports • Safe Exit • SOS Alerts
                         </p>
                       </div>
                     </div>
@@ -215,485 +272,862 @@ export default function HomeLandingPage() {
                   </Link>
                 </div>
 
-                <div className="flex items-center justify-between text-[9.5px] font-mono text-slate-500 px-1 pt-1 select-none">
+                <div className="flex items-center justify-between text-[9px] font-mono text-slate-500 px-1 pt-1 select-none">
                   <Link href="/login" className="hover:text-sky-400 transition-colors flex items-center space-x-1">
                     <Lock className="w-2.5 h-2.5" />
-                    <span>Official Login</span>
+                    <span>Officer Login</span>
                   </Link>
-                  <Link href="/citizen/sos" className="text-red-400/90 hover:text-red-400 font-bold transition-colors flex items-center space-x-1">
+                  <Link href="/citizen/sos" className="text-red-400 hover:text-red-300 font-bold transition-colors flex items-center space-x-1">
                     <AlertTriangle className="w-2.5 h-2.5" />
                     <span>Emergency 1-Tap SOS</span>
                   </Link>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* CENTER PANEL: HUGE DIGITAL TWIN CARD & STATUS STRIP */}
-          <div className="flex flex-col justify-between space-y-5 py-2 h-full w-full max-w-[965px] mx-auto">
-            <IndiaDigitalTwin />
-
-            {/* Compact glass status strip below the map */}
-            <div className="w-full flex flex-wrap items-center justify-between gap-3 px-5 py-3 rounded-xl border border-slate-900 bg-slate-950/75 backdrop-blur-md text-[9px] font-mono font-bold text-slate-300">
-              <div className="flex items-center space-x-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-500" />
-                <span>28/28 States Connected</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-500" />
-                <span>8 UT Connected</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-500" />
-                <span>785+ Districts</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-500" />
-                <span>13 AI Agents</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-500" />
-                <span>12 Departments</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Network 99.98%</span>
+            {/* CENTER PANEL: UNCLIPPED COMPLETE INDIA MAP */}
+            <div className="lg:col-span-5 flex flex-col space-y-3 min-w-0 w-full">
+              <IndiaDigitalTwin />
+              
+              {/* Architecture Facts Strip */}
+              <div className="w-full flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 rounded-xl border border-slate-900 bg-slate-950/80 backdrop-blur-md text-[9px] font-mono text-slate-300">
+                <span className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-400" /> 28 States Mesh</span>
+                <span className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-400" /> 8 UT Geometries</span>
+                <span className="flex items-center gap-1.5"><Check className="w-3 h-3 text-cyan-400" /> 5-Tier Command</span>
+                <span className="flex items-center gap-1.5"><Check className="w-3 h-3 text-purple-400" /> Multi-Agent AI</span>
               </div>
             </div>
-          </div>
 
-          {/* RIGHT PANEL: LIVE LAYERS & FEED */}
-          <div className="py-2 h-full w-full">
-            <LiveMapLayers />
-          </div>
+            {/* RIGHT PANEL: NATIONAL GIS LAYERS & OPS FEED */}
+            <div className="lg:col-span-3 flex flex-col min-w-0 w-full">
+              <LiveMapLayers />
+            </div>
 
+          </div>
         </section>
 
-        {/* 1. GOVERNMENT INFRASTRUCTURE APIs */}
-        <section id="govt-infrastructure" className="space-y-8 border-t border-slate-900/60 pt-16 scroll-mt-24">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-              Government Infrastructure APIs
+        {/* ========================================================================= */}
+        {/* 3. VISAKHAPATNAM WORKING DEMONSTRATION */}
+        {/* ========================================================================= */}
+        <section id="vizag-proof" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold font-mono uppercase">
+              <MapPin className="w-3 h-3" />
+              <span>SIH WORKING PROOF PILOT</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
+              VISAKHAPATNAM — WORKING DEMONSTRATION
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium">
-              Live backhaul telemetry and connection status with official Government of India services.
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              Real + Verified Geography | Working IoT | Traffic Simulation | AI Decision Pipeline | Digital Twin
+            </p>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl mx-auto">
+              While BharatOS provides the architectural framework for India-scale disaster governance, our fully functioning hardware-integrated pilot is operational for Visakhapatnam (GVMC), linking real physical culvert gauges, weather intelligence, and urban response.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
             {[
-              { name: 'IMD Weather Feed', status: 'Connected', sync: '3s ago', latency: '45ms', health: '99.9%' },
-              { name: 'NDMA Core Registry', status: 'Connected', sync: '1s ago', latency: '24ms', health: '99.9%' },
-              { name: 'ISRO Bhuvan GIS', status: 'Connected', sync: 'Just Now', latency: '12ms', health: '99.9%' },
-              { name: 'ERSS 112 Gateway', status: 'Connected', sync: 'Just Now', latency: '6ms', health: '100%' },
-              { name: 'NIC Secure Portal', status: 'Connected', sync: '8s ago', latency: '18ms', health: '99.9%' },
-              { name: 'Central Water Comm.', status: 'Connected', sync: '12s ago', latency: '40ms', health: '99.8%' },
-              { name: 'Ministry of Health', status: 'Connected', sync: '2m ago', latency: '33ms', health: '99.9%' },
-              { name: 'Indian Railways', status: 'Connected', sync: '15s ago', latency: '45ms', health: '99.8%' },
-              { name: 'Power Grid Registry', status: 'Connected', sync: 'Just Now', latency: '8ms', health: '99.9%' },
-              { name: 'Digital India API', status: 'Connected', sync: '1m ago', latency: '14ms', health: '99.9%' }
-            ].map((api) => (
-              <div
-                key={api.name}
-                className="rounded-2xl border border-slate-900 bg-slate-950/20 p-5 hover:border-slate-800/85 hover:bg-[#0B0F19]/40 hover:shadow-lg transition-all duration-200 select-none text-left flex flex-col justify-between h-[155px]"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
-                      {api.name}
-                    </h4>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              { title: 'Flood Intelligence', desc: 'Beach Road storm drain telemetry & culvert outfalls', icon: Waves, badge: 'REAL IoT + AI' },
+              { title: 'Weather Intelligence', desc: 'Live Open-Meteo precipitation & storm tracking', icon: CloudRain, badge: 'LIVE API' },
+              { title: 'Traffic Intelligence', desc: 'Simulated CCTV vehicle counts & congestion prediction', icon: Car, badge: 'SIMULATION' },
+              { title: 'IoT Monitoring', desc: 'ESP32 + HC-SR04 physical water-level sensor node', icon: Activity, badge: 'REAL HARDWARE' },
+              { title: 'Emergency Response', desc: 'Ambulance, Fire tender, and Police cordon dispatch', icon: Truck, badge: 'HUMAN APPROVAL' },
+              { title: 'Digital Twin', desc: '2D/3D spatial map of GVMC wards, facilities & assets', icon: Map, badge: 'VERIFIED GIS' }
+            ].map((card) => {
+              const Icon = card.icon
+              return (
+                <div key={card.title} className="p-4 rounded-2xl border border-slate-800/80 bg-[#0B0F19]/60 flex flex-col justify-between space-y-3">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Icon className="w-5 h-5 text-cyan-400" />
+                      <span className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/40 text-cyan-300 font-bold">
+                        {card.badge}
+                      </span>
+                    </div>
+                    <h4 className="text-xs font-bold font-mono text-white uppercase">{card.title}</h4>
+                    <p className="text-[10px] text-slate-400 leading-snug">{card.desc}</p>
                   </div>
-                  <div className="flex items-center space-x-1.5">
-                    <span className="text-[9px] font-mono text-emerald-400 font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 uppercase">
-                      {api.status}
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Vizag Action Callouts */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+            <Link
+              href="/dashboard/city?scenario=flood"
+              className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs font-bold font-mono shadow-lg transition-all"
+            >
+              <Waves className="w-4 h-4" />
+              <span>RUN VIZAG FLOOD RESPONSE</span>
+            </Link>
+            <Link
+              href="/dashboard/city"
+              className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-bold font-mono transition-all"
+            >
+              <Compass className="w-4 h-4 text-cyan-400" />
+              <span>OPEN VIZAG COMMAND CENTER</span>
+            </Link>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 4. DETECT → PREDICT → RESPOND WORKFLOW */}
+        {/* ========================================================================= */}
+        <section id="workflow" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              FROM DETECTION TO RESOLUTION
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              10-step synchronized operational pipeline from initial hazard sensing to verified closure.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {[
+              { step: '01', title: 'Multi-Source Sensing', desc: 'Weather, ESP32 IoT, CCTV simulation, citizen reports', type: 'INPUT' },
+              { step: '02', title: 'AI Detection', desc: 'Real-time threshold breach & anomaly identification', type: 'AI COGNITION' },
+              { step: '03', title: 'AI Prediction', desc: 'Inundation forecast & traffic congestion timeline', type: 'AI PREDICTION' },
+              { step: '04', title: 'Impact Assessment', desc: 'Hospital access, blocked roads, and village exposure', type: 'IMPACT EVAL' },
+              { step: '05', title: 'AI Recommendation', desc: 'LangGraph multi-agency resource & diversion plan', type: 'AI ADVISORY' },
+              { step: '06', title: 'Human Approval', desc: 'Commander review: Approve, Modify, or Reject', type: 'SAFETY GATE' },
+              { step: '07', title: 'Dispatch Action', desc: 'ERSS 112, fire, police & healthcare mobilization', type: 'EXECUTION' },
+              { step: '08', title: 'Live Tracking', desc: 'Real-time vehicle GPS & spatial status monitoring', type: 'TELEMETRY' },
+              { step: '09', title: 'Digital Twin Sync', desc: 'Live operational visualization on 2D/3D mesh', type: 'SPATIAL TWIN' },
+              { step: '10', title: 'Resolution & Audit', desc: 'Water recedes, road restored, immutable logs saved', type: 'RESOLVED' }
+            ].map((item) => (
+              <div key={item.step} className="p-3.5 rounded-xl border border-slate-800/80 bg-[#0B0F19]/70 space-y-2 flex flex-col justify-between">
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-mono text-cyan-400 font-bold">STEP {item.step}</span>
+                    <span className="text-[8px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-slate-800 text-slate-400">
+                      {item.type}
                     </span>
                   </div>
-                </div>
-
-                <div className="pt-2 border-t border-slate-900 mt-2 space-y-1 font-mono text-[8.5px] text-slate-500">
-                  <div className="flex justify-between"><span>LAST SYNC:</span><span className="text-slate-300 font-bold">{api.sync}</span></div>
-                  <div className="flex justify-between"><span>LATENCY:</span><span className="text-slate-300 font-bold">{api.latency}</span></div>
-                  <div className="flex justify-between"><span>HEALTH %:</span><span className="text-emerald-400 font-bold">{api.health}</span></div>
+                  <h4 className="text-xs font-bold font-mono text-white">{item.title}</h4>
+                  <p className="text-[10px] text-slate-400 leading-snug">{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* 2. AI EMERGENCY WORKFLOW */}
-        <section id="ai-workflow" className="space-y-8 border-t border-slate-900/60 pt-16 scroll-mt-24">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-              AI Emergency Workflow
+        {/* ========================================================================= */}
+        {/* 5. FLOOD + TRAFFIC INTEGRATION SHOWCASE */}
+        {/* ========================================================================= */}
+        <section id="flood-traffic" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-bold font-mono uppercase">
+              <Waves className="w-3 h-3" />
+              <span>CORE CROSS-DOMAIN INTEGRATION</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              FLOOD + TRAFFIC INTELLIGENCE
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium">
-              Synchronized pipeline detailing multi-agent dispatch coordination, validation, and resolution steps.
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              Synchronizing hydrological rise with urban mobility to maintain emergency medical and evacuation corridors.
             </p>
           </div>
 
-          <div className="relative grid grid-cols-1 md:grid-cols-7 gap-4 items-center">
+          {/* Visual Step-by-Step Flow */}
+          <div className="rounded-2xl border border-slate-800 bg-[#070c18] p-6 lg:p-8 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              
+              {/* Step A */}
+              <div className="p-4 rounded-xl border border-cyan-900/50 bg-cyan-950/20 space-y-2">
+                <span className="text-[9px] font-mono text-cyan-400 font-bold">1. WEATHER & SENSORS</span>
+                <h4 className="text-xs font-bold text-white">Rainfall & Water Rise</h4>
+                <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                  Open-Meteo reports 48mm/hr rain. Beach Road ESP32 gauge detects water depth surge to 4.65m (breaching critical threshold).
+                </p>
+              </div>
 
-            {/* Animated network routing pipeline connecting the nodes */}
-            <div className="hidden md:block absolute top-[44px] left-[6%] right-[6%] h-[8px] pointer-events-none z-0">
-              <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 10">
-                <path d="M 0,5 H 100" fill="none" stroke="rgba(6,182,212,0.18)" strokeWidth="1.5" />
-                <circle r="1.5" fill="#00f2ff">
-                  <animateMotion dur="4s" repeatCount="indefinite" path="M 0,5 H 100" />
-                </circle>
-                <circle r="1.5" fill="#a855f7" style={{ animationDelay: '1.5s' }}>
-                  <animateMotion dur="4.5s" repeatCount="indefinite" path="M 0,5 H 100" />
-                </circle>
-              </svg>
+              {/* Step B */}
+              <div className="p-4 rounded-xl border border-blue-900/50 bg-blue-950/20 space-y-2">
+                <span className="text-[9px] font-mono text-blue-400 font-bold">2. FLOOD & TRAFFIC AI</span>
+                <h4 className="text-xs font-bold text-white">Dual AI Prediction</h4>
+                <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                  Flood AI predicts culvert backflow in 15 mins. Traffic AI identifies 140 vehicles queued on Beach Road with impassable inundation.
+                </p>
+              </div>
+
+              {/* Step C */}
+              <div className="p-4 rounded-xl border border-purple-900/50 bg-purple-950/20 space-y-2">
+                <span className="text-[9px] font-mono text-purple-400 font-bold">3. COORDINATOR AI</span>
+                <h4 className="text-xs font-bold text-white">Combined Assessment</h4>
+                <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                  Coordinator Agent synthesizes: King George Hospital ambulance corridor is blocked. Recommends diversion via MVP Double Road.
+                </p>
+              </div>
+
+              {/* Step D */}
+              <div className="p-4 rounded-xl border border-amber-900/50 bg-amber-950/20 space-y-2">
+                <span className="text-[9px] font-mono text-amber-400 font-bold">4. HUMAN APPROVAL</span>
+                <h4 className="text-xs font-bold text-white">Commander Review</h4>
+                <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                  Operations Commander reviews diversion corridor and pump allocation. Explicitly approves dispatch via one click.
+                </p>
+              </div>
+
+              {/* Step E */}
+              <div className="p-4 rounded-xl border border-emerald-900/50 bg-emerald-950/20 space-y-2">
+                <span className="text-[9px] font-mono text-emerald-400 font-bold">5. TWIN & RESOLUTION</span>
+                <h4 className="text-xs font-bold text-white">Execution & Cleared</h4>
+                <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                  Police close Beach Road sector, pumps deployed, ambulances rerouted via green corridor. Digital Twin tracks resolution.
+                </p>
+              </div>
+
             </div>
 
-            {[
-              { step: '01', title: 'Citizen Report', desc: 'IoT Trigger / SOS Call', status: 'INCOMING', glow: 'border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)]' },
-              { step: '02', title: 'AI Classification', desc: 'Category parsing & risk analysis', status: 'PROCESSING', glow: 'border-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.1)]' },
-              { step: '03', title: 'Dept Selection', desc: 'Cross-agency resource routing', status: 'ROUTING', glow: 'border-cyan-500/35 shadow-[0_0_15px_rgba(6,182,212,0.15)] bg-[#0b1329]/20 border-cyan-500/40 animate-[pulse_3s_infinite_ease-in-out]' },
-              { step: '04', title: 'Officer Approval', desc: 'Manual plinth confirmation', status: 'WAITING', glow: 'border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)]' },
-              { step: '05', title: 'Dispatch', desc: 'ERSS 112 automated alert', status: 'STANDBY', glow: 'border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]' },
-              { step: '06', title: 'Live Tracking', desc: 'GIS location & drone monitoring', status: 'STANDBY', glow: 'border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.1)]' },
-              { step: '07', title: 'Resolved', desc: 'Case closing & logs archived', status: 'STANDBY', glow: 'border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' }
-            ].map((node) => (
-              <div
-                key={node.title}
-                className={`relative z-10 rounded-2xl border bg-[#0B0F19]/85 p-4 space-y-3 transition-all duration-300 hover:-translate-y-0.5 select-none ${node.glow}`}
-              >
-                <div className="flex items-center justify-between border-b border-slate-900 pb-2">
-                  <span className="text-[9.5px] font-mono text-slate-500 font-bold">
-                    STEP {node.step}
+            <div className="pt-3 border-t border-slate-900 flex flex-wrap items-center justify-between text-[10px] font-mono text-slate-400">
+              <span className="text-cyan-400 font-bold">FLOW SUMMARY:</span>
+              <span>WEATHER ➔ ESP32 SENSOR ➔ FLOOD AI ➔ TRAFFIC AI ➔ COORDINATOR AI ➔ HUMAN APPROVAL ➔ DISPATCH ➔ RESOLVED</span>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 6. HUMAN-IN-THE-LOOP SAFETY ARCHITECTURE */}
+        {/* ========================================================================= */}
+        <section id="human-in-the-loop" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold font-mono uppercase">
+              <Shield className="w-3 h-3" />
+              <span>NON-BYPASSABLE OPERATIONAL GOVERNANCE</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              HUMAN-IN-THE-LOOP SAFETY GATE
+            </h2>
+            <p className="text-base sm:text-lg font-bold font-mono text-amber-400">
+              AI recommends. Human approves. BharatOS executes.
+            </p>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl mx-auto">
+              Autonomous dispatch is strictly prohibited in BharatOS. Multi-agent AI performs high-speed synthesis and risk calculation, but the authority to deploy personnel, redirect traffic, and commit emergency resources remains exclusively with the human commander.
+            </p>
+          </div>
+
+          {/* Interactive Recommendation Simulation Card */}
+          <div className="max-w-4xl mx-auto rounded-2xl border border-amber-800/40 bg-[#0c0f1d] p-6 lg:p-8 space-y-6 shadow-2xl">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+              <div className="space-y-1">
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-950 border border-red-800 text-red-400 font-bold">
+                    CRITICAL ALERT INC-2026-8942
                   </span>
+                  <span className="text-xs font-mono text-slate-400">Ward 12 • Sector 4 Beach Road Culvert</span>
                 </div>
-                <div className="space-y-1 text-left">
-                  <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
-                    {node.title}
-                  </h4>
-                  <p className="text-[10px] text-slate-500 font-medium leading-snug">
-                    {node.desc}
-                  </p>
-                </div>
-                <div className="pt-1 flex items-center space-x-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                  <span className="text-[8.5px] font-mono text-slate-400 tracking-wider">
-                    {node.status}
-                  </span>
-                </div>
+                <h3 className="text-base font-bold text-white">Culvert Surcharge & Impassable Corridor</h3>
               </div>
-            ))}
+              <div className="flex items-center space-x-2 font-mono text-[10px]">
+                <span className="text-slate-400">AI Confidence:</span>
+                <span className="text-cyan-400 font-bold">96.4%</span>
+              </div>
+            </div>
+
+            {/* Assessment Badges */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                <span className="text-[9px] font-mono text-slate-500 uppercase">FLOOD SEVERITY</span>
+                <div className="text-sm font-bold text-red-400 font-mono">HIGH (Depth 4.65m)</div>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                <span className="text-[9px] font-mono text-slate-500 uppercase">TRAFFIC IMPACT</span>
+                <div className="text-sm font-bold text-amber-400 font-mono">HIGH CONGESTION</div>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                <span className="text-[9px] font-mono text-slate-500 uppercase">EMERGENCY CORRIDOR</span>
+                <div className="text-sm font-bold text-red-400 font-mono">AMBULANCE BLOCKED</div>
+              </div>
+            </div>
+
+            {/* AI Proposed Actions */}
+            <div className="space-y-2 pt-2">
+              <h4 className="text-xs font-bold font-mono text-slate-300 uppercase">AI RECOMMENDED ACTION PLAN:</h4>
+              <ul className="space-y-1.5 text-xs text-slate-300 font-mono">
+                <li className="flex items-start space-x-2">
+                  <span className="text-cyan-400 font-bold">1.</span>
+                  <span>Divert westbound traffic onto MVP Double Road; set traffic signals to flashing amber.</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-cyan-400 font-bold">2.</span>
+                  <span>Dispatch 2 GVMC Submersible Drainage Pumps (Asset #PUMP-04, #PUMP-07) to sector 4 outfall.</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-cyan-400 font-bold">3.</span>
+                  <span>Reserve green corridor for 108 Ambulances heading to King George Hospital.</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-cyan-400 font-bold">4.</span>
+                  <span>Broadcast localized evacuation warning in Telugu and English to 1,200 citizen devices in Ward 12.</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
+              <div className="text-xs font-mono text-slate-400">
+                Operator Action Status: <span className={`font-bold ${hitlDecision === 'approved' ? 'text-emerald-400' : hitlDecision === 'rejected' ? 'text-red-400' : 'text-amber-400'}`}>{hitlDecision.toUpperCase()}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={() => setHitlDecision('rejected')}
+                  className="px-4 py-2 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-800 text-red-300 font-mono text-xs font-bold transition-all"
+                >
+                  ✕ REJECT
+                </button>
+                <button
+                  onClick={() => setHitlDecision('modified')}
+                  className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 font-mono text-xs font-bold transition-all"
+                >
+                  ✎ MODIFY
+                </button>
+                <button
+                  onClick={() => setHitlDecision('approved')}
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-mono text-xs font-bold shadow-lg transition-all"
+                >
+                  ✓ APPROVE & DISPATCH
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 7. VISAKHAPATNAM DIGITAL TWIN */}
+        {/* ========================================================================= */}
+        <section id="digital-twin" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-bold font-mono uppercase">
+              <Map className="w-3 h-3" />
+              <span>SPATIAL MUNICIPAL TWIN</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              VISAKHAPATNAM DIGITAL TWIN
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              Live spatial synthesis of urban topography, sensor gauges, emergency assets, and incident perimeters.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            
+            <div className="p-6 rounded-2xl border border-slate-800 bg-[#0B0F19]/80 space-y-4">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 border border-emerald-800 text-emerald-400 font-bold">
+                REAL & VERIFIED INFRASTRUCTURE
+              </span>
+              <h4 className="text-base font-bold text-white">Physical Topography</h4>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Rendered with verified OpenStreetMap geometries for Visakhapatnam, mapping King George Hospital, Care Hospital, Fire HQ, Police Stations, and Beach Road culvert sluice gates.
+              </p>
+              <div className="text-[10px] font-mono text-slate-400 space-y-1">
+                <div>• Verified GVMC municipal boundaries</div>
+                <div>• 14 validated healthcare centers</div>
+                <div>• Beach Road physical sensor node</div>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-2xl border border-slate-800 bg-[#0B0F19]/80 space-y-4">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950 border border-amber-800 text-amber-400 font-bold">
+                SIMULATION & OPERATIONAL FEEDS
+              </span>
+              <h4 className="text-base font-bold text-white">Controlled Telemetry</h4>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Emergency vehicle patrol vectors, traffic camera vehicle density heatmaps, and secondary drainage node water depths run on synchronized simulation algorithms.
+              </p>
+              <div className="text-[10px] font-mono text-slate-400 space-y-1">
+                <div>• Dynamic GPS patrol simulation</div>
+                <div>• Intersection camera density maps</div>
+                <div>• Sluice gate backflow vectors</div>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-2xl border border-cyan-800/60 bg-gradient-to-br from-[#051128] to-[#040815] space-y-4 flex flex-col justify-between">
+              <div className="space-y-2">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-400 font-bold">
+                  INTERACTIVE PLATFORM
+                </span>
+                <h4 className="text-base font-bold text-white">Launch Spatial Cockpit</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Open the full 2D/3D spatial map view with live node popups, resource allocation drawers, and timeline playback.
+                </p>
+              </div>
+
+              <Link
+                href="/dashboard/digital-twin"
+                className="w-full inline-flex items-center justify-center space-x-2 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-mono text-xs font-bold transition-all shadow-lg"
+              >
+                <span>OPEN DIGITAL TWIN</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
 
           </div>
         </section>
 
-        {/* 3. SCENARIO SIMULATOR */}
-        <section className="space-y-8 border-t border-slate-900/60 pt-16">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-              Scenario Simulator
+        {/* ========================================================================= */}
+        {/* 8. AI COMMAND LAYER */}
+        {/* ========================================================================= */}
+        <section id="ai-layer" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              AI COMMAND LAYER
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium">
-              Execute response playbooks and auto-routing policies in a simulated environment.
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              Seven specialized cognitive agents coordinating operational decisions via LangGraph.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { id: 'flood', title: 'Urban Flood Response', time: '12 mins', depts: 'NDMA, Traffic, CWC', agents: 'Coord, Water, Traffic' },
-              { id: 'cyclone', title: 'Cyclone Response', time: '9 mins', depts: 'IMD, NDMA, Navy, ERSS', agents: 'Coord, Weather, Rescue' },
-              { id: 'fire', title: 'Fire & Hazmat Response', time: '6 mins', depts: 'Fire, Health, Power Grid', agents: 'Coord, Rescue, Medical' },
-              { id: 'earthquake', title: 'Earthquake Response', time: '15 mins', depts: 'NDMA, Health, Police', agents: 'Coord, Struct, Rescue' }
-            ].map((scenario) => (
-              <div
-                key={scenario.id}
-                onClick={() => setSelectedScenario(scenario.id)}
-                className={`cursor-pointer group relative rounded-2xl border p-5 transition-all duration-350 select-none flex flex-col justify-between h-[210px] ${
-                  selectedScenario === scenario.id
-                    ? 'border-sky-500 bg-sky-500/5 shadow-[0_0_20px_rgba(14,165,233,0.15)]'
-                    : 'border-slate-900 bg-slate-950/20 hover:border-slate-800 hover:bg-slate-950/45'
+              { name: 'Flood Intelligence', desc: 'Detects water-level changes, culvert backflow, and predicts flood inundation risk.', icon: Waves, color: 'text-cyan-400' },
+              { name: 'Weather Intelligence', desc: 'Analyzes real-time Open-Meteo precipitation, storm trajectory, and cloud cover.', icon: CloudRain, color: 'text-blue-400' },
+              { name: 'Traffic Intelligence', desc: 'Analyzes vehicle detection, queue density, congestion hotspots, and road impact.', icon: Car, color: 'text-amber-400' },
+              { name: 'Fire & Rescue Intelligence', desc: 'Evaluates structural hazard parameters, hydrant proximity, and rescue staging.', icon: Flame, color: 'text-red-400' },
+              { name: 'Healthcare Intelligence', desc: 'Coordinates hospital surge capacity, ICU bed reserves, and ambulance handoffs.', icon: HeartPulse, color: 'text-emerald-400' },
+              { name: 'Routing Intelligence', desc: 'Calculates emergency response corridors, obstacle bypasses, and evacuation paths.', icon: Navigation, color: 'text-purple-400' },
+              { name: 'Coordinator Agent', desc: 'Combines specialist agent intelligence into a unified NDMA-compliant recommendation.', icon: Sparkles, color: 'text-pink-400' }
+            ].map((agent) => {
+              const Icon = agent.icon
+              return (
+                <div key={agent.name} className="p-4 rounded-xl border border-slate-800/80 bg-[#0B0F19]/70 space-y-3">
+                  <div className="flex items-center space-x-2.5">
+                    <Icon className={`w-4 h-4 ${agent.color}`} />
+                    <h4 className="text-xs font-bold font-mono text-white uppercase">{agent.name}</h4>
+                  </div>
+                  <p className="text-[10.5px] text-slate-400 leading-snug">{agent.desc}</p>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 9. EMERGENCY OPERATIONS */}
+        {/* ========================================================================= */}
+        <section id="operations" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              EMERGENCY OPERATIONS
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              Operational capability cards across the core disaster management functions.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+            {[
+              { title: 'Incidents', desc: 'Triage & lifecycle tracking', icon: AlertCircle, color: 'text-red-400' },
+              { title: 'Police', desc: 'Perimeters & traffic cordons', icon: Shield, color: 'text-blue-400' },
+              { title: 'Fire & Hazmat', desc: 'Pumping tenders & rescue', icon: Flame, color: 'text-amber-400' },
+              { title: 'Healthcare', desc: 'Hospital surge & bed capacity', icon: Building2, color: 'text-emerald-400' },
+              { title: 'Ambulance', desc: 'Fleet dispatch & routing', icon: HeartPulse, color: 'text-teal-400' },
+              { title: 'Traffic', desc: 'Signal control & diversions', icon: Car, color: 'text-yellow-400' },
+              { title: 'Emergency Dispatch', desc: 'ERSS 112 multi-agency orders', icon: PhoneCall, color: 'text-pink-400' }
+            ].map((op) => {
+              const Icon = op.icon
+              return (
+                <div key={op.title} className="p-3.5 rounded-xl border border-slate-800 bg-[#0B0F19]/60 flex flex-col justify-between space-y-2 text-center items-center">
+                  <Icon className={`w-5 h-5 ${op.color}`} />
+                  <h4 className="text-[11px] font-bold font-mono text-white uppercase">{op.title}</h4>
+                  <p className="text-[9px] text-slate-400">{op.desc}</p>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* SCENARIO SIMULATOR (5 SIH PLAYBOOKS) */}
+        {/* ========================================================================= */}
+        <section id="simulator" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              SCENARIO PLAYBOOK SIMULATOR
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              Simulate operational response flows across 5 primary disaster playbooks.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            {scenarios.map((sc) => (
+              <button
+                key={sc.id}
+                onClick={() => setSelectedScenario(sc.id)}
+                className={`p-4 rounded-xl border text-left flex flex-col justify-between space-y-2.5 transition-all ${
+                  selectedScenario === sc.id
+                    ? 'border-cyan-500 bg-cyan-950/20 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+                    : 'border-slate-850 bg-[#080d19] hover:border-slate-700'
                 }`}
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-mono text-slate-500 uppercase font-bold">
-                      ACTIVE PLAYBOOK
-                    </span>
-                    <span className="text-[9.5px] font-mono text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded font-bold">
-                      EST: {scenario.time}
-                    </span>
-                  </div>
-                  <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
-                    {scenario.title}
-                  </h3>
-                </div>
-
-                <div className="space-y-2 border-t border-slate-900/60 pt-3 text-[9.5px] font-mono">
-                  <div className="flex justify-between">
-                    <span className="text-slate-500">DEPTS:</span>
-                    <span className="text-slate-300 font-bold">{scenario.depts}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-500">AI AGENTS:</span>
-                    <span className="text-sky-400 font-bold">{scenario.agents}</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between gap-2 pt-3 border-t border-slate-900/40">
-                  <button className="flex-1 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-mono text-[9px] font-bold text-center transition-colors">
-                    SIMULATE
-                  </button>
-                  <button className="flex-1 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 font-mono text-[9px] font-bold text-center border border-slate-850 transition-colors">
-                    WORKFLOW
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 4. NATIONAL DIGITAL TWIN */}
-        <section id="digital-twin" className="space-y-8 border-t border-slate-900/60 pt-16 scroll-mt-24">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-              National Digital Twin Map
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium">
-              ISRO Bhuvan mesh layers synthesizing police grids, NDRF units, hospital capacity, and hazard areas.
-            </p>
-          </div>
-
-          <NationalDigitalTwinMapSection />
-        </section>
-
-        {/* 5. RESOURCE AVAILABILITY */}
-        <section id="resource-availability" className="space-y-8 border-t border-slate-900/60 pt-16 scroll-mt-24">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-              Resource Availability Dashboard
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium">
-              National status logs detailing emergency vehicle and personnel status counts ready for database sync.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { name: 'Police Units', avail: 1420, busy: 320, offline: 15, update: '1s ago' },
-              { name: 'Fire Trucks', avail: 420, busy: 110, offline: 4, update: '3s ago' },
-              { name: 'Ambulances', avail: 840, busy: 290, offline: 8, update: 'Just Now' },
-              { name: 'Emergency Beds', avail: 2450, busy: 1120, offline: 0, update: '12s ago' },
-              { name: 'NDRF Teams', avail: 34, busy: 8, offline: 0, update: '1m ago' },
-              { name: 'Relief Shelters', avail: 180, busy: 45, offline: 2, update: '5m ago' },
-              { name: 'Blood Banks', avail: 95, busy: 5, offline: 0, update: '2m ago' },
-              { name: 'Disaster Responders', avail: 4800, busy: 1200, offline: 40, update: '10s ago' }
-            ].map((res) => (
-              <div
-                key={res.name}
-                className="rounded-2xl border border-slate-900 bg-slate-950/20 p-5 hover:border-slate-800/80 hover:bg-[#0B0F19]/45 hover:shadow-lg transition-all duration-200 select-none text-left flex flex-col justify-between h-[155px]"
-              >
                 <div className="space-y-1">
-                  <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
-                    {res.name}
-                  </h4>
-                  <span className="text-[8.5px] font-mono text-slate-500 uppercase">UPDATE: {res.update}</span>
-                </div>
-
-                <div className="grid grid-cols-3 gap-2 text-center pt-2 border-t border-slate-900/60 mt-3 font-mono">
-                  <div className="space-y-0.5">
-                    <div className="text-xs font-bold text-emerald-400">{res.avail}</div>
-                    <div className="text-[7.5px] text-slate-500 font-bold uppercase">AVAIL</div>
-                  </div>
-                  <div className="space-y-0.5">
-                    <div className="text-xs font-bold text-amber-400">{res.busy}</div>
-                    <div className="text-[7.5px] text-slate-500 font-bold uppercase">BUSY</div>
-                  </div>
-                  <div className="space-y-0.5">
-                    <div className="text-xs font-bold text-slate-400">{res.offline}</div>
-                    <div className="text-[7.5px] text-slate-500 font-bold uppercase">OFFLINE</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 6. NATIONAL INFRASTRUCTURE STATISTICS */}
-        <section id="national-stats" className="space-y-8 border-t border-slate-900/60 pt-16 scroll-mt-24">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-              National Infrastructure Statistics
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium font-sans">
-              Administrative telemetry counts representing connected national hardware layers.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { value: '785', label: 'Districts Connected', status: 'ACTIVE', color: 'text-sky-500', bg: 'bg-sky-500/10 border-sky-500/20' },
-              { value: '17,240', label: 'Police Stations', status: 'NODE READY', color: 'text-blue-500', bg: 'bg-blue-500/10 border-blue-500/20' },
-              { value: '25,480', label: 'Government Hospitals', status: 'LIVE', color: 'text-teal-500', bg: 'bg-teal-500/10 border-teal-500/20' },
-              { value: '8,410', label: 'Fire Stations', status: 'SYNCED', color: 'text-red-500', bg: 'bg-red-500/10 border-red-500/20' },
-              { value: '12', label: 'Connected Departments', status: 'SECURE LINK', color: 'text-violet-500', bg: 'bg-violet-500/10 border-violet-500/20' },
-              { value: '124,800+', label: 'IoT Grid Sensors', status: 'LIVE DATA', color: 'text-pink-500', bg: 'bg-pink-500/10 border-pink-500/20' },
-              { value: '13', label: 'AI Cognition Agents', status: 'ONLINE', color: 'text-indigo-500', bg: 'bg-indigo-500/10 border-indigo-500/20' },
-              { value: '4,280', label: 'Emergency Calls Today', status: 'TRACKING', color: 'text-rose-500', bg: 'bg-rose-500/10 border-rose-500/20' }
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-2xl border border-slate-900 bg-slate-950/20 p-6 flex flex-col justify-between hover:border-slate-800/80 hover:bg-[#0B0F19]/45 hover:shadow-lg transition-all duration-200 select-none group h-[145px]"
-              >
-                <div className="space-y-1">
-                  <span className={`text-[9px] font-bold font-mono tracking-widest px-1.5 py-0.5 rounded border uppercase ${stat.bg} ${stat.color}`}>
-                    {stat.status}
+                  <span className={`text-[8px] font-mono px-1.5 py-0.5 rounded border font-bold uppercase ${sc.badgeColor}`}>
+                    {sc.badge}
                   </span>
-                  <h3 className={`text-2xl font-black font-mono tracking-tight pt-2 transition-transform duration-200 ${stat.color}`}>
-                    {stat.value}
-                  </h3>
+                  <h4 className="text-xs font-bold font-mono text-white">{sc.title}</h4>
                 </div>
-                <p className="text-[10px] text-slate-300 font-bold uppercase tracking-wider font-sans leading-tight pt-2 border-t border-slate-900/60 mt-2">
-                  {stat.label}
+                <div className="text-[9px] font-mono text-slate-500">Click to load playbook</div>
+              </button>
+            ))}
+          </div>
+
+          {/* Active Scenario Details Box */}
+          <div className="rounded-2xl border border-slate-800 bg-[#070d1a] p-6 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-850 pb-3">
+              <div>
+                <span className="text-[9px] font-mono text-cyan-400 font-bold uppercase">ACTIVE PLAYBOOK SPECIFICATION</span>
+                <h3 className="text-sm sm:text-base font-bold font-mono text-white">{activeScenarioData.title}</h3>
+              </div>
+              <Link
+                href={activeScenarioData.actionUrl}
+                className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-bold transition-all shadow-md"
+              >
+                <span>{activeScenarioData.actionText}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                <span className="text-[9px] text-slate-400 font-bold uppercase">PRIMARY INPUT FEEDS</span>
+                <p className="text-slate-200">{activeScenarioData.inputs}</p>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                <span className="text-[9px] text-slate-400 font-bold uppercase">OPERATIONAL OUTPUTS</span>
+                <p className="text-slate-200">{activeScenarioData.outputs}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 10. RURAL FLOOD & EVACUATION */}
+        {/* ========================================================================= */}
+        <section id="rural-flood" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold font-mono uppercase">
+              <Wheat className="w-3 h-3" />
+              <span>SIH PROBLEM EXTENSION</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              RURAL FLOOD INTELLIGENCE & EVACUATION
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              Extending disaster resilience to rural agricultural basins through data-driven historical baseline modeling.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-800 bg-[#070e1a] p-6 lg:p-8 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+              
+              <div className="space-y-4">
+                <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded bg-purple-950/60 border border-purple-800 text-purple-300 text-[10px] font-mono font-bold">
+                  <span>HISTORICAL DATASET — NRSC VIC MODEL</span>
+                </div>
+                <h3 className="text-lg font-bold text-white">Data-Derived Agricultural Risk Analysis</h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Rural Visakhapatnam is modeled using 2,275 verified observations from the NRSC VIC hydrological model. The system dynamically computes Z-score precipitation anomalies, percentile risk breaches ($P_{75}, P_{90}, P_{99}$), and crop-specific waterlogging advisories for Paddy, Maize, and Sugarcane.
                 </p>
+                <div className="flex flex-wrap gap-2 text-[10px] font-mono text-slate-400">
+                  <span className="px-2 py-1 rounded bg-slate-900 border border-slate-800">Dynamic Month Selection (Jan–Jun)</span>
+                  <span className="px-2 py-1 rounded bg-slate-900 border border-slate-800">0.0–60.0 mm/day Slider</span>
+                  <span className="px-2 py-1 rounded bg-slate-900 border border-slate-800">3×3 Origami Field Simulator</span>
+                </div>
               </div>
-            ))}
+
+              <div className="p-5 rounded-xl border border-emerald-900/40 bg-emerald-950/10 space-y-3">
+                <h4 className="text-xs font-bold font-mono text-emerald-400 uppercase">RURAL FLOOD RESPONSE FLOW</h4>
+                <div className="space-y-2 text-xs font-mono text-slate-300">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px]">1</span>
+                    <span>Rainfall anomaly exceeds 90th percentile threshold.</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px]">2</span>
+                    <span>AI predicts agricultural inundation across 4 vulnerable habitations.</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px]">3</span>
+                    <span>Command Center reviews village evacuation & safe shelter route.</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px]">4</span>
+                    <span>Commander approves broadcast: Telugu SMS alerts sent to farmers.</span>
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <Link
+                    href="/dashboard/rural"
+                    className="w-full inline-flex items-center justify-center space-x-2 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold transition-all shadow-md"
+                  >
+                    <span>OPEN RURAL INTELLIGENCE</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+
+            </div>
           </div>
         </section>
 
-        {/* 7. GOVERNMENT API HEALTH MONITOR */}
-        <section id="health-monitor" className="space-y-8 border-t border-slate-900/60 pt-16 scroll-mt-24">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-              Government API Health Monitor
+        {/* ========================================================================= */}
+        {/* 11. CITIZEN OS */}
+        {/* ========================================================================= */}
+        <section id="citizen-os" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-[10px] font-bold font-mono uppercase">
+              <User className="w-3 h-3" />
+              <span>PUBLIC INTERACTION LAYER</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              CITIZEN OS
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium font-sans">
-              Real-time hardware latency diagnostics, endpoint clearance check, and active backhaul connectivity.
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              Report ➔ Alert ➔ Guidance ➔ Safe Exit ➔ SOS
+            </p>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl mx-auto">
+              Citizen reports can become operational inputs to BharatOS, while approved emergency actions generate citizen alerts and evacuation guidance.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
             {[
-              { name: 'IMD API', status: 'Connected', latency: '45ms', sync: '3s ago', version: 'v3.2', health: '99.9%' },
-              { name: 'NDMA API', status: 'Connected', latency: '24ms', sync: '1s ago', version: 'v1.8', health: '99.9%' },
-              { name: 'ERSS Gateway', status: 'Connected', latency: '6ms', sync: 'Just Now', version: 'v2.4', health: '100%' },
-              { name: 'NIC Portal', status: 'Connected', latency: '18ms', sync: '8s ago', version: 'v2.4', health: '99.9%' },
-              { name: 'ISRO Bhuvan', status: 'Connected', latency: '12ms', sync: 'Just Now', version: 'v4.0', health: '99.9%' },
-              { name: 'Health Ministry', status: 'Connected', latency: '33ms', sync: '2m ago', version: 'v2.1', health: '99.9%' },
-              { name: 'Power Grid API', status: 'Connected', latency: '8ms', sync: 'Just Now', version: 'v3.0', health: '99.9%' },
-              { name: 'Railways API', status: 'Connected', latency: '45ms', sync: '15s ago', version: 'v1.9', health: '99.8%' }
-            ].map((api) => (
-              <div
-                key={api.name}
-                className="rounded-2xl border border-slate-900 bg-slate-950/20 p-5 hover:border-slate-800/80 hover:bg-[#0B0F19]/45 hover:shadow-lg transition-all duration-200 select-none text-left flex flex-col justify-between h-[155px]"
-              >
-                <div className="flex items-center justify-between border-b border-slate-900 pb-2">
-                  <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
-                    {api.name}
-                  </h4>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                </div>
-
-                <div className="pt-2.5 space-y-1 font-mono text-[8.5px] text-slate-500">
-                  <div className="flex justify-between"><span>LATENCY:</span><span className="text-slate-300 font-bold">{api.latency}</span></div>
-                  <div className="flex justify-between"><span>LAST SYNC:</span><span className="text-slate-300 font-bold">{api.sync}</span></div>
-                  <div className="flex justify-between"><span>VERSION:</span><span className="text-slate-300 font-bold">{api.version}</span></div>
-                  <div className="flex justify-between"><span>HEALTH %:</span><span className="text-emerald-400 font-bold">{api.health}</span></div>
-                </div>
-              </div>
-            ))}
+              { title: 'Report Flooding', desc: 'Geotagged crowdsourced incident submission with photo and water depth', href: '/citizen/report', icon: FileText, color: 'text-red-400' },
+              { title: 'Public Alerts', desc: 'Hyperlocal multilingual hydrological notifications & warnings', href: '/citizen/alerts', icon: Bell, color: 'text-amber-400' },
+              { title: 'Safety Guidance', desc: 'NDMA disaster playbooks, flood safety precautions & first aid', href: '/citizen/guidance', icon: BookOpen, color: 'text-emerald-400' },
+              { title: 'Safe-Exit Routing', desc: 'Turn-by-turn dynamic evacuation routes away from flooded culverts', href: '/citizen/safe-exit', icon: Navigation, color: 'text-cyan-400' },
+              { title: '1-Tap SOS Beacon', desc: 'Direct emergency beacon dispatching GPS coordinates to ERSS 112', href: '/citizen/sos', icon: AlertTriangle, color: 'text-rose-400' }
+            ].map((item) => {
+              const Icon = item.icon
+              return (
+                <Link
+                  key={item.title}
+                  href={item.href}
+                  className="p-4 rounded-xl border border-slate-800/80 bg-[#0B0F19]/70 hover:border-sky-500/50 hover:bg-[#0c1428] transition-all flex flex-col justify-between space-y-3 group"
+                >
+                  <div className="space-y-2">
+                    <Icon className={`w-5 h-5 ${item.color}`} />
+                    <h4 className="text-xs font-bold font-mono text-white group-hover:text-sky-300 transition-colors">{item.title}</h4>
+                    <p className="text-[10.5px] text-slate-400 leading-snug">{item.desc}</p>
+                  </div>
+                  <span className="text-[9px] font-mono text-sky-400 font-bold flex items-center space-x-1">
+                    <span>EXPLORE</span>
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                  </span>
+                </Link>
+              )
+            })}
           </div>
         </section>
 
-        {/* 8. AI AGENT STATUS */}
-        <section id="ai-agent-status" className="space-y-8 border-t border-slate-900/60 pt-16 scroll-mt-24">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-              AI Command Agents Status
+        {/* ========================================================================= */}
+        {/* 12. DATA & INTEGRATION LAYER */}
+        {/* ========================================================================= */}
+        <section id="data-layer" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              DATA & INTEGRATION LAYER
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium">
-              Operational diagnostics and computational load of cognitive agents handling incident pipeline triage.
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              Transparent separation between live public feeds, verified infrastructure, and controlled simulation.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {[
-              { name: 'Vision Agent', status: 'Running', cpu: '14.2%', mem: '1.2GB', inf: '42 inf/s', health: '99.8%' },
-              { name: 'Language Agent', status: 'Running', cpu: '22.8%', mem: '2.4GB', inf: '85 inf/s', health: '99.9%' },
-              { name: 'Forecast Agent', status: 'Running', cpu: '8.4%', mem: '0.8GB', inf: '12 inf/s', health: '99.9%' },
-              { name: 'Routing Agent', status: 'Running', cpu: '12.0%', mem: '1.1GB', inf: '55 inf/s', health: '99.9%' },
-              { name: 'Dispatch Agent', status: 'Running', cpu: '6.5%', mem: '0.6GB', inf: '30 inf/s', health: '100.0%' },
-              { name: 'Analytics Agent', status: 'Running', cpu: '18.1%', mem: '1.9GB', inf: '72 inf/s', health: '99.9%' }
-            ].map((agent) => (
-              <div
-                key={agent.name}
-                className="rounded-2xl border border-slate-900 bg-slate-950/20 p-5 hover:border-slate-800/80 hover:bg-[#0B0F19]/45 hover:shadow-lg transition-all duration-200 select-none text-left flex flex-col justify-between h-[155px]"
-              >
-                <div className="flex items-center justify-between border-b border-slate-900 pb-2">
-                  <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
-                    {agent.name}
-                  </h4>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                </div>
-
-                <div className="pt-2.5 space-y-1 font-mono text-[8.5px] text-slate-500">
-                  <div className="flex justify-between"><span>CPU LOAD:</span><span className="text-slate-300 font-bold">{agent.cpu}</span></div>
-                  <div className="flex justify-between"><span>MEMORY:</span><span className="text-slate-300 font-bold">{agent.mem}</span></div>
-                  <div className="flex justify-between"><span>INFERENCE:</span><span className="text-slate-300 font-bold">{agent.inf}</span></div>
-                  <div className="flex justify-between"><span>HEALTH %:</span><span className="text-emerald-400 font-bold">{agent.health}</span></div>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            {/* Column 1: LIVE */}
+            <div className="p-5 rounded-2xl border border-emerald-900/50 bg-[#05111b] space-y-3">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <h3 className="text-xs font-bold font-mono text-emerald-400 uppercase tracking-wider">[ LIVE ] SOURCES</h3>
               </div>
-            ))}
+              <p className="text-[11px] text-slate-400">Real-time connected external public and hardware feeds:</p>
+              <ul className="space-y-1.5 text-xs font-mono text-slate-300">
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                  <span>Open-Meteo Global Weather Telemetry</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                  <span>Central CPCB Air Quality Index (AQI)</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                  <span>OpenStreetMap Dynamic Overpass API</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                  <span>Physical ESP32 ultrasonic water gauge (when online)</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 2: VERIFIED */}
+            <div className="p-5 rounded-2xl border border-cyan-900/50 bg-[#051124] space-y-3">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <h3 className="text-xs font-bold font-mono text-cyan-400 uppercase tracking-wider">[ VERIFIED ] DATASETS</h3>
+              </div>
+              <p className="text-[11px] text-slate-400">Authentic reference geographic and facility databases:</p>
+              <ul className="space-y-1.5 text-xs font-mono text-slate-300">
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
+                  <span>Visakhapatnam (GVMC) Ward & Road Network</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
+                  <span>Verified Hospitals (KGH, Care, Apollo)</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
+                  <span>Police Stations & Fire Station Locations</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
+                  <span>NRSC VIC Hydrological 2,275 Historical Records</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: SIMULATION */}
+            <div className="p-5 rounded-2xl border border-amber-900/50 bg-[#160f08] space-y-3">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-amber-400" />
+                <h3 className="text-xs font-bold font-mono text-amber-400 uppercase tracking-wider">[ SIMULATION ] DATA</h3>
+              </div>
+              <p className="text-[11px] text-slate-400">Controlled demonstration scenarios and mock vectors:</p>
+              <ul className="space-y-1.5 text-xs font-mono text-slate-300">
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span>Simulated CCTV Traffic Computer Vision</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span>Emergency Vehicle GPS & Patrol Vectors</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span>Drainage Sluice Gate Actuator Simulation</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span>Simulated Resource Pool Counts</span>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 13. BUILT FOR INDIA. PROVEN IN VISAKHAPATNAM. */}
+        {/* ========================================================================= */}
+        <section id="built-for-india" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="rounded-3xl border border-slate-800 bg-gradient-to-b from-[#081122] to-[#040813] p-8 lg:p-12 text-center space-y-6">
+            <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-sky-950/60 border border-sky-800/50 text-sky-400 font-bold uppercase">
+              INDIA-SCALE ARCHITECTURE
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              BUILT FOR INDIA. PROVEN IN VISAKHAPATNAM.
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
+              BharatOS establishes an enterprise architectural hierarchy spanning 28 States, 8 Union Territories, and multi-tier command layers, validated through our physical and operational deployment in Visakhapatnam.
+            </p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-4 font-mono text-center">
+              <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-900">
+                <div className="text-2xl font-black text-sky-400">28</div>
+                <div className="text-[10px] text-slate-400 uppercase mt-1">States Modeled</div>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-900">
+                <div className="text-2xl font-black text-cyan-400">8</div>
+                <div className="text-[10px] text-slate-400 uppercase mt-1">UT Geometries</div>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-900">
+                <div className="text-2xl font-black text-emerald-400">5-Tier</div>
+                <div className="text-[10px] text-slate-400 uppercase mt-1">Command Stack</div>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-900">
+                <div className="text-2xl font-black text-purple-400">100%</div>
+                <div className="text-[10px] text-slate-400 uppercase mt-1">Human-in-the-Loop</div>
+              </div>
+            </div>
+
+            <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/dashboard/national"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 text-white font-mono text-xs font-bold transition-all shadow-lg"
+              >
+                ENTER COMMAND CENTER
+              </Link>
+              <Link
+                href="/citizen"
+                className="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-mono text-xs font-bold transition-all"
+              >
+                OPEN CITIZEN PORTAL
+              </Link>
+            </div>
           </div>
         </section>
 
       </main>
 
-      {/* 9. SIMPLE GOVERNMENT FOOTER */}
-      <footer className="border-t border-slate-900/60 bg-[#060a13] mt-24 py-12 relative overflow-hidden z-10 select-none">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-
+      {/* ========================================================================= */}
+      {/* 14. FOOTER */}
+      {/* ========================================================================= */}
+      <footer className="border-t border-slate-900/80 bg-[#040711] mt-24 py-12 relative z-10 select-none">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-
-            {/* Footer Left Branding */}
-            <div className="md:col-span-4 space-y-4">
+            
+            {/* Branding */}
+            <div className="md:col-span-4 space-y-3">
               <BrandLogo size="md" />
-              <p className="text-[11px] text-slate-500 leading-relaxed max-w-sm">
-                BharatOS coordinates multi-agent AI, spatial digital twin systems, and real-time operations across India to coordinate emergency dispatch, emergency decision-making, and resilient public governance.
+              <p className="text-[11px] text-slate-400 leading-relaxed max-w-sm">
+                BharatOS is an AI-powered emergency command and spatial Digital Twin operating system designed for disaster resilience and human-approved multi-agency response.
               </p>
-            </div>
-
-            {/* Footer Center Links */}
-            <div className="md:col-span-4 grid grid-cols-2 gap-4 text-xs font-bold tracking-widest text-slate-400 font-mono">
-              <div className="space-y-2">
-                <h5 className="text-[9px] text-slate-600 font-extrabold tracking-[0.2em] uppercase">DOCUMENTATION</h5>
-                <p className="hover:text-white transition-colors cursor-pointer">PRIVACY POLICY</p>
-                <p className="hover:text-white transition-colors cursor-pointer">TERMS OF SERVICE</p>
-                <p className="hover:text-white transition-colors cursor-pointer font-sans leading-none uppercase">Government API References</p>
-              </div>
-              <div className="space-y-2">
-                <h5 className="text-[9px] text-slate-600 font-extrabold tracking-[0.2em] uppercase">ACCESS PORTALS</h5>
-                <Link href="/dashboard/national" className="hover:text-white transition-colors block">COMMAND CENTER</Link>
-                <Link href="/citizen" className="hover:text-sky-400 transition-colors block">CITIZEN PORTAL</Link>
-                <Link href="/login" className="hover:text-white transition-colors block">OFFICIAL LOGIN</Link>
+              <div className="text-[10px] font-mono text-cyan-400 font-bold">
+                Detect. Predict. Decide. Approve. Respond. Resolve.
               </div>
             </div>
 
-            {/* Footer Right Badges */}
-            <div className="md:col-span-4 space-y-4 text-xs text-slate-500">
-              <h5 className="text-[9px] text-slate-600 font-extrabold tracking-[0.2em] uppercase font-mono">GOVERNMENT PUBLIC INFRASTRUCTURE</h5>
-              <p className="leading-relaxed">
-                BharatOS is engineered for integration with NDMA disaster mitigation policies, ISRO Bhuvan spatial overlays, and NIC central directories.
+            {/* Quick Links */}
+            <div className="md:col-span-4 grid grid-cols-2 gap-4 text-xs font-mono">
+              <div className="space-y-2">
+                <h5 className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">COMMAND DECK</h5>
+                <Link href="/dashboard/national" className="block text-slate-400 hover:text-white transition-colors">National Command</Link>
+                <Link href="/dashboard/state" className="block text-slate-400 hover:text-white transition-colors">State Command</Link>
+                <Link href="/dashboard/district" className="block text-slate-400 hover:text-white transition-colors">District Command</Link>
+                <Link href="/dashboard/city" className="block text-slate-400 hover:text-white transition-colors">City Operations</Link>
+                <Link href="/dashboard/digital-twin" className="block text-slate-400 hover:text-white transition-colors">Digital Twin</Link>
+              </div>
+              <div className="space-y-2">
+                <h5 className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">CITIZEN PORTAL</h5>
+                <Link href="/citizen" className="block text-slate-400 hover:text-white transition-colors">Citizen Home</Link>
+                <Link href="/citizen/report" className="block text-slate-400 hover:text-white transition-colors">Report Hazard</Link>
+                <Link href="/citizen/safe-exit" className="block text-slate-400 hover:text-white transition-colors">Safe-Exit Routing</Link>
+                <Link href="/citizen/alerts" className="block text-slate-400 hover:text-white transition-colors">Public Alerts</Link>
+                <Link href="/citizen/sos" className="block text-red-400 hover:text-red-300 font-bold transition-colors">1-Tap SOS Beacon</Link>
+              </div>
+            </div>
+
+            {/* SIH Note */}
+            <div className="md:col-span-4 space-y-2 text-xs text-slate-400 font-mono">
+              <h5 className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">HACKATHON DEMO PROTOTYPE</h5>
+              <p className="text-[11px] leading-relaxed">
+                BharatOS is engineered for prototype demonstration at Smart India Hackathon (SIH 2026). Incorporates real ESP32 IoT sensing, NRSC VIC hydrological modeling, and LangGraph multi-agent orchestration.
               </p>
             </div>
 
           </div>
 
-          {/* Footer Bottom Strip */}
-          <div className="border-t border-slate-900/60 pt-6 flex flex-col sm:flex-row items-center justify-between text-[9px] font-mono text-slate-500">
-            <p>DESIGNED FOR HACKATHON DEMONSTRATION & PROTOTYPE VIEW</p>
-            <p className="mt-2 sm:mt-0">
-              MADE WITH ❤️ IN INDIA • BHARATOS © 2026
-            </p>
+          <div className="border-t border-slate-900 pt-6 flex flex-col sm:flex-row items-center justify-between text-[9.5px] font-mono text-slate-500">
+            <div>BHARATOS © 2026 • AI-POWERED EMERGENCY COMMAND & DIGITAL TWIN OS</div>
+            <div className="mt-2 sm:mt-0">ALL OPERATIONAL DISPATCHES REQUIRE EXPLICIT OPERATOR CONFIRMATION</div>
           </div>
-
         </div>
       </footer>
 
