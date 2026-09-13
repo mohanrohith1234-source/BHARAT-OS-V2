@@ -351,9 +351,9 @@ export const apiService = {
       if (res && Array.isArray(res)) {
         return res
       }
-      if (res && res.items && Array.isArray(res.items)) {
-        return res.items
-      }
+      if (res && Array.isArray(res.items)) return res.items
+      if (res && Array.isArray(res.data)) return res.data
+      if (res && Array.isArray(res.incidents)) return res.incidents
       return []
     } catch (err) {
       console.warn('Backend API connection failed. Using fallback mock incidents.', err)

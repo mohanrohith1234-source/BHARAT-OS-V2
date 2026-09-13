@@ -188,6 +188,23 @@ const translations = {
 
 function NationalCommandContent() {
   const searchParams = useSearchParams()
+  const [selectedIncidentId, setSelectedIncidentId] = useState<string>('m-1')
+  
+  const [currentTime, setCurrentTime] = useState('')
+  const [currentDate, setCurrentDate] = useState('')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    const updateTime = () => {
+      const now = new Date()
+      setCurrentTime(now.toLocaleTimeString('en-IN', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }))
+      setCurrentDate(now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase())
+    }
+    updateTime()
+    const timer = setInterval(updateTime, 1000)
+    return () => clearInterval(timer)
+  }, [])
   // DB Live States
   const [overview, setOverview] = useState<DashboardOverview | null>(null)
   const [incidents, setIncidents] = useState<BackendIncident[]>([])
@@ -1266,54 +1283,107 @@ function NationalCommandContent() {
         {/* 3. CENTER BOTTOM CHARTS */}
         <div id="risk-analysis" className={`grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 ${(activeSection === 'overview' || activeSection === 'risk-analysis') ? '' : 'hidden'}`}>
           
-          <div className="rounded-xl border border-slate-900 bg-[#0B0F19]/70 p-4 relative overflow-hidden flex flex-col justify-between min-w-0">
-            <div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">Response Time Telemetry</span>
-              <h4 className="text-xs font-bold text-slate-200 mt-0.5">Average dispatch duration (hours)</h4>
-            </div>
-            <div className="h-36 w-full mt-4 font-mono text-[9px] min-w-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={responseTimeData}>
-                  <defs>
-                    <linearGradient id="gradientDuration" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#38bdf8" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="time" stroke="#475569" strokeWidth={0.5} tickLine={false} />
-                  <YAxis stroke="#475569" strokeWidth={0.5} tickLine={false} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#0B0F19', borderColor: '#1e293b', color: '#f8fafc' }}
-                    labelStyle={{ color: '#94a3b8', fontSize: '9px', fontWeight: 'bold' }}
-                    itemStyle={{ color: '#38bdf8', fontSize: '10px' }}
-                  />
-                  <Area type="monotone" dataKey="duration" stroke="#38bdf8" strokeWidth={1.5} fillOpacity={1} fill="url(#gradientDuration)" />
-                </AreaChart>
-              </ResponsiveContainer>
+          {/* Chart 1: Breakdown */}
+          <div className="p-4 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between min-w-0">
+            <span className="text-[8.5px] font-bold text-slate-500 uppercase tracking-widest font-mono border-b border-slate-900 pb-1.5 block">Incident Breakdown</span>
+            <div className="h-32 w-full mt-2 relative flex items-center justify-center min-h-[128px]">
+              {mounted && Array.isArray(resourceAllocationData) && resourceAllocationData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%" minHeight={128}>
+                  <RechartsPieChart>
+                    <Pie
+                      data={resourceAllocationData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={22}
+                      outerRadius={38}
+                      paddingAngle={3}
+                      dataKey="value"
+                    >
+                      {resourceAllocationData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: '#060a13',
+                        borderColor: '#1e293b',
+                        borderRadius: '6px',
+                        fontSize: '10px',
+                        color: '#f8fafc'
+                      }}
+                    />
+                  </RechartsPieChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="text-[10px] text-slate-500 font-mono flex items-center space-x-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-ping" />
+                  <span>Loading breakdown data...</span>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-900 bg-[#0B0F19]/70 p-4 relative overflow-hidden flex flex-col justify-between min-w-0">
-            <div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">Agency Performance</span>
-              <h4 className="text-xs font-bold text-slate-200 mt-0.5">Efficiency rating percent</h4>
+          {/* Chart 2: Trends */}
+          <div className="p-4 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between min-w-0">
+            <span className="text-[8.5px] font-bold text-slate-500 uppercase tracking-widest font-mono border-b border-slate-900 pb-1.5 block">Incident Trend index</span>
+            <div className="h-32 w-full mt-2 text-[8px] font-mono relative flex items-center justify-center min-h-[128px]">
+              {mounted && Array.isArray(responseTimeData) && responseTimeData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%" minHeight={128}>
+                  <AreaChart data={responseTimeData} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                    <XAxis dataKey="time" stroke="#475569" fontSize={8} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#475569" fontSize={8} tickLine={false} axisLine={false} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: '#060a13',
+                        borderColor: '#1e293b',
+                        borderRadius: '6px',
+                        fontSize: '10px',
+                        color: '#f8fafc'
+                      }}
+                    />
+                    <Area type="monotone" dataKey="duration" stroke="#38bdf8" strokeWidth={1.5} fillOpacity={0.2} fill="#38bdf8" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="text-[10px] text-slate-500 font-mono flex items-center space-x-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-ping" />
+                  <span>Loading trend index...</span>
+                </div>
+              )}
             </div>
-            <div className="h-36 w-full mt-4 font-mono text-[9px] min-w-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <RechartsBarChart data={departmentPerformanceData}>
-                  <XAxis dataKey="name" stroke="#475569" strokeWidth={0.5} tickLine={false} />
-                  <YAxis stroke="#475569" strokeWidth={0.5} tickLine={false} domain={[50, 100]} />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: '#0B0F19', borderColor: '#1e293b', color: '#f8fafc' }}
-                    itemStyle={{ color: '#38bdf8', fontSize: '10px' }}
-                  />
-                  <Bar dataKey="efficiency" radius={[4, 4, 0, 0]}>
-                    {departmentPerformanceData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </RechartsBarChart>
-              </ResponsiveContainer>
+          </div>
+
+          {/* Chart 3: Performance */}
+          <div className="p-4 rounded-xl border border-slate-900 bg-[#0B0F19]/60 flex flex-col justify-between min-w-0">
+            <span className="text-[8.5px] font-bold text-slate-500 uppercase tracking-widest font-mono border-b border-slate-900 pb-1.5 block">Response Efficiency</span>
+            <div className="h-32 w-full mt-2 text-[8px] font-mono relative flex items-center justify-center min-h-[128px]">
+              {mounted && Array.isArray(departmentPerformanceData) && departmentPerformanceData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%" minHeight={128}>
+                  <RechartsBarChart data={departmentPerformanceData} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                    <XAxis dataKey="name" stroke="#475569" fontSize={8} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#475569" fontSize={8} tickLine={false} axisLine={false} domain={[0, 100]} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: '#060a13',
+                        borderColor: '#1e293b',
+                        borderRadius: '6px',
+                        fontSize: '10px',
+                        color: '#f8fafc'
+                      }}
+                    />
+                    <Bar dataKey="efficiency" radius={[2, 2, 0, 0]}>
+                      {departmentPerformanceData.map((entry, idx) => (
+                        <Cell key={`cell-${idx}`} fill={entry.color} />
+                      ))}
+                    </Bar>
+                  </RechartsBarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="text-[10px] text-slate-500 font-mono flex items-center space-x-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-ping" />
+                  <span>Loading response data...</span>
+                </div>
+              )}
             </div>
           </div>
 
