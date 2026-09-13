@@ -269,7 +269,7 @@ export default function IndiaDigitalTwin() {
       jh: { text: 'JHARKHAND', x: 374, y: 344, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.06em' },
       ct: { text: 'CHHATTISGARH', x: 314, y: 396, textAnchor: 'middle', fontSize: '7px', letterSpacing: '0.04em' },
       or: { text: 'ODISHA', x: 382, y: 384, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
-      wb: { text: 'WEST BENGAL', x: 442, y: 338, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
+      wb: { text: 'WEST BENGAL', x: 424, y: 350, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
 
       // Northeast States (Arunachal, Assam, Nagaland, Manipur, Mizoram, Tripura, Meghalaya, Sikkim)
       sk: { text: 'SIKKIM', x: 444, y: 224, textAnchor: 'start', fontSize: '6.5px', letterSpacing: '0.05em' },
@@ -278,8 +278,8 @@ export default function IndiaDigitalTwin() {
       nl: { text: 'NAGALAND', x: 574, y: 268, textAnchor: 'start', fontSize: '6.5px', letterSpacing: '0.04em' },
       mn: { text: 'MANIPUR', x: 566, y: 298, textAnchor: 'start', fontSize: '6.5px', letterSpacing: '0.04em' },
       mz: { text: 'MIZORAM', x: 546, y: 334, textAnchor: 'start', fontSize: '6.5px', letterSpacing: '0.04em' },
-      tr: { text: 'TRIPURA', x: 468, y: 336, textAnchor: 'end', fontSize: '6.5px', letterSpacing: '0.04em' },
-      ml: { text: 'MEGHALAYA', x: 476, y: 296, textAnchor: 'middle', fontSize: '6.5px', letterSpacing: '0.04em' },
+      tr: { text: 'TRIPURA', x: 486, y: 344, textAnchor: 'start', fontSize: '6.5px', letterSpacing: '0.04em' },
+      ml: { text: 'MEGHALAYA', x: 470, y: 292, textAnchor: 'middle', fontSize: '6.5px', letterSpacing: '0.04em' },
 
       // Southern States
       tg: { text: 'TELANGANA', x: 266, y: 436, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
