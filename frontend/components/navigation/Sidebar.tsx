@@ -70,9 +70,7 @@ export default function Sidebar() {
       items: [
         { id: 'national-command', label: 'National Command', path: '/dashboard/national', icon: Globe, color: 'text-sky-400' },
         { id: 'state-command', label: 'State Command', path: '/dashboard/state', icon: Building2, color: 'text-indigo-400' },
-        { id: 'district-command', label: 'District Command', path: '/dashboard/district', icon: MapPin, color: 'text-teal-400' },
-        { id: 'city-command', label: 'City Command', path: '/dashboard/city', icon: Building, color: 'text-emerald-400' },
-        { id: 'ward-command', label: 'Ward Operations', path: '/dashboard/city?level=ward', icon: Sliders, color: 'text-emerald-500' }
+        { id: 'district-command', label: 'District Command', path: '/dashboard/district', icon: MapPin, color: 'text-teal-400' }
       ]
     },
     {
@@ -92,6 +90,17 @@ export default function Sidebar() {
         { id: 'dispatch', label: 'Dispatch', path: '/dashboard/city?action=dispatch', icon: PhoneCall, color: 'text-pink-400' },
         { id: 'resources', label: 'Resources', path: '/dashboard/city#resources', icon: Truck, color: 'text-emerald-400' },
         { id: 'response-teams', label: 'Response Teams', path: '/dashboard/city#resources', icon: Shield, color: 'text-indigo-400' }
+      ]
+    },
+    {
+      title: 'OPERATIONS',
+      items: [
+        { id: 'ops-incidents', label: 'Incidents', path: '/dashboard/city#incidents', icon: AlertTriangle, color: 'text-red-400' },
+        { id: 'police', label: 'Police', path: '/dashboard/police', icon: Shield, color: 'text-blue-400' },
+        { id: 'fire', label: 'Fire & Hazmat', path: '/dashboard/fire', icon: Flame, color: 'text-orange-400' },
+        { id: 'healthcare', label: 'Healthcare', path: '/dashboard/healthcare', icon: HeartPulse, color: 'text-emerald-400' },
+        { id: 'ambulance', label: 'Ambulance', path: '/dashboard/ambulance', icon: Truck, color: 'text-red-400' },
+        { id: 'traffic', label: 'Traffic', path: '/dashboard/traffic', icon: Car, color: 'text-amber-400' }
       ]
     },
     {

@@ -52,8 +52,8 @@ export default function DistrictDashboardPage() {
           title="Visakhapatnam District Command Center"
           description="Integrated District Operations — Bridging Urban Real-Time IoT Flood Control with Rural Agricultural Anomaly Intelligence."
           breadcrumbs={[
-            { label: 'Home', href: '/dashboard/city' },
-            { label: 'Andhra Pradesh', href: '/dashboard/state' },
+            { label: 'Home', path: '/dashboard/city' },
+            { label: 'Andhra Pradesh', path: '/dashboard/state' },
             { label: 'Visakhapatnam District' }
           ]}
         />
@@ -68,7 +68,7 @@ export default function DistrictDashboardPage() {
           />
           <StatCard
             title="Urban IoT Monitoring"
-            value={overview?.digital_twin?.total_nodes ? `${overview.digital_twin.total_nodes} Sensors` : "6 Gauges"}
+            value={overview?.digital_twin_nodes_count ? `${overview.digital_twin_nodes_count} Sensors` : "6 Gauges"}
             description="Beach Road Sensor Node ACTIVE (REAL_IOT)"
             icon={<Cpu className="h-5 w-5 text-emerald-400" />}
           />

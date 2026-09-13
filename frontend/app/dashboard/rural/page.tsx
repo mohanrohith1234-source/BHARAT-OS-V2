@@ -70,11 +70,11 @@ export default function RuralDashboardPage() {
   useEffect(() => {
     setLoadingBaseline(true)
     apiService.getRuralBaseline()
-      .then(res => {
+      .then((res: any) => {
         setBaseline(res)
         setLoadingBaseline(false)
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn('Rural baseline API offline. Using built-in fallback.', err)
         setBaseline(fallbackBaseline)
         setLoadingBaseline(false)
@@ -86,11 +86,11 @@ export default function RuralDashboardPage() {
     setSimLoading(true)
     setSimError(null)
     apiService.runRuralSimulation(selectedMonth, rainfallScenario)
-      .then(res => {
+      .then((res: any) => {
         setSimResult(res)
         setSimLoading(false)
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn('Simulation API offline. Generating local scenario assessment.', err)
         // Perform local simulation logic in case of offline fallback
         const base = baseline || fallbackBaseline

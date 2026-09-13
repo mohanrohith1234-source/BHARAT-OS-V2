@@ -152,8 +152,8 @@ export default function StateDashboardPage() {
               title="Andhra Pradesh State Command Center"
               description="State-wide emergency operations. Visakhapatnam District is the active live pilot with real IoT sensors & rural intelligence."
               breadcrumbs={[
-                { label: 'Home', href: '/dashboard/city' },
-                { label: 'National', href: '/dashboard/national' },
+                { label: 'Home', path: '/dashboard/city' },
+                { label: 'National', path: '/dashboard/national' },
                 { label: 'Andhra Pradesh' }
               ]}
             />

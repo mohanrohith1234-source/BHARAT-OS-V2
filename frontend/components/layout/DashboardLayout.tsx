@@ -8,6 +8,7 @@ import Sidebar from '../navigation/Sidebar'
 import Header from '../navigation/Header'
 import RightAIPanel from '../navigation/RightAIPanel'
 import StatusBar from '../navigation/StatusBar'
+import MasterDemoBar from '../widgets/MasterDemoBar'
 import { useShellStore } from '../../store/useShellStore'
 import { useAuthStore } from '../../store/useAuthStore'
 import { useRealtimeStore } from '../../store/useRealtimeStore'
@@ -243,6 +244,9 @@ export default function DashboardLayout({
           )}
         </AnimatePresence>
       </div>
+
+      {/* Global BharatOS Master Scenario Simulator Bar */}
+      <MasterDemoBar />
 
       {/* Floating Exit Button during Presentation Mode */}
       {presentationMode && (

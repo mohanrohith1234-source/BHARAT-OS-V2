@@ -809,10 +809,14 @@ function NationalCommandContent() {
               <div className="flex items-center space-x-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                 <span className="text-[10px] font-extrabold text-emerald-400 font-mono uppercase tracking-widest bg-emerald-950/60 border border-emerald-900/40 px-2.5 py-0.5 rounded">
-                  {translations[lang].pilot}
+                  BHARATOS NATIONAL COMMAND CENTER
+                </span>
+                <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-sky-950/60 border border-sky-800/40 text-sky-400">
+                  LIVE PILOT: VISAKHAPATNAM
                 </span>
               </div>
-              <h2 className="text-lg font-black text-white tracking-wide">{translations[lang].title}</h2>
+              <h2 className="text-xl font-black text-white tracking-wide">National Situational Awareness & Early Warning</h2>
+              <p className="text-xs text-slate-400">National situational awareness, flood resilience, emergency coordination and AI-assisted decision support.</p>
             </div>
             
             {/* Language Selector */}
