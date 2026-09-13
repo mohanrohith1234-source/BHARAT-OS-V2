@@ -1,8 +1,8 @@
-export type EmergencyCategory = 'medical' | 'fire' | 'police' | 'road_accident' | 'disaster' | 'general'
+export type EmergencyCategory = 'medical' | 'flood' | 'fire' | 'police' | 'road_accident' | 'disaster' | 'general'
 export type EmergencySeverity = 'low' | 'medium' | 'high' | 'critical'
 export type IncidentStage = 'received' | 'ai_analyzed' | 'priority_assigned' | 'dept_notified' | 'resources_assigned' | 'response_in_progress' | 'resolved'
 export type DataFreshness = 'live' | 'last_updated' | 'last_known' | 'offline' | 'unavailable'
-export type DataSourceLabel = 'LIVE' | 'CACHED' | 'LAST KNOWN' | 'SIMULATED' | 'AI ASSISTED' | 'OFFICIAL AUTHORITY'
+export type DataSourceLabel = 'LIVE' | 'REAL_IOT' | 'VERIFIED' | 'HISTORICAL' | 'SIMULATION' | 'AI_DERIVED' | 'CACHED' | 'LAST KNOWN' | 'SIMULATED' | 'AI ASSISTED' | 'OFFICIAL AUTHORITY'
 export type GpsLocationState = 'GPS AVAILABLE' | 'GPS UNAVAILABLE' | 'PERMISSION DENIED' | 'LOCATION UNAVAILABLE'
 
 // Separated Network State vs Synchronization State

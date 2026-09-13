@@ -72,12 +72,11 @@ const trackerTranslations = {
 
 const STAGES_ORDER: { stage: IncidentStage; label: string }[] = [
   { stage: 'received', label: '1. Received' },
-  { stage: 'ai_analyzed', label: '2. AI Analysis' },
-  { stage: 'priority_assigned', label: '3. Priority' },
-  { stage: 'dept_notified', label: '4. Dept Notified' },
-  { stage: 'resources_assigned', label: '5. Resources' },
-  { stage: 'response_in_progress', label: '6. In Progress' },
-  { stage: 'resolved', label: '7. Resolved' }
+  { stage: 'ai_analyzed', label: '2. AI Triaged' },
+  { stage: 'dept_notified', label: '3. Dept Routed' },
+  { stage: 'resources_assigned', label: '4. Team Assigned' },
+  { stage: 'response_in_progress', label: '5. En Route' },
+  { stage: 'resolved', label: '6. Resolved' }
 ]
 
 export default function IncidentTrackerPage({ params }: { params: Promise<{ id: string }> }) {
@@ -207,7 +206,7 @@ export default function IncidentTrackerPage({ params }: { params: Promise<{ id: 
           LIFECYCLE STAGE PROGRESS
         </span>
 
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-6 gap-1">
           {STAGES_ORDER.map((stg, idx) => {
             const isComplete = idx <= currentStageIdx
             const isCurrent = idx === currentStageIdx

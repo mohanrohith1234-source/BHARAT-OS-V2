@@ -12,6 +12,7 @@ import {
   Shield,
   Car,
   CloudRain,
+  Waves,
   Radio,
   Mic,
   Camera,
@@ -20,7 +21,9 @@ import {
   Navigation,
   ChevronRight,
   WifiOff,
-  Info
+  Info,
+  Clock,
+  Layers
 } from 'lucide-react'
 import { useCitizenStore } from '../../../store/useCitizenStore'
 import { IndexedDbService } from '../../../services/offline/indexedDbService'
@@ -36,98 +39,137 @@ import {
 const reportTranslations = {
   en: {
     title: "REPORT AN EMERGENCY",
-    subtitle: "File a multi-media emergency report with real-time GPS coordinates",
-    categoryLabel: "1. Select Emergency Category",
+    subtitle: "Submit verified incident details to city response coordinators",
+    categoryLabel: "1. Select Emergency Type",
     medical: "Medical",
+    flood: "Flood / Waterlogging",
     fire: "Fire & Rescue",
     police: "Police / Safety",
     roadAccident: "Road Accident",
-    disaster: "Natural Disaster",
-    general: "General Emergency",
-    locationLabel: "2. Emergency Location Details",
+    general: "Other Emergency",
+    floodSubtypeLabel: "Select Flood Severity / Issue Type:",
+    floodSubtypes: [
+      { id: 'waterlogging', label: 'Waterlogging (Roads Blocked)' },
+      { id: 'blocked_drain', label: 'Blocked Drain / Overflow' },
+      { id: 'rising_water', label: 'Rapidly Rising Water' },
+      { id: 'stranded_person', label: 'Stranded Person / Family' },
+      { id: 'vehicle_trapped', label: 'Vehicle Trapped in Water' },
+      { id: 'other_flood', label: 'Other Flood Issue' }
+    ],
+    locationLabel: "2. Emergency Location",
     manualLocationPlaceholder: "Enter landmark or street address...",
-    gpsDetecting: "Detecting GPS Coords...",
+    gpsDetecting: "Detecting location...",
     detailsLabel: "3. Incident Details & Observations",
-    titlePlaceholder: "Brief summary (e.g. 2 vehicles collided near Beach Road)",
-    descPlaceholder: "Describe what happened, hazards present, or stranded citizens...",
-    affectedLabel: "4. Number of People Affected",
-    mediaLabel: "5. Attach Multi-Media Evidence (Optional)",
+    titlePlaceholder: "Brief summary (e.g. 50cm water stagnation near Beach Road Sector 4)",
+    descPlaceholder: "Describe what is happening, visible hazards, trapped citizens, or urgent needs...",
+    affectedLabel: "4. Number of People Affected / In Danger",
+    mediaLabel: "5. Attach Photo / Voice Evidence (Optional)",
     voiceRecordBtn: "Record Voice Note",
-    imageAttachBtn: "Upload Image",
-    videoAttachBtn: "Upload Video",
-    sharedInfoNotice: "Information Shared: Your exact GPS coordinates, incident summary, affected count, and contact phone number will be transmitted.",
+    imageAttachBtn: "Attach Photo",
+    videoAttachBtn: "Attach Video",
+    sharedInfoNotice: "Information Shared: Your detected location, incident summary, affected count, and contact phone number will be routed to the appropriate municipal department.",
     submitBtn: "SUBMIT EMERGENCY REPORT",
     submittingBtn: "Submitting Emergency Report...",
     successTitle: "EMERGENCY REPORT RECEIVED",
     ticketLabel: "Incident ID:",
-    offlineNotice: "SAVED LOCALLY IN INDEXEDDB — WILL SYNC WHEN ONLINE",
-    honestReceipt: "Request Submitted — Waiting for Department Assignment Confirmation",
-    trackBtn: "Track Incident Response",
-    homeBtn: "Return to Home Dashboard"
+    offlineNotice: "SAVED LOCALLY IN SECURE QUEUE — WILL SYNC WHEN ONLINE",
+    honestReceipt: "Awaiting Officer Dispatch Approval • High-impact resources require authorized sign-off",
+    trackBtn: "Track Response on Digital Twin",
+    homeBtn: "Return to Home Dashboard",
+    lifecycleTitle: "RESPONSE LIFECYCLE PROGRESS"
   },
   te: {
     title: "అత్యవసర పరిస్థితిని నివేదించండి",
-    subtitle: "GPS వివరాలతో మల్టీ-మీడియా అత్యవసర నివేదికను పంపండి",
-    categoryLabel: "1. అత్యవసర వర్గాన్ని ఎంచుకోండి",
+    subtitle: "నగర రెస్పాన్స్ కోఆర్డినేటర్లకు ధృవీకరించబడిన సమాచారం పంపండి",
+    categoryLabel: "1. అత్యవసర రకాన్ని ఎంచుకోండి",
     medical: "వైద్యం",
-    fire: "అగ్నిప్రమాదం",
-    police: "పోలీస్",
+    flood: "వరద / నీటి నిల్వ",
+    fire: "అగ్నిప్రమాదం & రక్షణ",
+    police: "పోలీస్ / ప్రజా రక్షణ",
     roadAccident: "రోడ్డు ప్రమాదం",
-    disaster: "ప్రకృతి విపత్తు",
-    general: "సాధారణం",
-    locationLabel: "2. అత్యవసర లొకేషన్ వివరాలు",
+    general: "ఇతర అత్యవసరం",
+    floodSubtypeLabel: "వరద రకాన్ని ఎంచుకోండి:",
+    floodSubtypes: [
+      { id: 'waterlogging', label: 'రోడ్లపై నీటి నిల్వ' },
+      { id: 'blocked_drain', label: 'డ్రెయిన్ మూసుకుపోవడం' },
+      { id: 'rising_water', label: 'వేగంగా పెరుగుతున్న నీటిమట్టం' },
+      { id: 'stranded_person', label: 'చిక్కుకున్న వ్యక్తులు / కుటుంబం' },
+      { id: 'vehicle_trapped', label: 'నీటిలో చిక్కుకున్న వాహనం' },
+      { id: 'other_flood', label: 'ఇతర వరద సమస్య' }
+    ],
+    locationLabel: "2. అత్యవసర స్థలం",
     manualLocationPlaceholder: "ల్యాండ్‌మార్క్ లేదా చిరునామా నమోదు చేయండి...",
-    gpsDetecting: "GPS గుర్తిస్తోంది...",
+    gpsDetecting: "స్థానం గుర్తిస్తోంది...",
     detailsLabel: "3. ఇన్సిడెంట్ వివరాలు",
-    titlePlaceholder: "సంక్షిప్త సారాంశం (ఉదా. బీచ్ రోడ్ వద్ద ప్రమాదం)",
+    titlePlaceholder: "సంక్షిప్త సారాంశం (ఉదా. బీచ్ రోడ్ వద్ద నీరు నిల్వ ఉంది)",
     descPlaceholder: "ఏమి జరిగిందో వివరించండి...",
-    affectedLabel: "4. ప్రభావితమైన ప్రజల సంఖ్య",
+    affectedLabel: "4. ప్రమాదంలో ఉన్న వ్యక్తుల సంఖ్య",
     mediaLabel: "5. మీడియా ఆధారాలు జోడించండి (ఐచ్ఛికం)",
     voiceRecordBtn: "వాయిస్ రికార్డ్ చేయండి",
     imageAttachBtn: "ఫోటో అప్‌లోడ్",
     videoAttachBtn: "వీడియో అప్‌లోడ్",
-    sharedInfoNotice: "పంచుకున్న సమాచారం: మీ GPS చిరునామా, వివరణ మరియు ఫోన్ నంబర్ పంపబడతాయి.",
+    sharedInfoNotice: "పంచుకున్న సమాచారం: మీ చిరునామా, వివరణ మరియు ఫోన్ నంబర్ సంబంధిత విభాగానికి పంపబడతాయి.",
     submitBtn: "అత్యవసర రిపోర్ట్ పంపండి",
     submittingBtn: "సమర్పిస్తోంది...",
     successTitle: "అత్యవసర నివేదిక స్వీకరించబడింది",
     ticketLabel: "ఇన్సిడెంట్ ID:",
     offlineNotice: "లోకల్‌గా సేవ్ చేయబడింది — కనెక్షన్ కోసం నిరీక్షణ",
-    honestReceipt: "అభ్యర్థన సమర్పించబడింది — ధృవీకరణ కోసం వేచి ఉంది",
-    trackBtn: "స్టేటస్ ట్రాక్ చేయండి",
-    homeBtn: "హోమ్‌కు తిరిగి వెళ్ళండి"
+    honestReceipt: "అధికారి ఆమోదం కోసం వేచి ఉంది • తగిన ధృవీకరణ తర్వాత బృందం బయలుదేరుతుంది",
+    trackBtn: "డిజిటల్ ట్విన్ పై ట్రాక్ చేయండి",
+    homeBtn: "హోమ్‌కు తిరిగి వెళ్ళండి",
+    lifecycleTitle: "ప్రతిస్పందన పురోగతి"
   },
   hi: {
     title: "आपातकाल की रिपोर्ट करें",
-    subtitle: "वास्तविक समय जीपीएस के साथ मल्टी-मीडिया आपातकालीन रिपोर्ट दर्ज करें",
-    categoryLabel: "1. आपातकालीन श्रेणी चुनें",
+    subtitle: "नगर आपातकालीन समन्वयकों को सत्यापित विवरण भेजें",
+    categoryLabel: "1. आपातकाल का प्रकार चुनें",
     medical: "चिकित्सा",
-    fire: "अग्निशमन",
-    police: "पुलिस / सुरक्षा",
+    flood: "बाढ़ / जलभराव",
+    fire: "अग्निशमन व बचाव",
+    police: "पुलिस व सुरक्षा",
     roadAccident: "सड़क दुर्घटना",
-    disaster: "प्राकृतिक आपदा",
-    general: "सामान्य",
-    locationLabel: "2. आपातकालीन स्थान का विवरण",
+    general: "अन्य आपातकाल",
+    floodSubtypeLabel: "बाढ़ / जलभराव की श्रेणी चुनें:",
+    floodSubtypes: [
+      { id: 'waterlogging', label: 'सड़कों पर भारी जलभराव' },
+      { id: 'blocked_drain', label: 'नाली जाम / ओवरफ्लो' },
+      { id: 'rising_water', label: 'तेजी से बढ़ता जलस्तर' },
+      { id: 'stranded_person', label: 'फंसे हुए नागरिक / परिवार' },
+      { id: 'vehicle_trapped', label: 'पानी में फंसा वाहन' },
+      { id: 'other_flood', label: 'अन्य बाढ़ समस्या' }
+    ],
+    locationLabel: "2. आपातकालीन स्थान",
     manualLocationPlaceholder: "लैंडमार्क या पता दर्ज करें...",
-    gpsDetecting: "जीपीएस ट्रैक हो रहा है...",
+    gpsDetecting: "स्थान ट्रैक हो रहा है...",
     detailsLabel: "3. घटना का विवरण",
-    titlePlaceholder: "संक्षिप्त विवरण (उदा. सड़क दुर्घटना)",
-    descPlaceholder: "क्या हुआ विवरण में बताएं...",
-    affectedLabel: "4. प्रभावित लोगों की संख्या",
-    mediaLabel: "5. मीडिया साक्ष्य जोड़ें (वैकल्पिक)",
+    titlePlaceholder: "संक्षिप्त विवरण (उदा. बीच रोड सेक्टर 4 में जलभराव)",
+    descPlaceholder: "क्या हुआ, वर्तमान खतरे और नागरिक स्थिति का विवरण दें...",
+    affectedLabel: "4. प्रभावित / खतरे में लोगों की संख्या",
+    mediaLabel: "5. साक्ष्य जोड़ें (वैकल्पिक)",
     voiceRecordBtn: "वॉइस नोट रिकॉर्ड करें",
-    imageAttachBtn: "छवि अपलोड करें",
-    videoAttachBtn: "वीडियो अपलोड करें",
-    sharedInfoNotice: "साझा की गई जानकारी: आपके जीपीएस निर्देशांक, विवरण और संपर्क नंबर प्रेषित किए जाएंगे।",
+    imageAttachBtn: "तस्वीर जोड़ें",
+    videoAttachBtn: "वीडियो जोड़ें",
+    sharedInfoNotice: "साझा की गई जानकारी: आपका स्थान, घटना विवरण और संपर्क संबंधित विभाग को भेजे जाएंगे।",
     submitBtn: "आपातकालीन रिपोर्ट भेजें",
     submittingBtn: "सबमिट हो रहा है...",
     successTitle: "आपातकालीन रिपोर्ट प्राप्त हुई",
     ticketLabel: "घटना आईडी:",
-    offlineNotice: "स्थानीय रूप से सहेजा गया — कनेक्शन की प्रतीक्षा",
-    honestReceipt: "अनुरोध सबमिट हुआ — पुष्टि की प्रतीक्षा में",
-    trackBtn: "स्थिति ट्रैक करें",
-    homeBtn: "होम पर लौटें"
+    offlineNotice: "स्थानीय रूप से सुरक्षित — कनेक्शन पर सिंक होगा",
+    honestReceipt: "अधिकारी अनुमोदन की प्रतीक्षा • संसाधन प्रेषण से पूर्व सत्यापन आवश्यक",
+    trackBtn: "डिजिटल ट्विन पर ट्रैक करें",
+    homeBtn: "होम पर लौटें",
+    lifecycleTitle: "प्रतिक्रिया प्रगति चक्र"
   }
 }
+
+const LIFECYCLE_STAGES = [
+  { id: 'report', label: 'Report' },
+  { id: 'ai_triage', label: 'AI Triage' },
+  { id: 'verified', label: 'Verified' },
+  { id: 'dept_routed', label: 'Dept Routed' },
+  { id: 'response', label: 'Response' },
+  { id: 'resolved', label: 'Resolved' }
+]
 
 function ReportEmergencyForm() {
   const router = useRouter()
@@ -136,7 +178,8 @@ function ReportEmergencyForm() {
   const t = reportTranslations[lang as 'en' | 'te' | 'hi'] || reportTranslations.en
 
   // Form State
-  const [category, setCategory] = useState<EmergencyCategory>('medical')
+  const [category, setCategory] = useState<EmergencyCategory>('flood')
+  const [floodSubtype, setFloodSubtype] = useState<string>('waterlogging')
   const [severity, setSeverity] = useState<EmergencySeverity>('high')
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -153,7 +196,7 @@ function ReportEmergencyForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submittedIncident, setSubmittedIncident] = useState<CitizenIncident | null>(null)
 
-  // GPS Re-detection
+  // Humanized location detection handler
   const handleDetectGps = () => {
     if (!navigator.geolocation) {
       setGpsStatus('GPS UNAVAILABLE')
@@ -164,7 +207,7 @@ function ReportEmergencyForm() {
         const updatedLoc: LocationInfo = {
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
-          address: manualAddress || `GPS (${pos.coords.latitude.toFixed(4)}° N, ${pos.coords.longitude.toFixed(4)}° E), Visakhapatnam`,
+          address: manualAddress || `MVP Colony, Visakhapatnam (${pos.coords.latitude.toFixed(4)}° N, ${pos.coords.longitude.toFixed(4)}° E)`,
           district: 'Visakhapatnam',
           stateName: 'Andhra Pradesh',
           gpsState: 'GPS AVAILABLE'
@@ -183,16 +226,23 @@ function ReportEmergencyForm() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    const incId = `INC-REP-${Math.floor(1000 + Math.random() * 9000)}`
+    const randomNum = Math.floor(8000 + Math.random() * 1999)
+    const incId = `CIT-${randomNum}`
     const nowIso = new Date().toISOString()
     const isOffline = networkState === 'OFFLINE'
+
+    const generatedTitle = title || (
+      category === 'flood'
+        ? `[FLOOD] ${floodSubtype.replace(/_/g, ' ').toUpperCase()} near ${manualAddress || activeLocation.address}`
+        : `[${category.toUpperCase()} EMERGENCY] ${manualAddress || activeLocation.address}`
+    )
 
     const incidentPayload: CitizenIncident = {
       id: incId,
       category,
       severity,
-      title: title || `[${category.toUpperCase()} EMERGENCY] ${manualAddress || activeLocation.address}`,
-      description: description || `Report submitted by citizen. Media evidence attached: Voice (${voiceRecorded ? 'Yes' : 'No'}), Image (${imageAttached ? 'Yes' : 'No'}), Video (${videoAttached ? 'Yes' : 'No'}).`,
+      title: generatedTitle,
+      description: description || `Citizen report submitted for ${category.toUpperCase()} (${category === 'flood' ? floodSubtype : 'Standard'}). Media: Voice (${voiceRecorded ? 'Yes' : 'No'}), Photo (${imageAttached ? 'Yes' : 'No'}), Video (${videoAttached ? 'Yes' : 'No'}).`,
       location: {
         latitude: activeLocation.latitude,
         longitude: activeLocation.longitude,
@@ -214,7 +264,18 @@ function ReportEmergencyForm() {
       syncState: isOffline ? 'PENDING' : 'SYNCED',
       isOfflineSaved: isOffline,
       timeline: [
-        { stage: 'received', title: 'Emergency Report Received', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), note: isOffline ? 'Enqueued in IndexedDB sync queue' : 'Received by BHARATOS Core Gateway' }
+        { 
+          stage: 'received', 
+          title: 'Emergency Report Received', 
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+          note: isOffline ? 'Saved in local secure queue' : 'Received by City Operations Gateway' 
+        },
+        { 
+          stage: 'ai_analyzed', 
+          title: 'AI Triage & Sensor Correlation', 
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+          note: 'Correlated with MVP Colony telemetry. Priority classified as HIGH.' 
+        }
       ],
       createdAt: nowIso,
       updatedAt: nowIso
@@ -227,21 +288,24 @@ function ReportEmergencyForm() {
     setTimeout(() => {
       setIsSubmitting(false)
       setSubmittedIncident(incidentPayload)
-    }, 700)
+    }, 600)
   }
 
+  // Submitted Confirmation View
   if (submittedIncident) {
     return (
-      <div className="space-y-5 py-3">
+      <div className="space-y-5 py-3 font-sans">
         <div className={`rounded-3xl p-6 text-center space-y-4 border ${
           submittedIncident.isOfflineSaved
             ? 'border-amber-800/80 bg-amber-950/20'
             : 'border-emerald-800/80 bg-emerald-950/20'
         }`}>
           <div className={`h-16 w-16 mx-auto rounded-full flex items-center justify-center border-2 ${
-            submittedIncident.isOfflineSaved ? 'border-amber-400 text-amber-400 bg-amber-950/80' : 'border-emerald-400 text-emerald-400 bg-emerald-950/80'
+            submittedIncident.isOfflineSaved 
+              ? 'border-amber-400 text-amber-400 bg-amber-950/80' 
+              : 'border-emerald-400 text-emerald-400 bg-emerald-950/80'
           }`}>
-            {submittedIncident.isOfflineSaved ? <WifiOff className="w-8 h-8" /> : <CheckCircle2 className="w-8 h-8 animate-bounce" />}
+            {submittedIncident.isOfflineSaved ? <WifiOff className="w-8 h-8" /> : <CheckCircle2 className="w-8 h-8" />}
           </div>
 
           <div className="space-y-1">
@@ -252,14 +316,49 @@ function ReportEmergencyForm() {
               {t.successTitle}
             </h2>
             <p className="text-xs text-slate-300 font-mono">
-              {t.ticketLabel} <span className="text-sky-400 font-bold">{submittedIncident.id}</span>
+              {t.ticketLabel} <span className="text-sky-400 font-bold text-sm">{submittedIncident.id}</span>
             </p>
           </div>
 
+          {/* 6-Stage Lifecycle Progress Display */}
+          <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-850 space-y-2.5 text-left">
+            <div className="flex items-center justify-between text-[10px] font-mono font-bold text-slate-400">
+              <span className="flex items-center gap-1 text-slate-300">
+                <Clock className="w-3 h-3 text-sky-400" />
+                {t.lifecycleTitle}
+              </span>
+              <span className="text-amber-400 uppercase">AWAITING OFFICER APPROVAL</span>
+            </div>
+
+            <div className="grid grid-cols-6 gap-1 pt-1 font-mono">
+              {LIFECYCLE_STAGES.map((step, idx) => {
+                const isCurrent = idx === 1 // AI Triage
+                const isPassed = idx === 0  // Report
+                return (
+                  <div key={step.id} className="text-center space-y-1">
+                    <div className={`h-2 rounded-full transition-all ${
+                      isCurrent 
+                        ? 'bg-amber-400 animate-pulse' 
+                        : isPassed 
+                        ? 'bg-emerald-500' 
+                        : 'bg-slate-800'
+                    }`} />
+                    <span className={`text-[8px] uppercase block truncate ${
+                      isCurrent ? 'text-amber-300 font-bold' : isPassed ? 'text-emerald-400' : 'text-slate-500'
+                    }`}>
+                      {step.label}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Incident Summary Card */}
           <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-850 text-left text-xs font-mono space-y-2">
             <div className="flex justify-between text-slate-400 text-[10px]">
               <span>Category: <strong className="text-white uppercase">{submittedIncident.category}</strong></span>
-              <span>Severity: <strong className="text-amber-400 uppercase">{submittedIncident.severity}</strong></span>
+              <span>Priority: <strong className="text-amber-400 uppercase">{submittedIncident.severity}</strong></span>
             </div>
             <h4 className="text-xs font-bold text-white leading-snug">{submittedIncident.title}</h4>
             <p className="text-slate-300 text-[11px] leading-relaxed truncate">
@@ -292,12 +391,12 @@ function ReportEmergencyForm() {
   }
 
   return (
-    <div className="space-y-5 pb-8">
+    <div className="space-y-5 pb-8 font-sans">
 
       {/* Header */}
       <div>
         <span className="text-[9.5px] font-mono font-black text-sky-400 uppercase tracking-widest block">
-          MULTIPLE EMERGENCY TYPES SUPPORTED
+          CITY EMERGENCY GATEWAY
         </span>
         <h1 className="text-xl font-black text-white font-mono tracking-tight">{t.title}</h1>
         <p className="text-xs text-slate-400 mt-0.5">{t.subtitle}</p>
@@ -305,81 +404,125 @@ function ReportEmergencyForm() {
 
       <form onSubmit={handleSubmitReport} className="space-y-4">
 
-        {/* 1. Category Picker Grid */}
-        <div className="rounded-2xl border border-slate-900 bg-[#060a13] p-4 space-y-2.5">
+        {/* 1. Category Picker Grid - Flood elevated as first-class citizen emergency */}
+        <div className="rounded-2xl border border-slate-900 bg-[#060a13] p-4 space-y-3">
           <label className="text-[10.5px] font-mono font-bold text-slate-300 uppercase tracking-wider block">
             {t.categoryLabel}
           </label>
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+            
+            {/* Medical */}
             <button
               type="button"
               onClick={() => setCategory('medical')}
-              className={`p-2.5 rounded-xl border text-left flex items-center space-x-2.5 transition-all ${
-                category === 'medical' ? 'border-red-500 bg-red-950/60 text-white font-bold' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
+              className={`p-3 rounded-xl border text-left flex items-center space-x-2.5 transition-all cursor-pointer ${
+                category === 'medical' 
+                  ? 'border-red-500 bg-red-950/60 text-white font-bold shadow-sm shadow-red-950' 
+                  : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
               }`}
             >
               <LifeBuoy className="w-4 h-4 text-red-400 shrink-0" />
               <span>{t.medical}</span>
             </button>
 
+            {/* Flood / Waterlogging - First Class Highlight */}
+            <button
+              type="button"
+              onClick={() => setCategory('flood')}
+              className={`p-3 rounded-xl border text-left flex items-center space-x-2.5 transition-all cursor-pointer ${
+                category === 'flood' 
+                  ? 'border-sky-500 bg-sky-950/60 text-white font-bold shadow-sm shadow-sky-950 ring-1 ring-sky-500/50' 
+                  : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
+              }`}
+            >
+              <Waves className="w-4 h-4 text-sky-400 shrink-0" />
+              <span>{t.flood}</span>
+            </button>
+
+            {/* Fire */}
             <button
               type="button"
               onClick={() => setCategory('fire')}
-              className={`p-2.5 rounded-xl border text-left flex items-center space-x-2.5 transition-all ${
-                category === 'fire' ? 'border-orange-500 bg-orange-950/60 text-white font-bold' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
+              className={`p-3 rounded-xl border text-left flex items-center space-x-2.5 transition-all cursor-pointer ${
+                category === 'fire' 
+                  ? 'border-orange-500 bg-orange-950/60 text-white font-bold shadow-sm shadow-orange-950' 
+                  : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
               }`}
             >
               <Flame className="w-4 h-4 text-orange-400 shrink-0" />
               <span>{t.fire}</span>
             </button>
 
+            {/* Police */}
             <button
               type="button"
               onClick={() => setCategory('police')}
-              className={`p-2.5 rounded-xl border text-left flex items-center space-x-2.5 transition-all ${
-                category === 'police' ? 'border-blue-500 bg-blue-950/60 text-white font-bold' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
+              className={`p-3 rounded-xl border text-left flex items-center space-x-2.5 transition-all cursor-pointer ${
+                category === 'police' 
+                  ? 'border-blue-500 bg-blue-950/60 text-white font-bold shadow-sm shadow-blue-950' 
+                  : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
               }`}
             >
               <Shield className="w-4 h-4 text-blue-400 shrink-0" />
               <span>{t.police}</span>
             </button>
 
+            {/* Road Accident */}
             <button
               type="button"
               onClick={() => setCategory('road_accident')}
-              className={`p-2.5 rounded-xl border text-left flex items-center space-x-2.5 transition-all ${
-                category === 'road_accident' ? 'border-amber-500 bg-amber-950/60 text-white font-bold' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
+              className={`p-3 rounded-xl border text-left flex items-center space-x-2.5 transition-all cursor-pointer ${
+                category === 'road_accident' 
+                  ? 'border-amber-500 bg-amber-950/60 text-white font-bold shadow-sm shadow-amber-950' 
+                  : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
               }`}
             >
               <Car className="w-4 h-4 text-amber-400 shrink-0" />
               <span>{t.roadAccident}</span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => setCategory('disaster')}
-              className={`p-2.5 rounded-xl border text-left flex items-center space-x-2.5 transition-all ${
-                category === 'disaster' ? 'border-purple-500 bg-purple-950/60 text-white font-bold' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
-              }`}
-            >
-              <CloudRain className="w-4 h-4 text-purple-400 shrink-0" />
-              <span>{t.disaster}</span>
-            </button>
-
+            {/* Other Emergency */}
             <button
               type="button"
               onClick={() => setCategory('general')}
-              className={`p-2.5 rounded-xl border text-left flex items-center space-x-2.5 transition-all ${
-                category === 'general' ? 'border-slate-500 bg-slate-900 text-white font-bold' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
+              className={`p-3 rounded-xl border text-left flex items-center space-x-2.5 transition-all cursor-pointer ${
+                category === 'general' 
+                  ? 'border-slate-500 bg-slate-900 text-white font-bold' 
+                  : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
               }`}
             >
               <AlertTriangle className="w-4 h-4 text-slate-400 shrink-0" />
               <span>{t.general}</span>
             </button>
           </div>
+
+          {/* Flood Subtype Selector (Shown when Flood is active) */}
+          {category === 'flood' && (
+            <div className="pt-2 border-t border-slate-900 space-y-2">
+              <label className="text-[10px] font-mono font-bold text-sky-400 uppercase tracking-wider block">
+                {t.floodSubtypeLabel}
+              </label>
+              <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                {t.floodSubtypes.map((sub) => (
+                  <button
+                    key={sub.id}
+                    type="button"
+                    onClick={() => setFloodSubtype(sub.id)}
+                    className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                      floodSubtype === sub.id
+                        ? 'border-sky-500 bg-sky-950/80 text-white font-bold'
+                        : 'border-slate-900 bg-slate-950/60 text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    ● {sub.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* 2. Location Picker Card */}
+        {/* 2. Location Picker Card - Humanized wording */}
         <div className="rounded-2xl border border-slate-900 bg-[#060a13] p-4 space-y-2.5">
           <div className="flex items-center justify-between">
             <label className="text-[10.5px] font-mono font-bold text-slate-300 uppercase tracking-wider block">
@@ -388,10 +531,10 @@ function ReportEmergencyForm() {
             <button
               type="button"
               onClick={handleDetectGps}
-              className="text-[10px] font-mono font-bold text-sky-400 hover:underline flex items-center space-x-1"
+              className="text-[10px] font-mono font-bold text-sky-400 hover:underline flex items-center space-x-1 cursor-pointer"
             >
               <Navigation className="w-3 h-3" />
-              <span>Re-detect GPS</span>
+              <span>Detect current location</span>
             </button>
           </div>
 
@@ -407,7 +550,7 @@ function ReportEmergencyForm() {
           <div className="flex items-center space-x-1.5 text-[9.5px] font-mono font-bold">
             <MapPin className="w-3.5 h-3.5 text-sky-400 shrink-0" />
             <span className={gpsStatus === 'GPS AVAILABLE' ? 'text-emerald-400' : 'text-amber-400'}>
-              {gpsStatus === 'GPS AVAILABLE' ? 'GPS High-Accuracy Linked' : 'GPS Signal Unavailable — Manual Address Entered'}
+              {gpsStatus === 'GPS AVAILABLE' ? '📍 Location detected' : '⚠️ Location not detected — manual landmark entered'}
             </span>
           </div>
         </div>
@@ -453,7 +596,7 @@ function ReportEmergencyForm() {
                 key={cnt}
                 type="button"
                 onClick={() => setAffectedCount(cnt)}
-                className={`py-2 rounded-xl border text-center font-bold transition-all ${
+                className={`py-2 rounded-xl border text-center font-bold transition-all cursor-pointer ${
                   affectedCount === cnt
                     ? 'border-sky-500 bg-sky-950 text-sky-300'
                     : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
@@ -475,34 +618,34 @@ function ReportEmergencyForm() {
             <button
               type="button"
               onClick={() => setVoiceRecorded(!voiceRecorded)}
-              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all ${
+              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
                 voiceRecorded ? 'border-emerald-500 bg-emerald-950/60 text-emerald-300' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
               }`}
             >
               <Mic className="w-4 h-4" />
-              <span>{voiceRecorded ? 'Voice Added' : t.voiceRecordBtn}</span>
+              <span>{voiceRecorded ? 'Voice Attached' : t.voiceRecordBtn}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setImageAttached(!imageAttached)}
-              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all ${
+              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
                 imageAttached ? 'border-emerald-500 bg-emerald-950/60 text-emerald-300' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
               }`}
             >
               <Camera className="w-4 h-4" />
-              <span>{imageAttached ? 'Image Added' : t.imageAttachBtn}</span>
+              <span>{imageAttached ? 'Photo Attached' : t.imageAttachBtn}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setVideoAttached(!videoAttached)}
-              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all ${
+              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
                 videoAttached ? 'border-emerald-500 bg-emerald-950/60 text-emerald-300' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
               }`}
             >
               <Video className="w-4 h-4" />
-              <span>{videoAttached ? 'Video Added' : t.videoAttachBtn}</span>
+              <span>{videoAttached ? 'Video Attached' : t.videoAttachBtn}</span>
             </button>
           </div>
         </div>

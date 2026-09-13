@@ -36,7 +36,7 @@ const profileTranslations = {
     medicalConditionsLabel: "Medical Conditions / Allergies (Optional):",
     contactsHeader: "Emergency Contacts (Notification Request List):",
     addContactBtn: "Add Emergency Contact",
-    simulatedBadge: "SIMULATED REQUEST",
+    simulatedBadge: "DEMO DATA",
     accessibilityHeader: "Accessibility & Interface Controls",
     voiceAlertsLabel: "Voice Alerts",
     highContrastLabel: "High-Contrast Colors",

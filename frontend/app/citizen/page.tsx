@@ -14,382 +14,450 @@ import {
   ChevronRight,
   MapPin,
   CheckCircle2,
-  Navigation
+  Navigation,
+  Droplets,
+  Building2,
+  HelpCircle,
+  Radio,
+  ExternalLink
 } from 'lucide-react'
 import { useCitizenStore } from '../../store/useCitizenStore'
+import { useVizagDataStore } from '../../store/useVizagDataStore'
 import { AppLanguage, CitizenAlert, CitizenIncident } from '../../types/citizen'
 
-const homeTranslations = {
-  en: {
-    greetingMorning: "Good Morning",
-    greetingAfternoon: "Good Afternoon",
-    greetingEvening: "Good Evening",
-    sosHeroTitle: "SOS — GET HELP NOW",
-    sosHeroSub: "Instant 1-Tap Emergency Dispatch Request",
-    safeExitTitle: "FIND SAFE EXIT",
-    safeExitSub: "Hazard-Aware Evacuation Routing",
-    quickReport: "Report Emergency",
-    quickReportSub: "Multi-Media & Live GPS",
-    quickAi: "Ask BHARATOS AI",
-    quickAiSub: "Conversational Triage",
-    nearbyAlertsTitle: "Active Alerts Nearby",
-    viewAllAlerts: "View All Alerts",
-    activeIncidentTitle: "My Ongoing Emergency",
-    trackStatus: "Track Status",
-    servicesTitle: "Quick Emergency Services",
-    servicePolice: "112 Police",
-    servicePoliceDesc: "Public Safety & Rescue",
-    serviceAmbulance: "108 Ambulance",
-    serviceAmbulanceDesc: "Medical Trauma & Emergency",
-    serviceFire: "101 Fire & Rescue",
-    serviceFireDesc: "Hazmat & Structural Fire",
-    serviceWomen: "1091 Women Helpline",
-    serviceWomenDesc: "Immediate Safety & Escort",
-    honestNotice: "BHARATOS Emergency OS is connected to national dispatch channels. Operational telemetry is verified before status updates.",
-    dataVerifiedBadge: "OFFICIAL AUTHORITY"
-  },
-  te: {
-    greetingMorning: "శుభోదయం",
-    greetingAfternoon: "శుభాహ్నం",
-    greetingEvening: "సాయంత్ర శుభాకాంక్షలు",
-    sosHeroTitle: "SOS — సహాయం పొందండి",
-    sosHeroSub: "తక్షణ 1-ట్యాప్ అత్యవసర డిస్పాచ్",
-    safeExitTitle: "సురక్షిత నిష్క్రమణ",
-    safeExitSub: "ప్రమాద రహిత తరలింపు మార్గం",
-    quickReport: "అత్యవసర రిపోర్ట్",
-    quickReportSub: "మల్టీ-మీడియా & లైవ్ GPS",
-    quickAi: "BHARATOS AI ని అడగండి",
-    quickAiSub: "సంభాషణ వర్గీకరణ",
-    nearbyAlertsTitle: "సమీప క్రియాశీల హెచ్చరికలు",
-    viewAllAlerts: "అన్ని హెచ్చరికలు చూడండి",
-    activeIncidentTitle: "నా కొనసాగుతున్న అత్యవసర పరిస్థితి",
-    trackStatus: "స్టేటస్ ట్రాక్ చేయండి",
-    servicesTitle: "త్వరిత అత్యవసర సేవలు",
-    servicePolice: "112 పోలీస్",
-    servicePoliceDesc: "ప్రజా రక్షణ & రక్షణ దళం",
-    serviceAmbulance: "108 అంబులెన్స్",
-    serviceAmbulanceDesc: "మెడికల్ ఎమర్జెన్సీ",
-    serviceFire: "101 ఫైర్ & రెస్క్యూ",
-    serviceFireDesc: "అగ్నిమాపక రక్షణ",
-    serviceWomen: "1091 మహిళా హెల్ప్‌లైన్",
-    serviceWomenDesc: "మహిళల తక్షణ భద్రత",
-    honestNotice: "BHARATOS అత్యవసర సిస్టమ్ జాతీయ డిస్పాచ్ ఛానెళ్లకు అనుసంధానించబడింది.",
-    dataVerifiedBadge: "అధికారిక వ్యవస్థ"
-  },
-  hi: {
-    greetingMorning: "सुप्रभात",
-    greetingAfternoon: "नमस्कार",
-    greetingEvening: "शुभ संध्या",
-    sosHeroTitle: "एसओएस — तुरंत मदद पाएं",
-    sosHeroSub: "तत्काल 1-टैप आपातकालीन सहायता अनुरोध",
-    safeExitTitle: "सुरक्षित निकास",
-    safeExitSub: "खतरा-जागरूक निकासी मार्ग",
-    quickReport: "आपातकाल रिपोर्ट करें",
-    quickReportSub: "मल्टी-मीडिया व लाइव जीपीएस",
-    quickAi: "भारतओएस एआई से पूछें",
-    quickAiSub: "बातचीत सहायता",
-    nearbyAlertsTitle: "आसपास के सक्रिय अलर्ट",
-    viewAllAlerts: "सभी अलर्ट देखें",
-    activeIncidentTitle: "मेरी सक्रिय आपातकालीन स्थिति",
-    trackStatus: "स्थिति ट्रैक करें",
-    servicesTitle: "त्वरित आपातकालीन सेवाएं",
-    servicePolice: "112 पुलिस",
-    servicePoliceDesc: "सार्वजनिक सुरक्षा व बचाव",
-    serviceAmbulance: "108 एम्बुलेंस",
-    serviceAmbulanceDesc: "चिकित्सा आपातकाल",
-    serviceFire: "101 अग्निशमन",
-    serviceFireDesc: "अग्निशमन व आपदा बचाव",
-    serviceWomen: "1091 महिला हेल्पलाइन",
-    serviceWomenDesc: "तत्काल महिला सुरक्षा",
-    honestNotice: "भारतओएस आपातकालीन प्रणाली राष्ट्रीय प्रेषण चैनलों से जुड़ी है।",
-    dataVerifiedBadge: "आधिकारिक प्राधिकरण"
-  }
-}
-
 export default function CitizenHome() {
-  const { profile, activeLocation, myIncidents, nearbyAlerts } = useCitizenStore()
+  const { profile, activeLocation, myIncidents } = useCitizenStore()
+  const { demoStage, simulationTime, incident, sensors, trafficCorridors } = useVizagDataStore()
   const lang: AppLanguage = profile.language || 'en'
-  const t = homeTranslations[lang as 'en' | 'te' | 'hi'] || homeTranslations.en
 
-  const [greeting, setGreeting] = useState(t.greetingMorning)
-  useEffect(() => {
-    const hour = new Date().getHours()
-    if (hour < 12) setGreeting(t.greetingMorning)
-    else if (hour < 17) setGreeting(t.greetingAfternoon)
-    else setGreeting(t.greetingEvening)
-  }, [lang, t])
-
-  const activeIncident: CitizenIncident | undefined = myIncidents.find(i => i.stage !== 'resolved') || myIncidents[0]
-
-  const displayAlerts: CitizenAlert[] = nearbyAlerts.length > 0 ? nearbyAlerts : [
-    {
-      id: 'alt-101',
-      title: 'High Coastal Storm Surge Warning',
-      summary: 'Heavy rainfall and sea turbulence reported along Beach Bypass Corridors. Exercise caution.',
-      severity: 'high',
-      category: 'Disaster Alert',
-      affectedArea: 'Visakhapatnam Coastal Belt',
-      officialSource: 'SDMA / IMD Weather Center',
-      recommendedAction: 'Avoid low-lying coastal roads and stay tuned for official advisories.',
-      timestamp: '10 mins ago',
-      isVerified: true,
-      status: 'active',
-      dataSource: 'OFFICIAL AUTHORITY'
+  // Dynamic Citizen Safety Status based on shared Vizag simulation state
+  const getSafetyStatus = () => {
+    switch (demoStage) {
+      case 'IDLE':
+        return {
+          badge: 'SAFE',
+          indicator: '🟢',
+          title: 'YOU ARE SAFE',
+          textColor: 'text-emerald-400',
+          bgColor: 'bg-emerald-950/40 border-emerald-800/60',
+          explanation: 'Normal weather and drainage flow in your sector. All major roadways and underpasses are clear.'
+        }
+      case 'HEAVY_RAIN':
+        return {
+          badge: 'CAUTION',
+          indicator: '🟡',
+          title: 'WEATHER CAUTION',
+          textColor: 'text-yellow-400',
+          bgColor: 'bg-yellow-950/40 border-yellow-800/60',
+          explanation: 'Precipitation spike (64 mm/hr) recorded in coastal catchment. Watch for localized water accumulation in low-lying spots.'
+        }
+      case 'WATER_RISING':
+      case 'INCIDENT_DETECTED':
+        return {
+          badge: 'HIGH RISK',
+          indicator: '🟠',
+          title: 'HIGH FLOOD RISK',
+          textColor: 'text-orange-400',
+          bgColor: 'bg-orange-950/50 border-orange-800/60',
+          explanation: `Beach Road culvert water level reached ${incident.waterDepthCm} cm. Avoid driving through Sector 4 and coastline bypass corridors.`
+        }
+      case 'AI_TRIAGE':
+      case 'OFFICER_APPROVED':
+        return {
+          badge: 'EVACUATE NOW',
+          indicator: '🔴',
+          title: 'CRITICAL INUNDATION ALERT',
+          textColor: 'text-red-400',
+          bgColor: 'bg-red-950/60 border-red-700/80 shadow-[0_0_30px_rgba(239,68,68,0.3)]',
+          explanation: 'Severe waterlogging at Beach Road Sector 4. Non-emergency traffic is being diverted to NH16. Move to upper floors or designated shelter.'
+        }
+      case 'UNITS_DISPATCHED':
+      case 'WATER_DRAINED':
+        return {
+          badge: 'CAUTION',
+          indicator: '🟡',
+          title: 'RESPONSE & DEWATERING ACTIVE',
+          textColor: 'text-cyan-400',
+          bgColor: 'bg-cyan-950/40 border-cyan-800/60',
+          explanation: 'Emergency vehicles and high-capacity dewatering pump DP-04 are operating on scene. Water depth is actively receding.'
+        }
+      case 'RESOLVED':
+        return {
+          badge: 'SAFE',
+          indicator: '🟢',
+          title: 'YOU ARE SAFE',
+          textColor: 'text-emerald-400',
+          bgColor: 'bg-emerald-950/40 border-emerald-800/60',
+          explanation: 'Water drained and roadway reopened. Normal drainage restored across all sectors.'
+        }
+      default:
+        return {
+          badge: 'SAFE',
+          indicator: '🟢',
+          title: 'YOU ARE SAFE',
+          textColor: 'text-emerald-400',
+          bgColor: 'bg-emerald-950/40 border-emerald-800/60',
+          explanation: 'Normal weather and drainage flow in your sector.'
+        }
     }
-  ]
+  }
+
+  const safety = getSafetyStatus()
+
+  // Dynamic Safety Advisor based on current stage
+  const getSafetyAdvice = () => {
+    if (demoStage === 'AI_TRIAGE' || demoStage === 'OFFICER_APPROVED' || demoStage === 'INCIDENT_DETECTED') {
+      return [
+        'Avoid Beach Road Sector 4 and low-lying coastal underpasses.',
+        'Do not attempt to drive through standing water deeper than 15 cm.',
+        'If water threatens your home, proceed immediately to MVP High School Relief Shelter (600m away).',
+        'Keep phone charged and avoid unnecessary non-emergency travel.'
+      ]
+    }
+    if (demoStage === 'HEAVY_RAIN' || demoStage === 'WATER_RISING') {
+      return [
+        'Heavy rainfall active. Keep clear of open municipal stormwater drains.',
+        'Park vehicles on elevated ground away from basement ramps.',
+        'Check that emergency flashlights and first-aid kits are accessible.'
+      ]
+    }
+    return [
+      'Weather conditions are stable. No immediate evacuation required.',
+      'Familiarize yourself with your nearest shelter: MVP High School Relief Shelter.',
+      'Emergency numbers 112 (Police), 108 (Medical), and 101 (Fire) are active 24/7.'
+    ]
+  }
+
+  const safetyAdviceList = getSafetyAdvice()
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-6 pb-12 font-sans max-w-5xl mx-auto">
 
-      {/* Greeting Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-900 pb-4">
-        <div>
-          <span className="text-[10px] font-mono font-bold text-sky-400 uppercase tracking-widest block">
-            {greeting}, {profile.name}
-          </span>
-          <h1 className="text-xl md:text-2xl font-black text-white font-mono tracking-tight leading-tight mt-0.5">
-            BHARATOS CITIZEN OS
-          </h1>
+      {/* 1. TOP SECTION: SAFETY STATUS BANNER */}
+      <div className={`rounded-3xl border p-6 flex flex-col md:flex-row md:items-center justify-between gap-5 transition-all duration-300 backdrop-blur-md ${safety.bgColor}`}>
+        <div className="space-y-2">
+          <div className="flex items-center space-x-2.5">
+            <span className="text-xl leading-none">{safety.indicator}</span>
+            <span className="text-xs font-mono font-black uppercase tracking-widest text-slate-400">SAFETY STATUS</span>
+            <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border uppercase ${safety.textColor} border-current/30`}>
+              {safety.badge}
+            </span>
+          </div>
+
+          <h2 className={`text-2xl md:text-3xl font-black font-mono tracking-tight ${safety.textColor}`}>
+            {safety.title}
+          </h2>
+
+          <div className="flex items-center space-x-2 text-xs text-slate-300 font-medium">
+            <MapPin className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+            <span>MVP Colony, Visakhapatnam (Ward 12)</span>
+          </div>
+
+          <p className="text-xs md:text-sm text-slate-200/90 leading-relaxed pt-1 max-w-2xl font-normal">
+            {safety.explanation}
+          </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-1.5 text-[10px] font-mono font-bold px-3 py-1.5 rounded-full bg-slate-950 border border-slate-850 text-slate-300">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>DESKTOP COMMAND ENGINE ACTIVE</span>
+
+        <div className="flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-2 shrink-0">
+          <div className="text-[10px] font-mono text-slate-400 flex items-center space-x-1.5 bg-black/40 px-3 py-1.5 rounded-xl border border-slate-800/80">
+            <Clock className="w-3 h-3 text-sky-400" />
+            <span>Scenario Clock: <strong className="text-white">{simulationTime}</strong></span>
+          </div>
+          <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/40 text-amber-300">
+            SIMULATION — HYDRAULIC LINK
+          </span>
+        </div>
+      </div>
+
+      {/* 2. TWO DOMINANT ACTIONS: SOS & REPORT FLOOD */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* DOMINANT ACTION 1: SOS GET HELP */}
+        <Link
+          href="/citizen/sos"
+          className="group relative overflow-hidden rounded-3xl border-2 border-red-600/80 bg-gradient-to-r from-red-950 via-[#2a080c] to-[#1a0407] p-6 shadow-[0_0_40px_rgba(239,68,68,0.35)] hover:shadow-[0_0_50px_rgba(239,68,68,0.55)] transition-all flex items-center justify-between cursor-pointer active:scale-[0.99]"
+        >
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-mono font-black uppercase tracking-widest text-red-400 block">
+              1-TAP IMMEDIATE DISPATCH
+            </span>
+            <h3 className="text-xl md:text-2xl font-black text-white font-mono uppercase tracking-tight">
+              🚨 SOS — GET HELP
+            </h3>
+            <p className="text-xs text-red-200/80 font-medium">
+              Request Medical, Fire, Police, or Flood Rescue immediately
+            </p>
+          </div>
+          <div className="h-16 w-16 rounded-2xl bg-red-600 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-red-950/80 shrink-0 ml-3">
+            <ShieldAlert className="w-8 h-8 group-hover:animate-ping" />
+          </div>
+        </Link>
+
+        {/* DOMINANT ACTION 2: REPORT FLOOD / EMERGENCY */}
+        <Link
+          href="/citizen/report"
+          className="group relative overflow-hidden rounded-3xl border-2 border-sky-600/80 bg-gradient-to-r from-sky-950 via-[#051c2e] to-[#041320] p-6 shadow-[0_0_40px_rgba(56,189,248,0.25)] hover:shadow-[0_0_50px_rgba(56,189,248,0.45)] transition-all flex items-center justify-between cursor-pointer active:scale-[0.99]"
+        >
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-mono font-black uppercase tracking-widest text-sky-400 block">
+              COMMUNITY REPORTING
+            </span>
+            <h3 className="text-xl md:text-2xl font-black text-white font-mono uppercase tracking-tight">
+              🌊 REPORT FLOOD
+            </h3>
+            <p className="text-xs text-sky-200/80 font-medium">
+              Report rising water, blocked drains, or stranded citizens
+            </p>
+          </div>
+          <div className="h-16 w-16 rounded-2xl bg-sky-600 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-sky-950/80 shrink-0 ml-3">
+            <Droplets className="w-8 h-8 group-hover:animate-bounce" />
+          </div>
+        </Link>
+      </div>
+
+      {/* 3. NEARBY ALERT & FLOOD STATUS ROW */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        
+        {/* NEARBY ALERT CARD */}
+        <div className="rounded-3xl border border-slate-850 bg-[#070B14]/90 p-5 space-y-3.5 backdrop-blur-md">
+          <div className="flex items-center justify-between border-b border-slate-900 pb-3">
+            <div className="flex items-center space-x-2">
+              <Shield className="w-4 h-4 text-amber-400" />
+              <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white">NEARBY ALERT</h3>
+            </div>
+            <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/40 text-amber-300">
+              SIMULATION
+            </span>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-white">
+                {demoStage === 'IDLE' 
+                  ? 'Coastal Marine Weather Normal' 
+                  : 'Beach Road Culvert Inundation Warning'}
+              </span>
+              <span className={`text-[9.5px] font-mono font-bold px-2 py-0.5 rounded uppercase ${
+                demoStage === 'AI_TRIAGE' || demoStage === 'OFFICER_APPROVED' || demoStage === 'INCIDENT_DETECTED'
+                  ? 'bg-red-950/80 border border-red-800 text-red-300'
+                  : 'bg-emerald-950/80 border border-emerald-800 text-emerald-300'
+              }`}>
+                {demoStage === 'IDLE' ? 'MONITORING' : 'ACTIVE WARNING'}
+              </span>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              {demoStage === 'IDLE'
+                ? 'No active hazard alerts for Visakhapatnam urban catchment. Routine drainage telemetry active.'
+                : 'Heavy rainfall runoff has overwhelmed the Beach Road Sector 4 outfall sump. Avoid driving near shoreline underpasses.'}
+            </p>
+
+            <div className="pt-2 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span>Source: <strong className="text-slate-200">IMD Radar / GVMC Sump Telemetry</strong></span>
+              <Link href="/citizen/alerts" className="text-sky-400 hover:text-sky-300 flex items-center gap-1 font-semibold">
+                <span>View All Alerts</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* FLOOD STATUS TELEMETRY CARD */}
+        <div className="rounded-3xl border border-slate-850 bg-[#070B14]/90 p-5 space-y-3.5 backdrop-blur-md">
+          <div className="flex items-center justify-between border-b border-slate-900 pb-3">
+            <div className="flex items-center space-x-2">
+              <Droplets className="w-4 h-4 text-cyan-400" />
+              <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white">FLOOD STATUS — LOCAL TELEMETRY</h3>
+            </div>
+            <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/40 text-cyan-300">
+              REAL_IOT & SIMULATION
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="p-3 rounded-2xl bg-[#040813] border border-slate-900 space-y-1">
+              <span className="text-[9.5px] font-mono text-slate-400 uppercase block">Water Level</span>
+              <span className="text-lg font-black font-mono text-white">{incident.waterDepthCm} cm</span>
+              <span className="text-[8.5px] font-mono text-slate-500 block">Sensor #1 Sump</span>
+            </div>
+
+            <div className="p-3 rounded-2xl bg-[#040813] border border-slate-900 space-y-1">
+              <span className="text-[9.5px] font-mono text-slate-400 uppercase block">Rainfall Rate</span>
+              <span className="text-lg font-black font-mono text-sky-400">
+                {demoStage === 'IDLE' ? '0 mm/h' : '64 mm/h'}
+              </span>
+              <span className="text-[8.5px] font-mono text-slate-500 block">Doppler Radar</span>
+            </div>
+
+            <div className="p-3 rounded-2xl bg-[#040813] border border-slate-900 space-y-1">
+              <span className="text-[9.5px] font-mono text-slate-400 uppercase block">Risk Level</span>
+              <span className={`text-sm font-black font-mono uppercase ${safety.textColor}`}>
+                {safety.badge}
+              </span>
+              <span className="text-[8.5px] font-mono text-slate-500 block">Zone Status</span>
+            </div>
+
+            <div className="p-3 rounded-2xl bg-[#040813] border border-slate-900 space-y-1">
+              <span className="text-[9.5px] font-mono text-slate-400 uppercase block">Road Closures</span>
+              <span className="text-sm font-bold font-mono text-amber-300 truncate block">
+                {trafficCorridors['beach-road']?.status === 'CLOSED_FLOOD' ? 'Beach Rd Closed' : 'All Open'}
+              </span>
+              <span className="text-[8.5px] font-mono text-slate-500 block">Detour Active</span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-1">
+            <span>Last Updated: <strong className="text-slate-200">{simulationTime}</strong></span>
+            <Link href="/citizen/safe-exit" className="text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1">
+              <span>Find Safe Exit Route</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+
+      </div>
+
+      {/* 4. NEARBY HELP QUICK DIRECTORY */}
+      <div className="rounded-3xl border border-slate-850 bg-[#070B14]/90 p-5 space-y-4 backdrop-blur-md">
+        <div className="flex items-center justify-between border-b border-slate-900 pb-3">
+          <div className="flex items-center space-x-2">
+            <Building2 className="w-4 h-4 text-emerald-400" />
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white">
+              NEARBY HELP — EMERGENCY DIRECTORY
+            </h3>
+          </div>
+          <span className="text-[9.5px] font-mono font-bold text-slate-400">
+            VERIFIED INFRASTRUCTURE
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Hospital */}
+          <div className="p-4 rounded-2xl bg-[#040813] border border-slate-900 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-base">🏥</span>
+                <span className="text-[9.5px] font-mono text-slate-400 font-bold">1.8 km</span>
+              </div>
+              <h4 className="text-xs font-bold text-white mt-1">NTR General Hospital</h4>
+              <p className="text-[10px] text-slate-400 font-mono mt-0.5">Level 1 Apex Trauma Center</p>
+            </div>
+            <div className="flex items-center space-x-1.5 pt-1">
+              <a
+                href="tel:108"
+                className="flex-1 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-700/40 text-emerald-300 text-[10px] font-mono font-bold text-center transition-colors"
+              >
+                CALL 108
+              </a>
+              <Link
+                href="/citizen/safe-exit"
+                className="flex-1 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-[10px] font-mono font-bold text-center transition-colors"
+              >
+                DIRECTIONS
+              </Link>
+            </div>
+          </div>
+
+          {/* Police Station */}
+          <div className="p-4 rounded-2xl bg-[#040813] border border-slate-900 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-base">🚓</span>
+                <span className="text-[9.5px] font-mono text-slate-400 font-bold">0.9 km</span>
+              </div>
+              <h4 className="text-xs font-bold text-white mt-1">MVP Colony Police Station</h4>
+              <p className="text-[10px] text-slate-400 font-mono mt-0.5">Sector Law Enforcement Base</p>
+            </div>
+            <div className="flex items-center space-x-1.5 pt-1">
+              <a
+                href="tel:112"
+                className="flex-1 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 border border-blue-700/40 text-blue-300 text-[10px] font-mono font-bold text-center transition-colors"
+              >
+                CALL 112
+              </a>
+              <Link
+                href="/citizen/safe-exit"
+                className="flex-1 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-[10px] font-mono font-bold text-center transition-colors"
+              >
+                DIRECTIONS
+              </Link>
+            </div>
+          </div>
+
+          {/* Fire Station */}
+          <div className="p-4 rounded-2xl bg-[#040813] border border-slate-900 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-base">🚒</span>
+                <span className="text-[9.5px] font-mono text-slate-400 font-bold">2.4 km</span>
+              </div>
+              <h4 className="text-xs font-bold text-white mt-1">Suryabagh Fire Station</h4>
+              <p className="text-[10px] text-slate-400 font-mono mt-0.5">Hazmat & Water Rescue Tender</p>
+            </div>
+            <div className="flex items-center space-x-1.5 pt-1">
+              <a
+                href="tel:101"
+                className="flex-1 py-1.5 rounded-lg bg-red-600/20 hover:bg-red-600/30 border border-red-700/40 text-red-300 text-[10px] font-mono font-bold text-center transition-colors"
+              >
+                CALL 101
+              </a>
+              <Link
+                href="/citizen/safe-exit"
+                className="flex-1 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-[10px] font-mono font-bold text-center transition-colors"
+              >
+                DIRECTIONS
+              </Link>
+            </div>
+          </div>
+
+          {/* Emergency Shelter */}
+          <div className="p-4 rounded-2xl bg-[#040813] border border-slate-900 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-base">🏫</span>
+                <span className="text-[9.5px] font-mono text-emerald-400 font-bold">0.6 km (Nearest)</span>
+              </div>
+              <h4 className="text-xs font-bold text-white mt-1">MVP High School Shelter</h4>
+              <p className="text-[10px] text-slate-400 font-mono mt-0.5">Food, Drinking Water, Medical Aid</p>
+            </div>
+            <div className="flex items-center space-x-1.5 pt-1">
+              <Link
+                href="/citizen/safe-exit"
+                className="w-full py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-mono font-bold text-center transition-colors flex items-center justify-center gap-1 shadow-md shadow-emerald-950"
+              >
+                <Navigation className="w-3 h-3" />
+                <span>SAFE EVACUATION ROUTE</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Responsive Grid Layout for Desktop */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* 5. BHARATOS SAFETY ADVISOR: "WHAT SHOULD I DO?" */}
+      <div className="rounded-3xl border border-indigo-900/40 bg-indigo-950/15 p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <HelpCircle className="w-4 h-4 text-indigo-400" />
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-indigo-300">
+              BHARATOS SAFETY ADVISOR — WHAT SHOULD I DO?
+            </h3>
+          </div>
+          <span className="text-[9.5px] font-mono text-indigo-300 bg-indigo-950/60 border border-indigo-800/40 px-2 py-0.5 rounded">
+            AI-DERIVED PRECAUTIONS
+          </span>
+        </div>
 
-        {/* Left Column (2 Cols on Desktop): SOS Hero, Safe Exit & Quick Actions */}
-        <div className="lg:col-span-2 space-y-6">
-
-          {/* 1. SOS Emergency Hero Button Card */}
-          <div className="relative overflow-hidden rounded-3xl border border-red-900/80 bg-gradient-to-b from-red-950/80 via-[#1a0507] to-[#0d0203] p-6 shadow-[0_0_40px_rgba(220,38,38,0.25)] space-y-5 text-center md:text-left md:flex md:items-center md:justify-between">
-            <div className="space-y-2 md:max-w-md">
-              <span className="text-[9.5px] font-mono font-black text-red-400 uppercase tracking-widest inline-block px-3 py-1 rounded-full bg-red-950/80 border border-red-800/60">
-                HIGH-PRIORITY SOS DISPATCH
-              </span>
-              <h2 className="text-lg md:text-xl font-black text-white font-mono uppercase">{t.sosHeroTitle}</h2>
-              <p className="text-xs text-red-200/90 font-medium leading-relaxed">{t.sosHeroSub}</p>
-              <p className="text-[10.5px] font-mono text-slate-400 pt-1">
-                📍 Auto Location: <span className="text-white font-bold">{activeLocation.address}</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+          {safetyAdviceList.map((advice, idx) => (
+            <div key={idx} className="p-3 rounded-2xl bg-[#040813]/80 border border-indigo-950/60 flex items-start space-x-2.5">
+              <div className="p-1 rounded bg-indigo-950 border border-indigo-800/50 text-indigo-400 shrink-0 mt-0.5">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+              </div>
+              <p className="text-xs text-slate-200 leading-snug">
+                {advice}
               </p>
             </div>
-
-            {/* Large Interactive SOS Button */}
-            <Link
-              href="/citizen/sos"
-              aria-label="Activate SOS Emergency"
-              className="mx-auto md:mx-0 h-28 w-28 rounded-full bg-gradient-to-tr from-red-700 via-red-600 to-rose-500 text-white flex flex-col items-center justify-center shadow-[0_0_35px_rgba(239,68,68,0.7)] border-2 border-red-300 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer shrink-0 group"
-            >
-              <ShieldAlert className="w-11 h-11 group-hover:animate-ping" />
-              <span className="text-xs font-black tracking-wider uppercase mt-1">SOS</span>
-            </Link>
-          </div>
-
-          {/* 2. FIND SAFE EXIT (Evacuation Action Card) */}
-          <Link
-            href="/citizen/safe-exit"
-            className="rounded-3xl border border-emerald-900/80 bg-gradient-to-r from-[#041d13] via-[#06281c] to-[#041d13] p-5 flex items-center justify-between hover:border-emerald-700 transition-all shadow-xl group cursor-pointer"
-          >
-            <div className="flex items-center space-x-4">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-950 border border-emerald-700 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-                <Navigation className="w-6 h-6 animate-pulse" />
-              </div>
-              <div>
-                <span className="text-[9px] font-mono font-bold text-emerald-400 uppercase tracking-widest block">HAZARD-AWARE ROUTING</span>
-                <h3 className="text-sm font-black text-white font-mono uppercase leading-tight">{t.safeExitTitle}</h3>
-                <p className="text-xs text-slate-300 mt-0.5">{t.safeExitSub}</p>
-              </div>
-            </div>
-            <div className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-mono font-extrabold text-xs uppercase tracking-wider flex items-center space-x-1 shadow-lg shrink-0">
-              <span>EXPLORE ROUTE</span>
-              <ChevronRight className="w-4 h-4 ml-0.5" />
-            </div>
-          </Link>
-
-          {/* 3. Quick Actions Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Link
-              href="/citizen/report"
-              className="rounded-2xl border border-slate-900 bg-[#060a13] p-5 flex items-center space-x-4 hover:border-slate-800 hover:bg-slate-950 transition-all shadow-md group"
-            >
-              <div className="h-12 w-12 rounded-2xl bg-orange-950/60 border border-orange-800/40 text-orange-400 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-                <AlertTriangle className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm font-extrabold text-white leading-tight">{t.quickReport}</h3>
-                <p className="text-xs text-slate-400 mt-0.5">{t.quickReportSub}</p>
-              </div>
-            </Link>
-
-            <Link
-              href="/citizen/ai-assistant"
-              className="rounded-2xl border border-slate-900 bg-[#060a13] p-5 flex items-center space-x-4 hover:border-slate-800 hover:bg-slate-950 transition-all shadow-md group"
-            >
-              <div className="h-12 w-12 rounded-2xl bg-sky-950/60 border border-sky-800/40 text-sky-400 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-                <Bot className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm font-extrabold text-white leading-tight">{t.quickAi}</h3>
-                <p className="text-xs text-slate-400 mt-0.5">{t.quickAiSub}</p>
-              </div>
-            </Link>
-          </div>
-
-          {/* 4. My Active Incident Status Banner (If ongoing) */}
-          {activeIncident && (
-            <div className="rounded-2xl border border-sky-900/60 bg-[#060e1c] p-5 space-y-3 shadow-lg">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <span className="h-2.5 w-2.5 rounded-full bg-sky-400 animate-ping" />
-                  <span className="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider">{t.activeIncidentTitle}</span>
-                </div>
-                <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded bg-sky-950 border border-sky-800/60 text-sky-300 uppercase">
-                  {activeIncident.stage.replace(/_/g, ' ')}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="text-sm font-extrabold text-white leading-snug">{activeIncident.title}</h4>
-                  <p className="text-xs text-slate-400 font-mono mt-0.5">{activeIncident.location.address}</p>
-                </div>
-                <Link
-                  href={`/citizen/incidents/${activeIncident.id}`}
-                  className="px-4 py-2 rounded-xl border border-sky-800 bg-sky-950 text-sky-300 hover:text-white text-xs font-bold font-mono transition-all shrink-0 ml-2"
-                >
-                  {t.trackStatus}
-                </Link>
-              </div>
-            </div>
-          )}
-
-          {/* 5. Active Nearby Alerts Section */}
-          <div className="space-y-3.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Shield className="w-4 h-4 text-amber-400" />
-                <h2 className="text-xs font-bold text-white font-mono uppercase tracking-wider">{t.nearbyAlertsTitle}</h2>
-              </div>
-              <Link href="/citizen/alerts" className="text-xs font-bold text-sky-400 hover:text-sky-300 font-mono flex items-center">
-                <span>{t.viewAllAlerts}</span>
-                <ChevronRight className="w-4 h-4 ml-0.5" />
-              </Link>
-            </div>
-
-            <div className="space-y-3">
-              {displayAlerts.map((alert) => (
-                <div
-                  key={alert.id}
-                  className={`rounded-2xl p-4.5 space-y-2 border ${
-                    alert.severity === 'critical' || alert.severity === 'high'
-                      ? 'border-amber-900/60 bg-[#140b03]'
-                      : 'border-slate-900 bg-[#060a13]'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9.5px] font-mono font-bold px-2.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/60 text-amber-400 uppercase tracking-wider">
-                      {alert.category} • {alert.severity}
-                    </span>
-                    <span className="text-[10px] font-mono text-slate-400">
-                      {alert.officialSource}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xs font-extrabold text-white leading-snug">{alert.title}</h3>
-                  <p className="text-xs text-slate-300 leading-relaxed">{alert.summary}</p>
-
-                  <div className="pt-2 border-t border-slate-900/80 flex items-center justify-between text-[10px] font-mono text-amber-300/90">
-                    <span className="truncate max-w-[70%]">💡 {alert.recommendedAction}</span>
-                    <span className="font-bold text-slate-500">{alert.timestamp}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
+          ))}
         </div>
-
-        {/* Right Column (1 Col on Desktop): Emergency Services & Telemetry */}
-        <div className="space-y-6">
-
-          {/* 6. Quick Emergency Services Dialers Grid */}
-          <div className="rounded-3xl border border-slate-900 bg-[#060a13] p-5 space-y-4 shadow-xl">
-            <h2 className="text-xs font-bold text-white font-mono uppercase tracking-wider border-b border-slate-900 pb-3">
-              {t.servicesTitle}
-            </h2>
-
-            <div className="space-y-3 font-mono text-xs">
-              <a
-                href="tel:112"
-                className="p-3.5 rounded-2xl border border-red-900/50 bg-[#120406] hover:bg-[#1a0609] transition-all flex items-center space-x-3.5 group"
-              >
-                <div className="h-10 w-10 rounded-xl bg-red-950 border border-red-800 text-red-400 flex items-center justify-center shrink-0 group-hover:scale-105">
-                  <PhoneCall className="w-5 h-5" />
-                </div>
-                <div className="min-w-0">
-                  <span className="font-bold text-white block text-xs truncate">{t.servicePolice}</span>
-                  <span className="text-[10px] text-slate-400 truncate block">{t.servicePoliceDesc}</span>
-                </div>
-              </a>
-
-              <a
-                href="tel:108"
-                className="p-3.5 rounded-2xl border border-sky-900/50 bg-[#040e1a] hover:bg-[#061426] transition-all flex items-center space-x-3.5 group"
-              >
-                <div className="h-10 w-10 rounded-xl bg-sky-950 border border-sky-800 text-sky-400 flex items-center justify-center shrink-0 group-hover:scale-105">
-                  <LifeBuoy className="w-5 h-5" />
-                </div>
-                <div className="min-w-0">
-                  <span className="font-bold text-white block text-xs truncate">{t.serviceAmbulance}</span>
-                  <span className="text-[10px] text-slate-400 truncate block">{t.serviceAmbulanceDesc}</span>
-                </div>
-              </a>
-
-              <a
-                href="tel:101"
-                className="p-3.5 rounded-2xl border border-orange-900/50 bg-[#140a03] hover:bg-[#1c0e04] transition-all flex items-center space-x-3.5 group"
-              >
-                <div className="h-10 w-10 rounded-xl bg-orange-950 border border-orange-800 text-orange-400 flex items-center justify-center shrink-0 group-hover:scale-105">
-                  <Flame className="w-5 h-5" />
-                </div>
-                <div className="min-w-0">
-                  <span className="font-bold text-white block text-xs truncate">{t.serviceFire}</span>
-                  <span className="text-[10px] text-slate-400 truncate block">{t.serviceFireDesc}</span>
-                </div>
-              </a>
-
-              <a
-                href="tel:1091"
-                className="p-3.5 rounded-2xl border border-purple-900/50 bg-[#120417] hover:bg-[#1a0621] transition-all flex items-center space-x-3.5 group"
-              >
-                <div className="h-10 w-10 rounded-xl bg-purple-950 border border-purple-800 text-purple-400 flex items-center justify-center shrink-0 group-hover:scale-105">
-                  <Shield className="w-5 h-5" />
-                </div>
-                <div className="min-w-0">
-                  <span className="font-bold text-white block text-xs truncate">{t.serviceWomen}</span>
-                  <span className="text-[10px] text-slate-400 truncate block">{t.serviceWomenDesc}</span>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          {/* Operational Disclaimer & Verification Footer */}
-          <div className="p-4 rounded-2xl border border-slate-900 bg-[#060a13] text-xs font-mono text-slate-400 flex items-start space-x-3 shadow-lg">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-            <div className="space-y-1.5">
-              <p className="leading-relaxed">{t.honestNotice}</p>
-              <span className="inline-block text-[9px] font-bold text-emerald-400 uppercase tracking-widest pt-1">
-                ● {t.dataVerifiedBadge}
-              </span>
-            </div>
-          </div>
-
-        </div>
-
       </div>
 
     </div>

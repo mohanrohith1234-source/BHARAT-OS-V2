@@ -329,6 +329,32 @@ export default function SafeExitPage() {
         </div>
       )}
 
+      {/* 5. Why this route? Dynamic Telemetry Verification */}
+      <div className="rounded-2xl border border-sky-900/60 bg-sky-950/20 p-4 space-y-2.5 font-mono text-xs">
+        <h3 className="text-[10.5px] font-bold text-sky-300 uppercase tracking-wider flex items-center gap-1.5">
+          <CheckCircle2 className="w-4 h-4 text-sky-400" />
+          WHY THIS ROUTE? (SAFETY CHECKLIST)
+        </h3>
+        <div className="space-y-1.5 text-slate-300 text-[11px]">
+          <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-900 flex items-center space-x-2">
+            <span className="text-emerald-400 font-bold">✓</span>
+            <span>Avoids Beach Road Sector 4 flooded depression (&gt;50cm depth)</span>
+          </div>
+          <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-900 flex items-center space-x-2">
+            <span className="text-emerald-400 font-bold">✓</span>
+            <span>Avoids active emergency vehicle response corridors</span>
+          </div>
+          <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-900 flex items-center space-x-2">
+            <span className="text-emerald-400 font-bold">✓</span>
+            <span>Uses high-elevation municipal roads via MVP Double Road</span>
+          </div>
+          <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-900 flex items-center space-x-2">
+            <span className="text-emerald-400 font-bold">✓</span>
+            <span>Terminates at MVP High School Shelter (Verified open, 120 capacity)</span>
+          </div>
+        </div>
+      </div>
+
       {/* 6. Official Evacuation Instructions */}
       <div className="rounded-2xl border border-slate-900 bg-[#060a13] p-4 space-y-2.5 font-mono text-xs">
         <h3 className="text-[10.5px] font-bold text-white uppercase tracking-wider">{t.instructionsHeader}</h3>

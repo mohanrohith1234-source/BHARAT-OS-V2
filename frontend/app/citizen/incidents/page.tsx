@@ -16,7 +16,8 @@ import {
   Shield,
   Car,
   CloudRain,
-  AlertTriangle
+  AlertTriangle,
+  Waves
 } from 'lucide-react'
 import { useCitizenStore } from '../../../store/useCitizenStore'
 import { IndexedDbService } from '../../../services/offline/indexedDbService'
@@ -63,12 +64,11 @@ const incidentListTranslations = {
 
 const STAGES_ORDER: { stage: IncidentStage; label: string }[] = [
   { stage: 'received', label: '1. Received' },
-  { stage: 'ai_analyzed', label: '2. AI Analysis' },
-  { stage: 'priority_assigned', label: '3. Priority' },
-  { stage: 'dept_notified', label: '4. Dept Notified' },
-  { stage: 'resources_assigned', label: '5. Resources' },
-  { stage: 'response_in_progress', label: '6. In Progress' },
-  { stage: 'resolved', label: '7. Resolved' }
+  { stage: 'ai_analyzed', label: '2. AI Triaged' },
+  { stage: 'dept_notified', label: '3. Dept Routed' },
+  { stage: 'resources_assigned', label: '4. Team Assigned' },
+  { stage: 'response_in_progress', label: '5. En Route' },
+  { stage: 'resolved', label: '6. Resolved' }
 ]
 
 export default function MyIncidentsPage() {
@@ -103,6 +103,7 @@ export default function MyIncidentsPage() {
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'medical': return <LifeBuoy className="w-4 h-4 text-red-400" />
+      case 'flood': return <Waves className="w-4 h-4 text-sky-400" />
       case 'fire': return <Flame className="w-4 h-4 text-orange-400" />
       case 'police': return <Shield className="w-4 h-4 text-blue-400" />
       case 'road_accident': return <Car className="w-4 h-4 text-amber-400" />
@@ -205,7 +206,7 @@ export default function MyIncidentsPage() {
                     <span className="text-sky-400 uppercase">{incident.stage.replace(/_/g, ' ')}</span>
                   </div>
 
-                  <div className="grid grid-cols-7 gap-1">
+                  <div className="grid grid-cols-6 gap-1">
                     {STAGES_ORDER.map((stg, idx) => {
                       const isComplete = idx <= currentStageIdx
                       const isCurrent = idx === currentStageIdx
@@ -224,7 +225,7 @@ export default function MyIncidentsPage() {
                           <span className={`text-[7.5px] font-mono uppercase block truncate ${
                             isCurrent ? 'text-sky-300 font-bold' : isComplete ? 'text-emerald-400' : 'text-slate-600'
                           }`}>
-                            {idx + 1}
+                            {stg.label}
                           </span>
                         </div>
                       )
@@ -252,7 +253,7 @@ export default function MyIncidentsPage() {
                     href={`/citizen/incidents/${incident.id}`}
                     className="px-3 py-1.5 rounded-lg border border-sky-800 bg-sky-950 hover:bg-sky-900 text-sky-300 hover:text-white font-bold transition-all flex items-center space-x-1"
                   >
-                    <span>{t.viewDetailsBtn}</span>
+                    <span>Track on Digital Twin</span>
                     <ChevronRight className="w-3 h-3" />
                   </Link>
                 </div>

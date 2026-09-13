@@ -82,68 +82,68 @@ const resourceTranslations = {
 const INITIAL_RESOURCES: EmergencyResource[] = [
   {
     id: 'res-1',
-    name: 'King George Hospital (KGH) Emergency & Trauma Center',
+    name: 'NTR General Hospital (Trauma & Emergency Care)',
     category: 'hospital',
-    distanceKm: 3.2,
-    address: 'Maharanipeta, Visakhapatnam, Andhra Pradesh',
+    distanceKm: 1.8,
+    address: 'Near Collectorate, Visakhapatnam',
     phone: '+91 891 2564891',
     availableBeds: 42,
     status: 'available',
-    latitude: 17.7089,
-    longitude: 83.3054,
-    dataSource: 'OFFICIAL AUTHORITY'
+    latitude: 17.7122,
+    longitude: 83.3150,
+    dataSource: 'VERIFIED'
   },
   {
     id: 'res-2',
-    name: 'Visakhapatnam Apollo Emergency Care Unit',
-    category: 'hospital',
-    distanceKm: 1.8,
-    address: 'Health City, Arilova, Visakhapatnam',
-    phone: '+91 891 2867777',
-    availableBeds: 18,
-    status: 'available',
-    latitude: 17.7412,
-    longitude: 83.3321,
-    dataSource: 'OFFICIAL AUTHORITY'
-  },
-  {
-    id: 'res-3',
     name: 'MVP Colony Law & Order Police Station',
     category: 'police',
-    distanceKm: 0.8,
+    distanceKm: 0.9,
     address: 'Sector 5, MVP Colony, Visakhapatnam',
     phone: '+91 891 2562233',
     availableUnits: 6,
     status: 'available',
     latitude: 17.7311,
     longitude: 83.3245,
-    dataSource: 'OFFICIAL AUTHORITY'
+    dataSource: 'VERIFIED'
   },
   {
-    id: 'res-4',
-    name: 'Suryabagh Central Fire Station & Disaster Depot',
+    id: 'res-3',
+    name: 'Suryabagh Fire Station & Water Rescue Tender',
     category: 'fire',
-    distanceKm: 4.1,
+    distanceKm: 2.4,
     address: 'Suryabagh, Visakhapatnam',
     phone: '+91 891 2563344',
     availableUnits: 4,
     status: 'available',
     latitude: 17.7123,
     longitude: 83.3012,
-    dataSource: 'OFFICIAL AUTHORITY'
+    dataSource: 'VERIFIED'
   },
   {
-    id: 'res-5',
+    id: 'res-4',
     name: 'MVP High School Emergency Relief Shelter',
     category: 'shelter',
-    distanceKm: 1.2,
+    distanceKm: 0.6,
     address: 'Sector 2, MVP Colony, Visakhapatnam',
     phone: '+91 891 2789900',
     availableBeds: 120,
     status: 'available',
     latitude: 17.7345,
     longitude: 83.3190,
-    dataSource: 'OFFICIAL AUTHORITY'
+    dataSource: 'VERIFIED'
+  },
+  {
+    id: 'res-5',
+    name: 'GVMC Community Relief Hall',
+    category: 'shelter',
+    distanceKm: 1.1,
+    address: 'Sector 8, MVP Colony, Visakhapatnam',
+    phone: '+91 891 2754321',
+    availableBeds: 85,
+    status: 'available',
+    latitude: 17.7380,
+    longitude: 83.3260,
+    dataSource: 'VERIFIED'
   }
 ]
 
