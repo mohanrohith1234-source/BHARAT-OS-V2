@@ -100,6 +100,8 @@ interface LabelConfig {
   x: number
   y: number
   textAnchor: 'start' | 'end' | 'middle'
+  fontSize: string
+  letterSpacing?: string
   hasLeader: boolean
   leaderX?: number
   leaderY?: number
@@ -243,97 +245,66 @@ export default function IndiaDigitalTwin() {
       }
     })
 
-    // 4. Collision-resolved Label Layout using Force-Directed Relaxation
-    const initialLabels: LabelConfig[] = statesList
+    // 4. Geographic-aware State Label Layout with Explicit Positions & Leader Lines
+    // Explicit positioning ensures zero collisions, legible typography for long names, and clear visual association
+    const explicitLabelMap: Record<string, Omit<LabelConfig, 'id' | 'hasLeader'>> = {
+      la: { text: 'LADAKH', x: 230, y: 84, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
+      jk: { text: 'JAMMU & KASHMIR', x: 156, y: 110, textAnchor: 'middle', fontSize: '7px', letterSpacing: '0.04em' },
+      hp: { text: 'HIMACHAL PRADESH', x: 232, y: 132, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.04em' },
+      pb: { text: 'PUNJAB', x: 166, y: 156, textAnchor: 'end', fontSize: '8px', letterSpacing: '0.06em' },
+      ut: { text: 'UTTARAKHAND', x: 270, y: 178, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
+      hr: { text: 'HARYANA', x: 180, y: 198, textAnchor: 'end', fontSize: '8px', letterSpacing: '0.06em' },
+      rj: { text: 'RAJASTHAN', x: 118, y: 262, textAnchor: 'middle', fontSize: '8.5px', letterSpacing: '0.08em' },
+      up: { text: 'UTTAR PRADESH', x: 304, y: 218, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.05em' },
+      sk: { text: 'SIKKIM', x: 444, y: 224, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
+      as: { text: 'ASSAM', x: 524, y: 248, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
+      tr: { text: 'TRIPURA', x: 522, y: 326, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
+      br: { text: 'BIHAR', x: 374, y: 262, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
+      wb: { text: 'WEST BENGAL', x: 444, y: 346, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
+      jh: { text: 'JHARKHAND', x: 374, y: 344, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.06em' },
+      mp: { text: 'MADHYA PRADESH', x: 234, y: 348, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.06em' },
+      gj: { text: 'GUJARAT', x: 96, y: 326, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
+      ct: { text: 'CHHATTISGARH', x: 314, y: 396, textAnchor: 'middle', fontSize: '7px', letterSpacing: '0.04em' },
+      or: { text: 'ODISHA', x: 382, y: 384, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
+      mh: { text: 'MAHARASHTRA', x: 168, y: 438, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.06em' },
+      ga: { text: 'GOA', x: 130, y: 498, textAnchor: 'end', fontSize: '7px', letterSpacing: '0.05em' },
+      tg: { text: 'TELANGANA', x: 266, y: 436, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
+      ka: { text: 'KARNATAKA', x: 182, y: 528, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
+      ap: { text: 'ANDHRA PRADESH', x: 296, y: 498, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.06em' },
+      kl: { text: 'KERALA', x: 172, y: 606, textAnchor: 'end', fontSize: '7px', letterSpacing: '0.05em' },
+      tn: { text: 'TAMIL NADU', x: 246, y: 602, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.06em' }
+    }
+
+    const labels: LabelConfig[] = statesList
       .filter(s => DISPLAY_LABELS_SET.has(s.id))
       .map(s => {
-        // Handle small states with custom offset leader lines
-        if (s.id === 'dl') {
-          return { id: s.id, text: 'DELHI', x: s.cx + 50, y: s.cy - 12, textAnchor: 'start', hasLeader: true, leaderX: s.cx, leaderY: s.cy }
+        const custom = explicitLabelMap[s.id]
+        if (custom) {
+          const leaderStates = new Set(['sk', 'tr', 'wb', 'ga', 'kl'])
+          const hasLeader = leaderStates.has(s.id)
+          return {
+            id: s.id,
+            text: custom.text,
+            x: custom.x,
+            y: custom.y,
+            textAnchor: custom.textAnchor,
+            fontSize: custom.fontSize,
+            letterSpacing: custom.letterSpacing,
+            hasLeader,
+            leaderX: hasLeader ? s.cx : undefined,
+            leaderY: hasLeader ? s.cy : undefined
+          }
         }
-        if (s.id === 'ga') {
-          return { id: s.id, text: 'GOA', x: s.cx - 40, y: s.cy + 10, textAnchor: 'end', hasLeader: true, leaderX: s.cx, leaderY: s.cy }
-        }
-        if (s.id === 'sk') {
-          return { id: s.id, text: 'SIKKIM', x: s.cx + 40, y: s.cy - 20, textAnchor: 'start', hasLeader: true, leaderX: s.cx, leaderY: s.cy }
-        }
-        if (s.id === 'tr') {
-          return { id: s.id, text: 'TRIPURA', x: s.cx + 45, y: s.cy, textAnchor: 'start', hasLeader: true, leaderX: s.cx, leaderY: s.cy }
-        }
-        if (s.id === 'jh') {
-          return { id: s.id, text: 'JHARKHAND', x: s.cx + 10, y: s.cy + 16, textAnchor: 'middle', hasLeader: false }
-        }
-        if (s.id === 'wb') {
-          return { id: s.id, text: 'WEST BENGAL', x: s.cx + 25, y: s.cy + 5, textAnchor: 'start', hasLeader: false }
-        }
-        if (s.id === 'ut') {
-          return { id: s.id, text: 'UTTARAKHAND', x: s.cx + 12, y: s.cy - 12, textAnchor: 'start', hasLeader: false }
-        }
-        if (s.id === 'hp') {
-          return { id: s.id, text: 'HIMACHAL PRADESH', x: s.cx - 15, y: s.cy - 12, textAnchor: 'end', hasLeader: false }
-        }
-        // Centered labels by default for large states
         return {
           id: s.id,
           text: s.name.toUpperCase(),
           x: s.cx,
-          y: s.cy + 3, // slightly drop center for node offset
+          y: s.cy,
           textAnchor: 'middle',
+          fontSize: '8px',
           hasLeader: false
         }
       })
-
-    // Force relaxation algorithm
-    const labels = initialLabels.map(l => ({ ...l }))
-    const iterations = 25
-    const collisionDist = 26 // separation boundary for labels
-    
-    // Command node centers to avoid overlap
-    const avoidPoints = Array.from(nodesMap.values())
-
-    for (let iter = 0; iter < iterations; iter++) {
-      // Repel from key nodes
-      for (const label of labels) {
-        if (label.hasLeader) continue;
-        for (const pt of avoidPoints) {
-          const dx = label.x - pt.x
-          const dy = label.y - pt.y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < collisionDist + 8) {
-            const force = (collisionDist + 8 - dist) * 0.35
-            const angle = dist > 0 ? Math.atan2(dy, dx) : Math.random() * Math.PI * 2
-            label.x += Math.cos(angle) * force
-            label.y += Math.sin(angle) * force
-          }
-        }
-      }
-
-      // Repel labels from each other
-      for (let i = 0; i < labels.length; i++) {
-        for (let j = i + 1; j < labels.length; j++) {
-          const l1 = labels[i]
-          const l2 = labels[j]
-          const dx = l1.x - l2.x
-          const dy = l1.y - l2.y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          const targetDist = collisionDist + 10
-          
-          if (dist < targetDist) {
-            const force = (targetDist - dist) * 0.25
-            const angle = dist > 0 ? Math.atan2(dy, dx) : Math.random() * Math.PI * 2
-            
-            if (!l1.hasLeader) {
-              l1.x += Math.cos(angle) * force
-              l1.y += Math.sin(angle) * force
-            }
-            if (!l2.hasLeader) {
-              l2.x -= Math.cos(angle) * force
-              l2.y -= Math.sin(angle) * force
-            }
-          }
-        }
-      }
-    }
 
     return {
       projectedStates: statesList,
@@ -842,7 +813,8 @@ export default function IndiaDigitalTwin() {
                   x={label.x}
                   y={label.y}
                   textAnchor={label.textAnchor}
-                  className="fill-[#F8FAFC] font-mono text-[9.5px] font-bold tracking-wider antialiased"
+                  style={{ fontSize: label.fontSize, letterSpacing: label.letterSpacing || '0.06em' }}
+                  className="fill-[#F8FAFC] font-mono font-semibold antialiased opacity-95 pointer-events-none"
                 >
                   {label.text}
                 </text>
