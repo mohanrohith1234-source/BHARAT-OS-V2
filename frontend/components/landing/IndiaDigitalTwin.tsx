@@ -160,14 +160,14 @@ export default function IndiaDigitalTwin() {
   })
   const [activeLayerPanel, setActiveLayerPanel] = useState(false)
 
-  // Auto-fit & Projection configuration: uses D3 geoMercator fitted into 640x760 with ~5-8% visual breathing room
+  // Auto-fit & Projection configuration: uses D3 geoMercator fitted into a 640x720 viewport with 5-8% padding
   const { projectedStates, commandNodes, districtNodes, labelLayout } = useMemo(() => {
     const width = 640
-    const height = 760
-    const paddingLeft = 40
-    const paddingTop = 75 // Generous top clearance ensuring Ladakh/Siachen is not under the card header
-    const paddingRight = 45
-    const paddingBottom = 45
+    const height = 720
+    const paddingLeft = 36
+    const paddingRight = 36
+    const paddingTop = 52
+    const paddingBottom = 48
 
     const projection = geoMercator()
       .fitExtent([[paddingLeft, paddingTop], [width - paddingRight, height - paddingBottom]], IndiaGeoJSON as any)
@@ -335,12 +335,6 @@ export default function IndiaDigitalTwin() {
       }
     }
 
-    // Explicit boundary clamping to guarantee zero label clipping
-    labels.forEach(l => {
-      l.x = Math.max(35, Math.min(605, l.x))
-      l.y = Math.max(82, Math.min(725, l.y))
-    })
-
     return {
       projectedStates: statesList,
       commandNodes: nodesMap,
@@ -364,7 +358,7 @@ export default function IndiaDigitalTwin() {
   }, [commandNodes])
 
   return (
-    <div className="relative w-full h-[730px] bg-[#040815] rounded-2xl border border-slate-800/80 bg-gradient-to-b from-[#050918] to-[#02050e] p-5 backdrop-blur-xl overflow-hidden shadow-[0_24px_50px_-12px_rgba(0,0,0,0.85)] flex flex-col justify-between select-none min-w-0">
+    <div className="relative w-full h-[640px] sm:h-[680px] xl:h-[720px] bg-[#040815] rounded-2xl border border-slate-800/80 bg-gradient-to-b from-[#050918] to-[#02050e] p-4 sm:p-5 backdrop-blur-xl overflow-hidden shadow-[0_24px_50px_-12px_rgba(0,0,0,0.85)] flex flex-col justify-between select-none">
       {/* Background patterns: reduced grid opacity and added soft radial light behind the map */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(18,24,38,0.22)_1px,transparent_1px),linear-gradient(90deg,rgba(18,24,38,0.22)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none z-0 opacity-18" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-sky-500/5 rounded-full filter blur-[100px] pointer-events-none z-0" />
@@ -373,18 +367,21 @@ export default function IndiaDigitalTwin() {
       {/* Header */}
       <div className="flex items-center justify-between border-b border-slate-900/60 pb-3 z-20 relative">
         <div className="flex items-center space-x-2">
-          <Layers className="w-4 h-4 text-sky-500 animate-pulse" />
-          <span className="text-[10px] font-bold font-mono tracking-widest text-slate-200">BHARATOS NATIONAL NETWORK</span>
-          <span className="text-[8px] font-mono px-2 py-0.5 rounded bg-blue-950/60 border border-blue-800/40 text-blue-400 font-bold hidden sm:inline">
-            INDIA-SCALE ARCHITECTURE
+          <Layers className="w-4 h-4 text-sky-400 animate-pulse" />
+          <span className="text-[10px] font-bold font-mono tracking-widest text-slate-300">BHARATOS NATIONAL NETWORK</span>
+          <span className="hidden sm:inline-block text-[8px] font-mono px-1.5 py-0.5 rounded bg-sky-950/60 border border-sky-800/40 text-sky-400 font-bold">
+            28 STATES & 8 UTs
           </span>
         </div>
         <div className="flex items-center space-x-2">
-          <div className="hidden md:flex items-center space-x-2 text-[8px] font-mono text-slate-400 bg-slate-950/80 px-2.5 py-1 rounded-xl border border-slate-800/60">
-            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> LIVE</span>
-            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> VERIFIED</span>
-            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-400" /> SIMULATION</span>
-          </div>
+          <a
+            href="/dashboard/district"
+            className="hidden sm:flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-800/60 text-[9px] font-mono text-emerald-400 hover:text-emerald-300 font-bold transition-all"
+            title="Inspect Andhra Pradesh / Visakhapatnam Working Pilot"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+            <span>VIZAG PILOT</span>
+          </a>
           <button 
             onClick={() => setActiveLayerPanel(!activeLayerPanel)} 
             className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-800/80 bg-[#0B0F19]/90 text-[9px] font-mono font-bold text-slate-400 hover:text-white hover:bg-slate-950 transition-all duration-200"
@@ -420,7 +417,11 @@ export default function IndiaDigitalTwin() {
       </AnimatePresence>
 
       {/* Map Canvas */}
-      <svg className="absolute inset-0 w-full h-full z-10" viewBox="0 0 640 760" preserveAspectRatio="xMidYMid meet">
+      <svg 
+        className="absolute inset-0 w-full h-full z-10" 
+        viewBox="0 0 640 720"
+        preserveAspectRatio="xMidYMid meet"
+      >
         <defs>
           {/* Style element containing premium GPU-accelerated keyframe animations */}
           <style>{`
@@ -565,8 +566,8 @@ export default function IndiaDigitalTwin() {
 
         {/* Dynamic ambient scan grid telemetry */}
         <g id="bg-telemetry" className="opacity-25 pointer-events-none">
-          <circle cx="320" cy="385" r="260" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1" strokeDasharray="3 9" className="animate-[spin_32s_linear_infinite]" />
-          <circle cx="320" cy="385" r="170" fill="none" stroke="rgba(6,182,212,0.25)" strokeWidth="0.8" strokeDasharray="6 12" className="animate-[spin_18s_linear_infinite]" />
+          <circle cx="320" cy="360" r="260" fill="none" stroke="rgba(6,182,212,0.22)" strokeWidth="1" strokeDasharray="3 9" className="animate-[spin_32s_linear_infinite]" />
+          <circle cx="320" cy="360" r="170" fill="none" stroke="rgba(6,182,212,0.25)" strokeWidth="0.8" strokeDasharray="6 12" className="animate-[spin_18s_linear_infinite]" />
         </g>
 
         {/* Ambient radial glow centered on Delhi command room */}
@@ -615,23 +616,34 @@ export default function IndiaDigitalTwin() {
         <g id="states-mesh" className="pointer-events-auto">
           {projectedStates.map((state) => {
             const isHovered = hoveredState?.id === state.id
+            const isAP = state.id === 'ap'
             const fillGradient = `url(#stateGradient-${state.status})`
             const borderColors = {
-              connected: isHovered ? '#00f2ff' : 'rgba(20, 184, 166, 0.35)',
+              connected: isAP ? '#10b981' : isHovered ? '#00f2ff' : 'rgba(20, 184, 166, 0.35)',
               warning: isHovered ? '#fbbf24' : 'rgba(245, 158, 11, 0.45)',
               incident: isHovered ? '#f87171' : 'rgba(239, 68, 68, 0.55)'
             }
 
             return (
-              <g key={`group-${state.id}`}>
+              <g 
+                key={`group-${state.id}`}
+                onClick={() => {
+                  if (isAP) {
+                    window.location.href = '/dashboard/district'
+                  } else {
+                    window.location.href = '/dashboard/state'
+                  }
+                }}
+                className="cursor-pointer group"
+              >
                 <path
                   d={state.path}
-                  fill={layers.boundaries ? fillGradient : 'rgba(8, 16, 32, 0.4)'}
+                  fill={layers.boundaries ? (isAP ? 'rgba(6, 78, 59, 0.65)' : fillGradient) : 'rgba(8, 16, 32, 0.4)'}
                   stroke={layers.boundaries ? borderColors[state.status] : 'rgba(15, 23, 42, 0.6)'}
-                  strokeWidth={isHovered ? 1.5 : 1.0}
+                  strokeWidth={isAP ? (isHovered ? 2.8 : 2.0) : (isHovered ? 1.8 : 1.0)}
                   onMouseEnter={() => setHoveredState(state)}
                   onMouseLeave={() => setHoveredState(null)}
-                  className="transition-all duration-250 cursor-pointer"
+                  className="transition-all duration-200"
                 />
                 {/* Micro reflection top layer for premium glass effect */}
                 {layers.boundaries && (
@@ -905,24 +917,40 @@ export default function IndiaDigitalTwin() {
         )}
       </svg>
 
-      {/* Legend Map Indicator */}
-      <div className="absolute bottom-4 right-4 z-20 flex items-center space-x-3 bg-slate-950/85 border border-slate-900 px-3 py-1.5 rounded-lg text-[8.5px] font-mono font-bold text-slate-400 shadow-lg">
+      {/* India Command Hierarchy Indicator */}
+      <div className="absolute bottom-3 left-3 z-20 hidden md:flex items-center space-x-1.5 bg-slate-950/90 border border-slate-800 px-2.5 py-1.5 rounded-lg text-[8px] font-mono font-bold text-slate-400 backdrop-blur-md shadow-lg">
+        <span className="text-cyan-400">NATIONAL</span>
+        <span className="text-slate-600">→</span>
+        <span className="text-sky-400">STATE</span>
+        <span className="text-slate-600">→</span>
+        <span className="text-emerald-400">DISTRICT</span>
+        <span className="text-slate-600">→</span>
+        <span className="text-teal-400">CITY</span>
+        <span className="text-slate-600">→</span>
+        <span className="text-purple-400">FIELD</span>
+      </div>
+
+      {/* Legend Map Indicator - Data Credibility System */}
+      <div className="absolute bottom-3 right-3 z-20 flex items-center space-x-3 bg-slate-950/90 border border-slate-800 px-3 py-1.5 rounded-lg text-[8.5px] font-mono font-bold text-slate-300 shadow-lg backdrop-blur-md">
         <div className="flex items-center space-x-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-          <span>Connected</span>
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span>LIVE</span>
         </div>
         <div className="flex items-center space-x-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-          <span>Command Center</span>
+          <span className="w-2 h-2 rounded-full bg-cyan-400" />
+          <span>VERIFIED</span>
         </div>
         <div className="flex items-center space-x-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-          <span>Warning</span>
+          <span className="w-2 h-2 rounded-full bg-amber-400" />
+          <span>SIMULATION</span>
         </div>
-        <div className="flex items-center space-x-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-          <span>Incident</span>
-        </div>
+        <a 
+          href="/dashboard/district"
+          className="hidden sm:inline-flex items-center space-x-1 text-emerald-400 hover:text-emerald-300 pl-1 border-l border-slate-800"
+          title="Click to open Visakhapatnam District Pilot"
+        >
+          <span>AP = PROOF</span>
+        </a>
       </div>
 
     </div>

@@ -132,14 +132,11 @@ export default function HomeLandingPage() {
           {/* Center Nav Links */}
           <nav className="hidden lg:flex items-center space-x-7 text-[11px] font-semibold tracking-[0.12em] text-slate-400 font-mono antialiased">
             <Link href="/" className="text-sky-400 border-b-2 border-sky-500 pb-1 px-0.5">HOME</Link>
-            <a href="#national-network" className="hover:text-white transition-colors py-1">NATIONAL NETWORK</a>
-            <a href="#vizag-proof" className="hover:text-white transition-colors py-1">VIZAG DEMO</a>
-            <a href="#workflow" className="hover:text-white transition-colors py-1">AI WORKFLOW</a>
-            <a href="#flood-traffic" className="hover:text-white transition-colors py-1">FLOOD + TRAFFIC</a>
-            <a href="#human-in-the-loop" className="hover:text-white transition-colors py-1">SAFETY GATE</a>
-            <a href="#digital-twin" className="hover:text-white transition-colors py-1">DIGITAL TWIN</a>
-            <a href="#rural-flood" className="hover:text-white transition-colors py-1">RURAL</a>
-            <a href="#citizen-os" className="hover:text-white transition-colors py-1">CITIZEN OS</a>
+            <a href="#vizag-proof" className="hover:text-white transition-colors py-1">PLATFORM</a>
+            <Link href="/dashboard/digital-twin" className="hover:text-white transition-colors py-1">DIGITAL TWIN</Link>
+            <Link href="/dashboard/national" className="hover:text-white transition-colors py-1">COMMAND CENTER</Link>
+            <Link href="/citizen" className="hover:text-white transition-colors py-1">CITIZEN PORTAL</Link>
+            <a href="#built-for-india" className="hover:text-white transition-colors py-1">ABOUT / TECHNOLOGY</a>
           </nav>
 
           {/* Right Action Controls */}
@@ -178,7 +175,7 @@ export default function HomeLandingPage() {
               
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-[10px] font-bold tracking-wider font-mono uppercase w-fit">
                 <Shield className="w-3 h-3" />
-                <span>AI-POWERED NATIONAL EMERGENCY OPERATIONS</span>
+                <span>INDIA-SCALE AI EMERGENCY PLATFORM</span>
               </div>
 
               <div className="space-y-2">
@@ -194,7 +191,7 @@ export default function HomeLandingPage() {
               </div>
 
               <p className="text-xs sm:text-[13px] text-slate-300 leading-relaxed font-normal">
-                An AI-powered emergency operations platform connecting weather intelligence, flood and IoT sensing, traffic intelligence, emergency services, citizens and a spatial Digital Twin through a human-in-the-loop response workflow. Flood resilience is the primary SIH use case, coordinating multi-agency dispatch with mandatory operator verification.
+                BharatOS is an AI-powered emergency operations platform that connects weather intelligence, flood and IoT sensing, traffic intelligence, emergency services, citizens and a spatial Digital Twin through a human-in-the-loop response workflow. Flood resilience is the primary SIH use case, with Visakhapatnam serving as the working demonstration.
               </p>
 
               {/* Core Feature Checklist */}
@@ -269,6 +266,20 @@ export default function HomeLandingPage() {
                     <div className="w-7 h-7 rounded-lg bg-sky-500/10 group-hover:bg-sky-500/25 border border-sky-500/20 flex items-center justify-center text-sky-400 shrink-0 ml-2 transition-colors">
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </div>
+                  </Link>
+
+                  {/* EXPLORE DIGITAL TWIN SECONDARY BUTTON */}
+                  <Link
+                    href="/dashboard/digital-twin"
+                    className="w-full group flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-left transition-all"
+                  >
+                    <div className="flex items-center space-x-2.5 min-w-0">
+                      <Map className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <span className="text-[11px] font-mono font-bold text-slate-300 group-hover:text-white uppercase">
+                        EXPLORE DIGITAL TWIN
+                      </span>
+                    </div>
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                 </div>
 
