@@ -6,7 +6,7 @@ import PageHeader from '../../../components/ui/PageHeader'
 import ChartCard from '../../../components/ui/ChartCard'
 import LineChart from '../../../components/ui/LineChart'
 import { apiService } from '../../../services/api'
-import { CloudRain, AlertTriangle, AlertCircle, Info, TrendingUp, HelpCircle, Thermometer } from 'lucide-react'
+import { CloudRain, AlertTriangle, AlertCircle, Info, TrendingUp, HelpCircle, Thermometer, ShieldCheck } from 'lucide-react'
 
 // Month names list
 const MONTHS_MAP: Record<number, string> = {
@@ -47,11 +47,12 @@ export default function RuralDashboardPage() {
   // Simulation input state
   const [selectedMonth, setSelectedMonth] = useState<number>(5) // Default to May
   const [rainfallScenario, setRainfallScenario] = useState<number>(12.0) // Default to 12mm/day
+  const [barrierDeployed, setBarrierDeployed] = useState<boolean>(false) // Origami L-clamp flood barrier mitigation
 
   // Offline/Fallback baseline data if API is offline
   const fallbackBaseline = {
     district: 'Visakhapatnam',
-    total_records: 175,
+    total_records: 2275,
     date_range: { start: '2025-01-01', end: '2025-06-30' },
     percentiles: { p50: 0.065, p75: 2.13, p90: 8.59, p95: 11.50, p99: 15.40 },
     monthly_stats: [
@@ -281,8 +282,8 @@ export default function RuralDashboardPage() {
               <CloudRain className="h-4 w-4" />
             </div>
             <div>
-              <p className="text-2xl font-black text-white">350 (Raw Rows)</p>
-              <p className="text-[10px] text-slate-500 font-semibold font-mono mt-0.5">Original District: Visakhapatanam</p>
+              <p className="text-2xl font-black text-white">{baseline?.total_records || 2275} (Cleaned Rows)</p>
+              <p className="text-[10px] text-slate-500 font-semibold font-mono mt-0.5">Deduplicated from 4,550 raw observations</p>
             </div>
           </div>
 
@@ -485,18 +486,35 @@ export default function RuralDashboardPage() {
 
         {/* Physical Demonstration Origami Map Block */}
         <div className="glass-panel rounded-2xl p-6 space-y-4">
-          <div className="border-b border-slate-900 pb-4 flex items-center justify-between">
+          <div className="border-b border-slate-900 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h5 className="text-sm font-black text-white uppercase tracking-wider font-mono">
-                Physical Origami Field Demonstration
-              </h5>
+              <div className="flex items-center space-x-2">
+                <h5 className="text-sm font-black text-white uppercase tracking-wider font-mono">
+                  Physical Origami Field Demonstration & L-Clamp Barrier
+                </h5>
+                <span className="text-[9px] font-bold bg-purple-950/40 border border-purple-900 text-purple-400 px-2 py-0.5 rounded font-mono">
+                  ORIGAMI-GRID
+                </span>
+              </div>
               <p className="text-[10px] text-slate-500 font-semibold font-mono mt-0.5">
-                CONCEPTUAL SIMULATION SCHEMATIC — NOT LIVE TELEMETRY
+                CONCEPTUAL SIMULATION SCHEMATIC — BEFORE / AFTER BARRIER COMPARISON
               </p>
             </div>
-            <span className="text-[9px] font-bold bg-purple-950/40 border border-purple-900 text-purple-400 px-2.5 py-0.5 rounded font-mono">
-              ORIGAMI-GRID
-            </span>
+
+            {/* Barrier Deployment Control Button */}
+            <div className="flex items-center space-x-2.5">
+              <button
+                onClick={() => setBarrierDeployed(!barrierDeployed)}
+                className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
+                  barrierDeployed
+                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)] border border-emerald-400/40'
+                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700'
+                }`}
+              >
+                <ShieldCheck className={`w-4 h-4 ${barrierDeployed ? 'text-white' : 'text-slate-400'}`} />
+                <span>{barrierDeployed ? 'L-CLAMP BARRIERS ENGAGED' : 'DEPLOY L-CLAMP BARRIERS'}</span>
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -534,35 +552,50 @@ export default function RuralDashboardPage() {
 
             {/* Simulated origami crop fields layout */}
             <div className="md:col-span-2 grid grid-cols-3 gap-3 p-1">
-              {CROPS.map((crop, idx) => (
-                <div 
-                  key={idx} 
-                  className={`border rounded-xl p-4 flex flex-col justify-between space-y-3 transition-all duration-300 relative overflow-hidden group hover:scale-[1.02] ${getFieldWaterLevelColor(simResult?.risk_level)}`}
-                >
-                  <div>
-                    <span className="text-[9px] font-bold text-slate-500 font-mono block">Field Block 0{idx + 1}</span>
-                    <span className="text-xs font-black text-white block mt-1">{crop.name}</span>
-                  </div>
-                  <p className="text-[9px] text-slate-400 leading-normal font-semibold font-mono line-clamp-2">
-                    {crop.type}
-                  </p>
-                  
-                  {/* Decorative grid overlay for technical feel */}
-                  <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
-                  
-                  {/* Simulated water accumulation indicator bar */}
-                  {simResult && simResult.risk_level !== 'LOW' && (
-                    <div className="w-full bg-slate-950/70 h-1.5 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full transition-all duration-500 ${
-                          simResult.risk_level === 'MEDIUM' ? 'bg-yellow-500 w-[30%]' :
-                          simResult.risk_level === 'HIGH' ? 'bg-blue-400 w-[65%]' : 'bg-blue-500 w-full animate-pulse'
-                        }`} 
-                      />
+              {CROPS.map((crop, idx) => {
+                // When barrier is deployed, effective water level drops by 1 tier
+                const effectiveRisk = barrierDeployed
+                  ? (simResult?.risk_level === 'CRITICAL' ? 'HIGH' : simResult?.risk_level === 'HIGH' ? 'MEDIUM' : 'LOW')
+                  : simResult?.risk_level
+
+                return (
+                  <div 
+                    key={idx} 
+                    className={`border rounded-xl p-4 flex flex-col justify-between space-y-3 transition-all duration-300 relative overflow-hidden group hover:scale-[1.02] ${getFieldWaterLevelColor(effectiveRisk)}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-bold text-slate-500 font-mono block">Field Block 0{idx + 1}</span>
+                      {barrierDeployed && (
+                        <span className="text-[8px] font-bold px-1.5 py-0.2 rounded bg-emerald-950/80 border border-emerald-800/60 text-emerald-300 font-mono flex items-center gap-1">
+                          <ShieldCheck className="w-2.5 h-2.5" />
+                          PROTECTED
+                        </span>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))}
+                    <div>
+                      <span className="text-xs font-black text-white block">{crop.name}</span>
+                      <p className="text-[9px] text-slate-400 leading-normal font-semibold font-mono line-clamp-2 mt-1">
+                        {crop.type}
+                      </p>
+                    </div>
+                    
+                    {/* Decorative grid overlay for technical feel */}
+                    <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
+                    
+                    {/* Simulated water accumulation indicator bar */}
+                    {effectiveRisk && effectiveRisk !== 'LOW' && (
+                      <div className="w-full bg-slate-950/70 h-1.5 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full transition-all duration-500 ${
+                            effectiveRisk === 'MEDIUM' ? 'bg-yellow-500 w-[25%]' :
+                            effectiveRisk === 'HIGH' ? 'bg-blue-400 w-[55%]' : 'bg-blue-500 w-full animate-pulse'
+                          }`} 
+                        />
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>

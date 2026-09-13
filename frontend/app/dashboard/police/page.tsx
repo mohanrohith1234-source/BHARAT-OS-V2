@@ -388,26 +388,26 @@ export default function PoliceOperationsPage() {
         <footer className="border border-slate-900 bg-[#0B0F19]/90 rounded-xl px-4 py-2 shrink-0 flex items-center justify-between text-[10px] font-mono text-slate-400">
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-slate-500">GRID STATUS:</span>
-              <span className="text-emerald-400 font-bold uppercase">NORMAL</span>
+              <span className="font-bold text-slate-500">FLEET:</span>
+              <span className="text-emerald-400 font-bold uppercase">PATROL ACTIVE</span>
             </div>
             <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-slate-500">SCADA NODES:</span>
-              <span className="text-slate-200">98 ONLINE</span>
+              <span className="font-bold text-slate-500">UNITS:</span>
+              <span className="text-slate-200">5 ACTIVE TELEMETRY</span>
             </div>
             <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-slate-500">ACTIVE TERMINALS:</span>
-              <span className="text-slate-200">14 CONNECTED</span>
+              <span className="font-bold text-slate-500">NETWORK:</span>
+              <span className="text-sky-400 font-semibold">AP-POLICE SECURED</span>
             </div>
           </div>
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-slate-500">LATENCY:</span>
-              <span className="text-sky-400">1.2ms</span>
+              <span className="font-bold text-slate-500">DISPATCH:</span>
+              <span className="text-purple-400 font-semibold">CAD INTEGRATED</span>
             </div>
             <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-slate-500">ENCRYPTION:</span>
-              <span className="text-slate-200 uppercase">AES-256</span>
+              <span className="font-bold text-slate-500">SAFETY GATE:</span>
+              <span className="text-slate-200 uppercase">HUMAN SIGN-OFF</span>
             </div>
           </div>
         </footer>

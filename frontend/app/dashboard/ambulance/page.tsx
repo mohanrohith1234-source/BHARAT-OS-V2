@@ -357,30 +357,30 @@ export default function AmbulanceOperationsPage() {
 
         </section>
 
-        {/* BOTTOM SYSTEM STATUS BAR */}
+        {/* BOTTOM STATUS BAR */}
         <footer className="border border-slate-900 bg-[#0B0F19]/90 rounded-xl px-4 py-2 shrink-0 flex items-center justify-between text-[10px] font-mono text-slate-400">
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-slate-500">GRID STATUS:</span>
-              <span className="text-emerald-400 font-bold uppercase">NORMAL</span>
+              <span className="font-bold text-slate-500">FLEET:</span>
+              <span className="text-emerald-400 font-bold uppercase">108 EMS ACTIVE</span>
             </div>
             <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-slate-500">SCADA NODES:</span>
-              <span className="text-slate-200">98 ONLINE</span>
+              <span className="font-bold text-slate-500">VEHICLES:</span>
+              <span className="text-slate-200">4 MONITORED</span>
             </div>
             <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-slate-500">ACTIVE TERMINALS:</span>
-              <span className="text-slate-200">14 CONNECTED</span>
+              <span className="font-bold text-slate-500">CORRIDOR:</span>
+              <span className="text-sky-400 font-semibold">GREEN WAVE CONNECTED</span>
             </div>
           </div>
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-slate-500">LATENCY:</span>
-              <span className="text-sky-400">1.2ms</span>
+              <span className="font-bold text-slate-500">TRAUMA ER:</span>
+              <span className="text-emerald-400 font-semibold">NTR GENERAL / SEVEN HILLS</span>
             </div>
             <div className="flex items-center space-x-1.5">
-              <span className="font-bold text-slate-500">ENCRYPTION:</span>
-              <span className="text-slate-200 uppercase">AES-256</span>
+              <span className="font-bold text-slate-500">SAFETY:</span>
+              <span className="text-slate-200 uppercase">HUMAN SIGN-OFF</span>
             </div>
           </div>
         </footer>
