@@ -64,7 +64,7 @@ const STATE_METADATA: Record<string, StateMetadata> = {
 }
 
 const DISPLAY_LABELS_SET = new Set([
-  'jk', 'pb', 'hr', 'rj', 'gj', 'mh', 'mp', 'up', 'br', 'jh', 'wb', 'or', 'ct', 'tg', 'ap', 'ka', 'tn', 'kl', 'as', 'la', 'ut', 'hp', 'ga', 'tr', 'sk'
+  'jk', 'pb', 'hr', 'rj', 'gj', 'mh', 'mp', 'up', 'br', 'jh', 'wb', 'or', 'ct', 'tg', 'ap', 'ka', 'tn', 'kl', 'la', 'ut', 'hp', 'ga', 'sk', 'ar', 'as', 'nl', 'mn', 'mz', 'tr', 'ml'
 ])
 
 // Reduced node density (approx 20-25% reduction: down from 35 states/UTs to 24 key backbone nodes)
@@ -248,30 +248,44 @@ export default function IndiaDigitalTwin() {
     // 4. Geographic-aware State Label Layout with Explicit Positions & Leader Lines
     // Explicit positioning ensures zero collisions, legible typography for long names, and clear visual association
     const explicitLabelMap: Record<string, Omit<LabelConfig, 'id' | 'hasLeader'>> = {
+      // Northern States
       la: { text: 'LADAKH', x: 230, y: 84, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
       jk: { text: 'JAMMU & KASHMIR', x: 156, y: 110, textAnchor: 'middle', fontSize: '7px', letterSpacing: '0.04em' },
       hp: { text: 'HIMACHAL PRADESH', x: 232, y: 132, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.04em' },
       pb: { text: 'PUNJAB', x: 166, y: 156, textAnchor: 'end', fontSize: '8px', letterSpacing: '0.06em' },
       ut: { text: 'UTTARAKHAND', x: 270, y: 178, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
       hr: { text: 'HARYANA', x: 180, y: 198, textAnchor: 'end', fontSize: '8px', letterSpacing: '0.06em' },
-      rj: { text: 'RAJASTHAN', x: 118, y: 262, textAnchor: 'middle', fontSize: '8.5px', letterSpacing: '0.08em' },
       up: { text: 'UTTAR PRADESH', x: 304, y: 218, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.05em' },
-      sk: { text: 'SIKKIM', x: 444, y: 224, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
-      as: { text: 'ASSAM', x: 524, y: 248, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
-      tr: { text: 'TRIPURA', x: 522, y: 326, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
-      br: { text: 'BIHAR', x: 374, y: 262, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
-      wb: { text: 'WEST BENGAL', x: 444, y: 346, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
-      jh: { text: 'JHARKHAND', x: 374, y: 344, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.06em' },
-      mp: { text: 'MADHYA PRADESH', x: 234, y: 348, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.06em' },
+
+      // Western & Central States
+      rj: { text: 'RAJASTHAN', x: 118, y: 262, textAnchor: 'middle', fontSize: '8.5px', letterSpacing: '0.08em' },
       gj: { text: 'GUJARAT', x: 96, y: 326, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
+      mp: { text: 'MADHYA PRADESH', x: 234, y: 348, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.06em' },
+      mh: { text: 'MAHARASHTRA', x: 168, y: 438, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.06em' },
+      ga: { text: 'GOA', x: 128, y: 498, textAnchor: 'end', fontSize: '7px', letterSpacing: '0.05em' },
+
+      // Eastern & Central States
+      br: { text: 'BIHAR', x: 374, y: 262, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
+      jh: { text: 'JHARKHAND', x: 374, y: 344, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.06em' },
       ct: { text: 'CHHATTISGARH', x: 314, y: 396, textAnchor: 'middle', fontSize: '7px', letterSpacing: '0.04em' },
       or: { text: 'ODISHA', x: 382, y: 384, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
-      mh: { text: 'MAHARASHTRA', x: 168, y: 438, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.06em' },
-      ga: { text: 'GOA', x: 130, y: 498, textAnchor: 'end', fontSize: '7px', letterSpacing: '0.05em' },
+      wb: { text: 'WEST BENGAL', x: 442, y: 338, textAnchor: 'start', fontSize: '7px', letterSpacing: '0.05em' },
+
+      // Northeast States (Arunachal, Assam, Nagaland, Manipur, Mizoram, Tripura, Meghalaya, Sikkim)
+      sk: { text: 'SIKKIM', x: 444, y: 224, textAnchor: 'start', fontSize: '6.5px', letterSpacing: '0.05em' },
+      ar: { text: 'ARUNACHAL PRADESH', x: 556, y: 216, textAnchor: 'middle', fontSize: '6.5px', letterSpacing: '0.04em' },
+      as: { text: 'ASSAM', x: 504, y: 252, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.06em' },
+      nl: { text: 'NAGALAND', x: 574, y: 268, textAnchor: 'start', fontSize: '6.5px', letterSpacing: '0.04em' },
+      mn: { text: 'MANIPUR', x: 566, y: 298, textAnchor: 'start', fontSize: '6.5px', letterSpacing: '0.04em' },
+      mz: { text: 'MIZORAM', x: 546, y: 334, textAnchor: 'start', fontSize: '6.5px', letterSpacing: '0.04em' },
+      tr: { text: 'TRIPURA', x: 468, y: 336, textAnchor: 'end', fontSize: '6.5px', letterSpacing: '0.04em' },
+      ml: { text: 'MEGHALAYA', x: 476, y: 296, textAnchor: 'middle', fontSize: '6.5px', letterSpacing: '0.04em' },
+
+      // Southern States
       tg: { text: 'TELANGANA', x: 266, y: 436, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
       ka: { text: 'KARNATAKA', x: 182, y: 528, textAnchor: 'middle', fontSize: '8px', letterSpacing: '0.08em' },
-      ap: { text: 'ANDHRA PRADESH', x: 296, y: 498, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.06em' },
-      kl: { text: 'KERALA', x: 172, y: 606, textAnchor: 'end', fontSize: '7px', letterSpacing: '0.05em' },
+      ap: { text: 'ANDHRA PRADESH', x: 300, y: 504, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.06em' },
+      kl: { text: 'KERALA', x: 170, y: 606, textAnchor: 'end', fontSize: '7px', letterSpacing: '0.05em' },
       tn: { text: 'TAMIL NADU', x: 246, y: 602, textAnchor: 'middle', fontSize: '7.5px', letterSpacing: '0.06em' }
     }
 
@@ -280,7 +294,7 @@ export default function IndiaDigitalTwin() {
       .map(s => {
         const custom = explicitLabelMap[s.id]
         if (custom) {
-          const leaderStates = new Set(['sk', 'tr', 'wb', 'ga', 'kl'])
+          const leaderStates = new Set(['sk', 'tr', 'wb', 'ga', 'kl', 'nl', 'mn', 'mz', 'ml'])
           const hasLeader = leaderStates.has(s.id)
           return {
             id: s.id,
