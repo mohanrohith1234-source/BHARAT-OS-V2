@@ -399,7 +399,7 @@ export default function BharatOSShell({ children }: ShellProps) {
       )}
 
       {/* Mobile Bottom Navigation (EXACTLY 5 ITEMS: Home, Report, SOS, Alerts, My Incidents) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-slate-900 bg-[#030712]/95 backdrop-blur-xl max-w-lg mx-auto w-full flex justify-around py-2 px-1">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-slate-900 bg-[#030712]/95 backdrop-blur-xl max-w-lg mx-auto w-full flex justify-around py-1.5 px-1">
         {primaryNavItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.path
@@ -407,7 +407,7 @@ export default function BharatOSShell({ children }: ShellProps) {
             <Link
               key={item.path}
               href={item.path}
-              className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-bold transition-all relative ${
+              className={`flex flex-col items-center justify-center flex-1 min-h-[48px] py-1 text-[10px] font-bold transition-all relative ${
                 item.isSos
                   ? 'text-red-500 font-extrabold'
                   : isActive
@@ -416,7 +416,7 @@ export default function BharatOSShell({ children }: ShellProps) {
               }`}
             >
               {item.isSos ? (
-                <div className="h-9 w-9 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg shadow-red-900/50 border border-red-400 -mt-3 animate-pulse">
+                <div className="h-10 w-10 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg shadow-red-900/50 border border-red-400 -mt-3.5 animate-pulse">
                   <Icon className="h-5 w-5" />
                 </div>
               ) : (

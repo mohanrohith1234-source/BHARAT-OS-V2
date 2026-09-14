@@ -18,9 +18,14 @@ import {
   AlertTriangle,
   Info,
   Navigation,
-  WifiOff
+  WifiOff,
+  Radio,
+  Compass,
+  ExternalLink,
+  Bot
 } from 'lucide-react'
 import { useCitizenStore } from '../../../../store/useCitizenStore'
+import { useVizagDataStore } from '../../../../store/useVizagDataStore'
 import { IndexedDbService } from '../../../../services/offline/indexedDbService'
 import { CitizenIncident, IncidentStage, AppLanguage } from '../../../../types/citizen'
 
@@ -156,7 +161,21 @@ export default function IncidentTrackerPage({ params }: { params: Promise<{ id: 
     )
   }
 
-  const currentStageIdx = STAGES_ORDER.findIndex(s => s.stage === incident.stage)
+  const { demoStage, simulationTime, incident: vizagIncident } = useVizagDataStore()
+
+  // Calculate dynamic stage aligned with shared Vizag scenario
+  const getEffectiveStageIdx = () => {
+    if (demoStage === 'RESOLVED') return 5
+    if (demoStage === 'UNITS_DISPATCHED' || demoStage === 'WATER_DRAINED') return 4
+    if (demoStage === 'OFFICER_APPROVED') return 2
+    if (demoStage === 'AI_TRIAGE') return 1
+    return STAGES_ORDER.findIndex(s => s.stage === incident?.stage) || 0
+  }
+
+  const currentStageIdx = incident ? getEffectiveStageIdx() : 0
+  const isEnRoute = demoStage === 'UNITS_DISPATCHED' || demoStage === 'WATER_DRAINED'
+  const isResolved = demoStage === 'RESOLVED'
+  const isAwaitingApproval = demoStage === 'AI_TRIAGE' || demoStage === 'OFFICER_APPROVED'
 
   return (
     <div className="space-y-5 pb-8">
@@ -233,22 +252,115 @@ export default function IncidentTrackerPage({ params }: { params: Promise<{ id: 
         </div>
       </div>
 
-      {/* Honest Operational Status Cards (Unit & ETA) */}
-      <div className="grid grid-cols-2 gap-3 font-mono text-xs">
-        <div className="p-3.5 rounded-2xl border border-slate-900 bg-[#060a13] space-y-1">
-          <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">ASSIGNED UNIT</span>
-          <p className="text-white font-bold text-[11px] truncate">
-            {incident.assignedUnit ? incident.assignedUnit.name : t.unconfirmedUnit}
-          </p>
-        </div>
+      {/* Live Response Tracking & Operational Status */}
+      {isEnRoute ? (
+        <div className="rounded-2xl border border-sky-600/70 bg-sky-950/20 p-4 space-y-3 font-mono shadow-[0_0_30px_rgba(56,189,248,0.2)]">
+          <div className="flex items-center justify-between border-b border-sky-900/50 pb-2.5">
+            <div className="flex items-center space-x-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+              <h3 className="text-xs font-black uppercase tracking-wider text-white">
+                LIVE RESPONSE TELEMETRY — UNITS EN ROUTE
+              </h3>
+            </div>
+            <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-sky-950/80 border border-sky-700/60 text-sky-300">
+              GPS SOURCE: SIMULATION
+            </span>
+          </div>
 
-        <div className="p-3.5 rounded-2xl border border-slate-900 bg-[#060a13] space-y-1">
-          <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">ESTIMATED ETA</span>
-          <p className="text-white font-bold text-[11px] truncate">
-            {incident.estimatedEta ? incident.estimatedEta : t.unconfirmedEta}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+            <div className="p-3 rounded-xl bg-black/50 border border-sky-900/50 space-y-1">
+              <div className="flex justify-between items-center text-[10px]">
+                <span className="text-slate-400 font-bold uppercase">PRIMARY UNIT</span>
+                <span className="text-emerald-400 font-bold">42 km/h</span>
+              </div>
+              <p className="text-white font-bold text-[11px]">FT-12 (Water Rescue Tender)</p>
+              <div className="flex justify-between items-center text-[9.5px] text-slate-400 pt-0.5">
+                <span>ETA: <strong className="text-white">~3 min</strong> (1.1 km away)</span>
+                <span className="text-cyan-400">Via NH16 Detour</span>
+              </div>
+            </div>
+
+            <div className="p-3 rounded-xl bg-black/50 border border-sky-900/50 space-y-1">
+              <div className="flex justify-between items-center text-[10px]">
+                <span className="text-slate-400 font-bold uppercase">MEDICAL SUPPORT</span>
+                <span className="text-emerald-400 font-bold">38 km/h</span>
+              </div>
+              <p className="text-white font-bold text-[11px]">A-21 (ALS Ambulance)</p>
+              <div className="flex justify-between items-center text-[9.5px] text-slate-400 pt-0.5">
+                <span>ETA: <strong className="text-white">~4 min</strong> (1.4 km away)</span>
+                <span className="text-cyan-400">En Route</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between pt-1">
+            <span className="text-[10px] text-slate-400">
+              Corridor: <strong className="text-slate-200">Beach Road Sector 4 Bypass</strong>
+            </span>
+            <Link
+              href="/citizen/safe-exit"
+              className="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-[10px] flex items-center space-x-1.5 transition-all shadow-md"
+            >
+              <Navigation className="w-3 h-3" />
+              <span>TRACK ON DIGITAL TWIN</span>
+            </Link>
+          </div>
+        </div>
+      ) : isAwaitingApproval ? (
+        <div className="rounded-2xl border border-amber-800/80 bg-amber-950/20 p-4 space-y-2.5 font-mono">
+          <div className="flex items-center justify-between border-b border-amber-900/40 pb-2">
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              <h3 className="text-xs font-black uppercase tracking-wider text-amber-300">
+                AWAITING OFFICER DISPATCH APPROVAL
+              </h3>
+            </div>
+            <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800/60 text-amber-300">
+              AI_DERIVED TRIAGE
+            </span>
+          </div>
+          <p className="text-[11px] text-slate-300 leading-relaxed">
+            Incident classified as SEV-2 High Priority. Municipal Duty Officer has received the dispatch ticket and is authorizing high-impact vehicle deployment.
+          </p>
+          <div className="p-2 rounded-xl bg-black/40 border border-amber-950 text-[9.5px] text-amber-400 font-bold">
+            BHARATOS Protocol: High-impact vehicles require authorized human sign-off before physical dispatch.
+          </div>
+        </div>
+      ) : isResolved ? (
+        <div className="rounded-2xl border border-emerald-800/80 bg-emerald-950/20 p-4 space-y-2 font-mono">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-xs font-black uppercase tracking-wider text-emerald-300">
+                INCIDENT RESOLVED & SCENE SECURED
+              </h3>
+            </div>
+            <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/60 text-emerald-300">
+              VERIFIED
+            </span>
+          </div>
+          <p className="text-[11px] text-slate-300">
+            Water receded, Beach Road Sector 4 reopened, and all responding municipal units have stood down.
           </p>
         </div>
-      </div>
+      ) : (
+        /* Honest Fallback Status Cards (Unit & ETA) */
+        <div className="grid grid-cols-2 gap-3 font-mono text-xs">
+          <div className="p-3.5 rounded-2xl border border-slate-900 bg-[#060a13] space-y-1">
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">ASSIGNED UNIT</span>
+            <p className="text-white font-bold text-[11px] truncate">
+              {incident.assignedUnit ? incident.assignedUnit.name : t.unconfirmedUnit}
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl border border-slate-900 bg-[#060a13] space-y-1">
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">ESTIMATED ETA</span>
+            <p className="text-white font-bold text-[11px] truncate">
+              {incident.estimatedEta ? incident.estimatedEta : t.unconfirmedEta}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Official Activity Log Timeline */}
       <div className="rounded-2xl border border-slate-900 bg-[#060a13] p-4 space-y-3">

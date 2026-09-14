@@ -23,7 +23,13 @@ import {
   WifiOff,
   Info,
   Clock,
-  Layers
+  Layers,
+  Play,
+  Square,
+  Trash2,
+  Bot,
+  Sparkles,
+  X
 } from 'lucide-react'
 import { useCitizenStore } from '../../../store/useCitizenStore'
 import { IndexedDbService } from '../../../services/offline/indexedDbService'
@@ -187,10 +193,72 @@ function ReportEmergencyForm() {
   const [manualAddress, setManualAddress] = useState(activeLocation.address || '')
   const [gpsStatus, setGpsStatus] = useState<GpsLocationState>(activeLocation.gpsState || 'GPS AVAILABLE')
 
-  // Media Attachment Simulation State
-  const [voiceRecorded, setVoiceRecorded] = useState(false)
-  const [imageAttached, setImageAttached] = useState(false)
-  const [videoAttached, setVideoAttached] = useState(false)
+  // Real Media Attachment State
+  const photoInputRef = React.useRef<HTMLInputElement | null>(null)
+  const videoInputRef = React.useRef<HTMLInputElement | null>(null)
+  const [photo, setPhoto] = useState<{ name: string; sizeKb: number; previewUrl: string } | null>(null)
+  const [video, setVideo] = useState<{ name: string; sizeMb: string; previewUrl: string } | null>(null)
+  
+  // Voice Recording simulation state
+  const [isRecordingVoice, setIsRecordingVoice] = useState(false)
+  const [voiceDuration, setVoiceDuration] = useState(0)
+  const [voiceNote, setVoiceNote] = useState<{ name: string; durationSec: number; sizeKb: number } | null>(null)
+  const [isPlayingVoice, setIsPlayingVoice] = useState(false)
+
+  // Voice recording timer effect
+  React.useEffect(() => {
+    let interval: NodeJS.Timeout
+    if (isRecordingVoice) {
+      interval = setInterval(() => {
+        setVoiceDuration((prev) => prev + 1)
+      }, 1000)
+    }
+    return () => clearInterval(interval)
+  }, [isRecordingVoice])
+
+  const handleStartVoiceRecording = () => {
+    setVoiceDuration(0)
+    setIsRecordingVoice(true)
+  }
+
+  const handleStopVoiceRecording = () => {
+    setIsRecordingVoice(false)
+    const finalSec = voiceDuration > 0 ? voiceDuration : 4
+    setVoiceNote({
+      name: `VOICE_NOTE_${new Date().toISOString().slice(11, 19).replace(/:/g, '')}.aac`,
+      durationSec: finalSec,
+      sizeKb: 32 + finalSec * 14
+    })
+  }
+
+  const handleTogglePlayVoice = () => {
+    setIsPlayingVoice(true)
+    setTimeout(() => {
+      setIsPlayingVoice(false)
+    }, (voiceNote?.durationSec || 3) * 1000)
+  }
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setPhoto({
+        name: file.name,
+        sizeKb: Math.round(file.size / 1024),
+        previewUrl: URL.createObjectURL(file)
+      })
+    }
+  }
+
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setVideo({
+        name: file.name,
+        sizeMb: (file.size / (1024 * 1024)).toFixed(1),
+        previewUrl: URL.createObjectURL(file)
+      })
+    }
+  }
 
   // Submission State
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -242,7 +310,7 @@ function ReportEmergencyForm() {
       category,
       severity,
       title: generatedTitle,
-      description: description || `Citizen report submitted for ${category.toUpperCase()} (${category === 'flood' ? floodSubtype : 'Standard'}). Media: Voice (${voiceRecorded ? 'Yes' : 'No'}), Photo (${imageAttached ? 'Yes' : 'No'}), Video (${videoAttached ? 'Yes' : 'No'}).`,
+      description: description || `Citizen report submitted for ${category.toUpperCase()} (${category === 'flood' ? floodSubtype : 'Standard'}). Media: Voice (${voiceNote ? voiceNote.name : 'None'}), Photo (${photo ? photo.name : 'None'}), Video (${video ? video.name : 'None'}).`,
       location: {
         latitude: activeLocation.latitude,
         longitude: activeLocation.longitude,
@@ -254,9 +322,9 @@ function ReportEmergencyForm() {
       },
       affectedCount,
       mediaUrls: {
-        voice: voiceRecorded ? 'simulated_audio_note.webm' : undefined,
-        images: imageAttached ? ['simulated_scene_photo.jpg'] : undefined,
-        video: videoAttached ? 'simulated_hazard_clip.mp4' : undefined
+        voice: voiceNote ? voiceNote.name : undefined,
+        images: photo ? [photo.previewUrl] : undefined,
+        video: video ? video.previewUrl : undefined
       },
       stage: 'received',
       dataFreshness: isOffline ? 'offline' : 'live',
@@ -354,6 +422,93 @@ function ReportEmergencyForm() {
             </div>
           </div>
 
+          {/* AI TRIAGE & SENSOR CORRELATION PANEL (AI_DERIVED) */}
+          <div className="p-4 rounded-2xl bg-indigo-950/20 border border-indigo-900/50 space-y-3 text-left">
+            <div className="flex items-center justify-between border-b border-indigo-900/40 pb-2">
+              <div className="flex items-center space-x-2">
+                <Bot className="w-4 h-4 text-indigo-400" />
+                <span className="text-xs font-mono font-bold text-indigo-300 uppercase tracking-wider">
+                  AI-DERIVED EMERGENCY TRIAGE
+                </span>
+              </div>
+              <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-950/80 border border-indigo-800/60 text-indigo-300">
+                AI_DERIVED • 94% CONFIDENCE
+              </span>
+            </div>
+
+            <div className="space-y-2 text-xs font-mono">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-slate-400">Classified Threat:</span>
+                <span className="text-white font-bold uppercase">
+                  {submittedIncident.category === 'flood' ? `Flood Inundation (${floodSubtype.replace(/_/g, ' ')})` : submittedIncident.category}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-slate-400">Telemetry Corroboration:</span>
+                <span className="text-sky-400 font-bold">Beach Rd Culvert (+45cm) Correlated</span>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-black/40 border border-indigo-950/80 space-y-1.5 text-[11px]">
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
+                  Observed Hazards & Impact:
+                </span>
+                <ul className="text-slate-300 space-y-1 list-disc list-inside text-[10.5px]">
+                  <li>Rapid stormwater accumulation on primary coastal carriageway</li>
+                  <li>Estimated {affectedCount} citizen(s) in direct vicinity</li>
+                  <li>Potential road blockage for emergency bypass transit</li>
+                </ul>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-amber-950/30 border border-amber-900/40 space-y-1 text-[11px]">
+                <span className="text-[10px] text-amber-300 font-bold uppercase tracking-wider block">
+                  Recommended Action & Routing:
+                </span>
+                <p className="text-slate-300 text-[10.5px] leading-relaxed">
+                  Route to GVMC Dewatering Unit DP-04 & alert Suryabagh Traffic Police for perimeter diversions.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Attached Evidence Preview (if any) */}
+          {(photo || video || voiceNote) && (
+            <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-850 text-left space-y-2 font-mono">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                ATTACHED MULTIMODAL EVIDENCE
+              </span>
+              <div className="flex flex-wrap gap-2 pt-1 text-xs">
+                {photo && (
+                  <div className="flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-xl p-2">
+                    <img src={photo.previewUrl} alt="Report evidence" className="w-10 h-10 rounded-lg object-cover" />
+                    <div>
+                      <span className="text-[10.5px] font-bold text-white block truncate max-w-[120px]">{photo.name}</span>
+                      <span className="text-[9px] text-slate-400">{photo.sizeKb} KB • Photo</span>
+                    </div>
+                  </div>
+                )}
+                {video && (
+                  <div className="flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-xl p-2">
+                    <Video className="w-6 h-6 text-sky-400 ml-1" />
+                    <div>
+                      <span className="text-[10.5px] font-bold text-white block truncate max-w-[120px]">{video.name}</span>
+                      <span className="text-[9px] text-slate-400">{video.sizeMb} MB • Video</span>
+                    </div>
+                  </div>
+                )}
+                {voiceNote && (
+                  <div className="flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-xl p-2">
+                    <Mic className="w-6 h-6 text-emerald-400 ml-1" />
+                    <div>
+                      <span className="text-[10.5px] font-bold text-white block truncate max-w-[120px]">{voiceNote.name}</span>
+                      <span className="text-[9px] text-slate-400">{voiceNote.durationSec}s • Voice Note</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Incident Summary Card */}
           <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-850 text-left text-xs font-mono space-y-2">
             <div className="flex justify-between text-slate-400 text-[10px]">
@@ -380,8 +535,16 @@ function ReportEmergencyForm() {
           </Link>
 
           <Link
+            href="/citizen/safe-exit"
+            className="w-full py-3 rounded-2xl border border-emerald-800 bg-emerald-950/30 hover:bg-emerald-950/50 text-emerald-300 font-bold tracking-wider uppercase text-center flex items-center justify-center space-x-2 transition-all"
+          >
+            <Navigation className="w-4 h-4 text-emerald-400" />
+            <span>FIND SAFE EVACUATION ROUTE</span>
+          </Link>
+
+          <Link
             href="/citizen"
-            className="w-full py-3.5 rounded-2xl border border-slate-800 bg-slate-950 hover:bg-slate-900 text-slate-300 hover:text-white font-bold tracking-wider uppercase text-center block transition-all"
+            className="w-full py-3 rounded-2xl border border-slate-800 bg-slate-950 hover:bg-slate-900 text-slate-300 hover:text-white font-bold tracking-wider uppercase text-center block transition-all"
           >
             {t.homeBtn}
           </Link>
@@ -608,46 +771,175 @@ function ReportEmergencyForm() {
           </div>
         </div>
 
-        {/* 5. Multi-Media Attachments */}
-        <div className="rounded-2xl border border-slate-900 bg-[#060a13] p-4 space-y-2.5">
-          <label className="text-[10.5px] font-mono font-bold text-slate-300 uppercase tracking-wider block">
-            {t.mediaLabel}
-          </label>
-
-          <div className="grid grid-cols-3 gap-2 font-mono text-[10px]">
-            <button
-              type="button"
-              onClick={() => setVoiceRecorded(!voiceRecorded)}
-              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
-                voiceRecorded ? 'border-emerald-500 bg-emerald-950/60 text-emerald-300' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
-              }`}
-            >
-              <Mic className="w-4 h-4" />
-              <span>{voiceRecorded ? 'Voice Attached' : t.voiceRecordBtn}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setImageAttached(!imageAttached)}
-              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
-                imageAttached ? 'border-emerald-500 bg-emerald-950/60 text-emerald-300' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
-              }`}
-            >
-              <Camera className="w-4 h-4" />
-              <span>{imageAttached ? 'Photo Attached' : t.imageAttachBtn}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setVideoAttached(!videoAttached)}
-              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
-                videoAttached ? 'border-emerald-500 bg-emerald-950/60 text-emerald-300' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
-              }`}
-            >
-              <Video className="w-4 h-4" />
-              <span>{videoAttached ? 'Video Attached' : t.videoAttachBtn}</span>
-            </button>
+        {/* 5. Real Multi-Modal Media Attachments */}
+        <div className="rounded-2xl border border-slate-900 bg-[#060a13] p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <label className="text-[10.5px] font-mono font-bold text-slate-300 uppercase tracking-wider block">
+              {t.mediaLabel}
+            </label>
+            <span className="text-[9.5px] font-mono text-slate-500">OPTIONAL • CAMERA / AUDIO</span>
           </div>
+
+          {/* Hidden File Inputs */}
+          <input
+            ref={photoInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handlePhotoUpload}
+            className="hidden"
+          />
+          <input
+            ref={videoInputRef}
+            type="file"
+            accept="video/*"
+            onChange={handleVideoUpload}
+            className="hidden"
+          />
+
+          {/* Media Action Controls */}
+          <div className="grid grid-cols-3 gap-2 font-mono text-[10px]">
+            {/* Photo Trigger */}
+            <button
+              type="button"
+              onClick={() => photoInputRef.current?.click()}
+              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
+                photo ? 'border-sky-500 bg-sky-950/60 text-sky-300' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
+              }`}
+            >
+              <Camera className="w-4 h-4 text-sky-400" />
+              <span>{photo ? 'Photo Loaded' : t.imageAttachBtn}</span>
+            </button>
+
+            {/* Video Trigger */}
+            <button
+              type="button"
+              onClick={() => videoInputRef.current?.click()}
+              className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
+                video ? 'border-sky-500 bg-sky-950/60 text-sky-300' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
+              }`}
+            >
+              <Video className="w-4 h-4 text-sky-400" />
+              <span>{video ? 'Video Loaded' : t.videoAttachBtn}</span>
+            </button>
+
+            {/* Voice Recorder Trigger */}
+            {!isRecordingVoice ? (
+              <button
+                type="button"
+                onClick={handleStartVoiceRecording}
+                className={`p-2.5 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
+                  voiceNote ? 'border-emerald-500 bg-emerald-950/60 text-emerald-300' : 'border-slate-900 bg-slate-950 text-slate-400 hover:text-white'
+                }`}
+              >
+                <Mic className="w-4 h-4 text-emerald-400" />
+                <span>{voiceNote ? 'Audio Ready' : t.voiceRecordBtn}</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleStopVoiceRecording}
+                className="p-2.5 rounded-xl border border-red-500 bg-red-950/80 text-white flex flex-col items-center justify-center space-y-1 animate-pulse cursor-pointer"
+              >
+                <Square className="w-4 h-4 text-red-400" />
+                <span>Stop (00:0{voiceDuration})</span>
+              </button>
+            )}
+          </div>
+
+          {/* Active Voice Recording Live Bar */}
+          {isRecordingVoice && (
+            <div className="p-3 rounded-xl bg-red-950/40 border border-red-800/80 flex items-center justify-between font-mono text-xs text-red-200 animate-pulse">
+              <div className="flex items-center space-x-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
+                <span className="font-bold">RECORDING VOICE OBSERVATION...</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-white font-bold">00:0{voiceDuration}</span>
+                <button
+                  type="button"
+                  onClick={handleStopVoiceRecording}
+                  className="px-2 py-0.5 rounded bg-red-600 hover:bg-red-500 text-white font-bold text-[10px]"
+                >
+                  DONE
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Attached Files Detail Cards */}
+          {(photo || video || voiceNote) && (
+            <div className="space-y-2 pt-1 font-mono text-xs">
+              {/* Photo Preview Card */}
+              {photo && (
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-850 flex items-center justify-between">
+                  <div className="flex items-center space-x-3 truncate">
+                    <img src={photo.previewUrl} alt="Preview" className="w-10 h-10 rounded-lg object-cover border border-slate-800 shrink-0" />
+                    <div className="truncate">
+                      <p className="font-bold text-white text-[11px] truncate">{photo.name}</p>
+                      <span className="text-[9px] text-slate-400">{photo.sizeKb} KB • Image Evidence</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setPhoto(null)}
+                    className="p-1 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-900 ml-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* Video Preview Card */}
+              {video && (
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-850 flex items-center justify-between">
+                  <div className="flex items-center space-x-3 truncate">
+                    <div className="w-10 h-10 rounded-lg bg-sky-950/80 border border-sky-800/60 flex items-center justify-center text-sky-400 shrink-0">
+                      <Video className="w-5 h-5" />
+                    </div>
+                    <div className="truncate">
+                      <p className="font-bold text-white text-[11px] truncate">{video.name}</p>
+                      <span className="text-[9px] text-slate-400">{video.sizeMb} MB • Hazard Video Clip</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setVideo(null)}
+                    className="p-1 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-900 ml-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* Voice Note Preview Card */}
+              {voiceNote && (
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-850 flex items-center justify-between">
+                  <div className="flex items-center space-x-3 truncate">
+                    <button
+                      type="button"
+                      onClick={handleTogglePlayVoice}
+                      className="w-10 h-10 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 hover:scale-105 transition-all shrink-0 cursor-pointer"
+                    >
+                      {isPlayingVoice ? <Square className="w-4 h-4 text-emerald-300 animate-pulse" /> : <Play className="w-4 h-4 text-emerald-300 ml-0.5" />}
+                    </button>
+                    <div className="truncate">
+                      <p className="font-bold text-white text-[11px] truncate">
+                        {voiceNote.name} {isPlayingVoice && <span className="text-emerald-400 text-[9px] animate-pulse">● Playing...</span>}
+                      </p>
+                      <span className="text-[9px] text-slate-400">{voiceNote.durationSec}s duration • {voiceNote.sizeKb} KB</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setVoiceNote(null)}
+                    className="p-1 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-900 ml-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Data Consent & Privacy Notice */}

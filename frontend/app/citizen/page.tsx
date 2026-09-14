@@ -104,31 +104,42 @@ export default function CitizenHome() {
 
   const safety = getSafetyStatus()
 
-  // Dynamic Safety Advisor based on current stage
+  // Dynamic Safety Advisor strictly bound to 4 risk tiers
   const getSafetyAdvice = () => {
-    if (demoStage === 'AI_TRIAGE' || demoStage === 'OFFICER_APPROVED' || demoStage === 'INCIDENT_DETECTED') {
+    if (safety.badge === 'EVACUATE NOW') {
       return [
-        'Avoid Beach Road Sector 4 and low-lying coastal underpasses.',
-        'Do not attempt to drive through standing water deeper than 15 cm.',
-        'If water threatens your home, proceed immediately to MVP High School Relief Shelter (600m away).',
-        'Keep phone charged and avoid unnecessary non-emergency travel.'
+        'CRITICAL: Immediate evacuation advised for Beach Road Sector 4 low-lying ground.',
+        'Proceed immediately to nearest designated relief center: MVP High School Relief Shelter (600m).',
+        'Do not drive through floodwater — water depths exceed 55 cm with submerged debris.',
+        'Keep mobile devices charged, take essential medications and emergency go-bag.'
       ]
     }
-    if (demoStage === 'HEAVY_RAIN' || demoStage === 'WATER_RISING') {
+    if (safety.badge === 'HIGH RISK') {
       return [
-        'Heavy rainfall active. Keep clear of open municipal stormwater drains.',
-        'Park vehicles on elevated ground away from basement ramps.',
-        'Check that emergency flashlights and first-aid kits are accessible.'
+        'High flood risk detected. Avoid Sector 4 shoreline road and low-lying coastal underpasses.',
+        'Move valuable items, electronics, and vehicles to elevated ground immediately.',
+        'Ensure family members and neighbors are alerted; keep line of communication open with Ward 12 coordinator.',
+        'Monitor BharatOS early warning notifications for rapid shelter evacuation orders.'
+      ]
+    }
+    if (safety.badge === 'CAUTION') {
+      return [
+        'Precipitation spike active. Watch for localized stormwater ponding near basement ramps.',
+        'Municipal emergency crews and dewatering pumps are deployed across Beach Road.',
+        'Follow designated traffic diversions towards NH16 bypass.',
+        'Avoid contact with open stormwater gutters and fallen electric cables.'
       ]
     }
     return [
-      'Weather conditions are stable. No immediate evacuation required.',
-      'Familiarize yourself with your nearest shelter: MVP High School Relief Shelter.',
-      'Emergency numbers 112 (Police), 108 (Medical), and 101 (Fire) are active 24/7.'
+      'Normal weather and urban drainage conditions in Visakhapatnam MVP Colony.',
+      'Familiarize yourself with your nearest shelter: MVP High School Relief Shelter (600m away).',
+      'Emergency numbers 112 (Police), 108 (Medical), and 101 (Fire) are active 24/7.',
+      'Maintain basic emergency go-bag and check drinking water supply.'
     ]
   }
 
   const safetyAdviceList = getSafetyAdvice()
+  const closedRoadsCount = Object.values(trafficCorridors).filter(c => c.status === 'CLOSED_FLOOD').length
 
   return (
     <div className="space-y-6 pb-12 font-sans max-w-5xl mx-auto">
@@ -163,9 +174,14 @@ export default function CitizenHome() {
             <Clock className="w-3 h-3 text-sky-400" />
             <span>Scenario Clock: <strong className="text-white">{simulationTime}</strong></span>
           </div>
-          <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/40 text-amber-300">
-            SIMULATION — HYDRAULIC LINK
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-sky-950/80 border border-sky-800/60 text-sky-300">
+              SENSOR FEED: SIMULATION
+            </span>
+            <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/60 text-emerald-300">
+              VERIFIED CATCHMENT
+            </span>
+          </div>
         </div>
       </div>
 
@@ -269,7 +285,7 @@ export default function CitizenHome() {
               <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white">FLOOD STATUS — LOCAL TELEMETRY</h3>
             </div>
             <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/40 text-cyan-300">
-              REAL_IOT & SIMULATION
+              SENSOR FEED: SIMULATION (VIZAG IOT TWIN)
             </span>
           </div>
 
@@ -299,9 +315,11 @@ export default function CitizenHome() {
             <div className="p-3 rounded-2xl bg-[#040813] border border-slate-900 space-y-1">
               <span className="text-[9.5px] font-mono text-slate-400 uppercase block">Road Closures</span>
               <span className="text-sm font-bold font-mono text-amber-300 truncate block">
-                {trafficCorridors['beach-road']?.status === 'CLOSED_FLOOD' ? 'Beach Rd Closed' : 'All Open'}
+                {closedRoadsCount > 0 ? `${closedRoadsCount} Road Closed` : '0 Closed (All Open)'}
               </span>
-              <span className="text-[8.5px] font-mono text-slate-500 block">Detour Active</span>
+              <span className="text-[8.5px] font-mono text-slate-500 block">
+                {closedRoadsCount > 0 ? 'Beach Rd Diversion' : 'Normal Flow'}
+              </span>
             </div>
           </div>
 
