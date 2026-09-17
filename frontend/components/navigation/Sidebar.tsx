@@ -69,32 +69,32 @@ export default function Sidebar() {
     {
       title: 'PRIMARY OPERATIONS',
       items: [
-        { id: 'command-center', label: 'Command Center', path: '/dashboard/district', icon: Layers, color: 'text-sky-400' },
-        { id: 'incidents', label: 'Incidents Queue', path: '/dashboard/district#incidents', icon: AlertTriangle, color: 'text-red-400' },
-        { id: 'iot-sensors', label: 'IoT & Sensor Ops', path: '/dashboard/digital-twin', icon: Activity, color: 'text-purple-400', badge: 'LIVE' },
-        { id: 'traffic-intel', label: 'Traffic Intelligence', path: '/dashboard/traffic', icon: Car, color: 'text-amber-400', badge: 'YOLO' },
-        { id: 'ai-ops', label: 'AI Operations', path: '/dashboard/ai-ops', icon: Cpu, color: 'text-indigo-400', badge: 'AGENT' },
-        { id: 'resources', label: 'Resources & Fleet', path: '/dashboard/district#resources', icon: Truck, color: 'text-emerald-400' },
-        { id: 'event-stream', label: 'Event Stream', path: '/dashboard/district#activity', icon: Radio, color: 'text-cyan-400' },
+        { id: 'command-center', label: 'Command Center', path: '/dashboard/district', icon: Layers, color: 'text-slate-400' },
+        { id: 'incidents', label: 'Incidents Queue', path: '/dashboard/district#incidents', icon: AlertTriangle, color: 'text-slate-400' },
+        { id: 'iot-sensors', label: 'IoT & Sensor Ops', path: '/dashboard/digital-twin', icon: Activity, color: 'text-slate-400', badge: 'LIVE' },
+        { id: 'traffic-intel', label: 'Traffic Intelligence', path: '/dashboard/traffic', icon: Car, color: 'text-slate-400', badge: 'YOLO' },
+        { id: 'ai-ops', label: 'AI Operations', path: '/dashboard/ai-ops', icon: Cpu, color: 'text-slate-400', badge: 'AGENT' },
+        { id: 'resources', label: 'Resources & Fleet', path: '/dashboard/district#resources', icon: Truck, color: 'text-slate-400' },
+        { id: 'event-stream', label: 'Event Stream', path: '/dashboard/district#activity', icon: Radio, color: 'text-slate-400' },
         { id: 'audit-log', label: 'Audit & System Log', path: '/dashboard/administration', icon: Database, color: 'text-slate-400' }
       ]
     },
     {
       title: 'COMMAND LEVELS',
       items: [
-        { id: 'national-command', label: 'National Command', path: '/dashboard/national', icon: Globe, color: 'text-sky-400' },
-        { id: 'state-command', label: 'State Command', path: '/dashboard/state', icon: Building2, color: 'text-indigo-400' },
-        { id: 'district-command', label: 'District Command', path: '/dashboard/district', icon: MapPin, color: 'text-teal-400' }
+        { id: 'national-command', label: 'National Command', path: '/dashboard/national', icon: Globe, color: 'text-slate-400' },
+        { id: 'state-command', label: 'State Command', path: '/dashboard/state', icon: Building2, color: 'text-slate-400' },
+        { id: 'district-command', label: 'District Command', path: '/dashboard/district', icon: MapPin, color: 'text-slate-400' }
       ]
     },
     {
       title: 'EMERGENCY SECTORS',
       items: [
-        { id: 'police', label: 'Police', path: '/dashboard/police', icon: Shield, color: 'text-blue-400' },
-        { id: 'fire', label: 'Fire & Rescue', path: '/dashboard/fire', icon: Flame, color: 'text-orange-400' },
-        { id: 'ambulance', label: 'Ambulance', path: '/dashboard/ambulance', icon: Truck, color: 'text-red-400' },
-        { id: 'healthcare', label: 'Healthcare', path: '/dashboard/healthcare', icon: HeartPulse, color: 'text-emerald-400' },
-        { id: 'rural-intelligence', label: 'Rural Intelligence', path: '/dashboard/rural', icon: CloudRain, color: 'text-emerald-400' }
+        { id: 'police', label: 'Police', path: '/dashboard/police', icon: Shield, color: 'text-slate-400' },
+        { id: 'fire', label: 'Fire & Rescue', path: '/dashboard/fire', icon: Flame, color: 'text-slate-400' },
+        { id: 'ambulance', label: 'Ambulance', path: '/dashboard/ambulance', icon: Truck, color: 'text-slate-400' },
+        { id: 'healthcare', label: 'Healthcare', path: '/dashboard/healthcare', icon: HeartPulse, color: 'text-slate-400' },
+        { id: 'rural-intelligence', label: 'Rural Intelligence', path: '/dashboard/rural', icon: CloudRain, color: 'text-slate-400' }
       ]
     }
   ]
@@ -209,7 +209,7 @@ export default function Sidebar() {
 
                     {/* Custom Telemetry Badges */}
                     {(item as any).badge && !sidebarCollapsed && (
-                      <span className="ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded bg-purple-950/60 border border-purple-800 text-purple-400 animate-pulse font-mono shrink-0">
+                      <span className="ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded bg-sky-950/60 border border-sky-800/60 text-sky-400 font-mono shrink-0">
                         {(item as any).badge}
                       </span>
                     )}

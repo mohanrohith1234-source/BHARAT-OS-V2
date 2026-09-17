@@ -338,7 +338,7 @@ export default function Header() {
           <button
             onClick={handleStartDemo}
             disabled={demoRunning}
-            className="relative flex items-center space-x-1 lg:space-x-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-700 px-2 py-1.5 lg:px-4 lg:py-2 text-[10px] lg:text-xs font-bold uppercase tracking-widest text-white hover:from-blue-500 hover:to-purple-600 transition-all shadow-lg hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] focus:outline-none disabled:opacity-50 border border-purple-400/20 shrink-0"
+            className="relative flex items-center space-x-1 lg:space-x-2 rounded-xl bg-sky-600 hover:bg-sky-500 px-2 py-1.5 lg:px-4 lg:py-2 text-[10px] lg:text-xs font-bold uppercase tracking-widest text-white transition-all shadow-lg hover:shadow-[0_0_15px_rgba(56,189,248,0.25)] focus:outline-none disabled:opacity-50 border border-sky-400/30 shrink-0"
           >
             <Play className={`h-3 w-3 lg:h-3.5 lg:w-3.5 shrink-0 ${demoRunning ? 'animate-spin' : ''}`} />
             <span className="whitespace-nowrap">Start Demo</span>

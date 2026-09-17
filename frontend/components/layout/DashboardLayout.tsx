@@ -191,8 +191,8 @@ export default function DashboardLayout({
 
                   {/* Operational Prototype Status Badges */}
                   <div className="flex items-center space-x-2.5 text-[9px] font-mono font-bold">
-                    <span className="flex items-center space-x-1 bg-purple-950/50 border border-purple-800/40 text-purple-300 rounded px-2 py-0.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+                    <span className="flex items-center space-x-1 bg-sky-950/50 border border-sky-800/40 text-sky-300 rounded px-2 py-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
                       <span>PROTOTYPE • SIMULATION MODE</span>
                     </span>
                     <span className="flex items-center space-x-1.5 bg-sky-950/50 border border-sky-800/40 text-sky-300 rounded px-2 py-0.5">
@@ -254,7 +254,7 @@ export default function DashboardLayout({
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           onClick={() => setPresentationMode(false)}
-          className="fixed bottom-6 right-6 z-[9999] flex items-center space-x-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white px-4 py-2.5 text-xs font-bold uppercase tracking-widest shadow-2xl transition-all border border-purple-400/25 cursor-pointer hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+          className="fixed bottom-6 right-6 z-[9999] flex items-center space-x-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white px-4 py-2.5 text-xs font-bold uppercase tracking-widest shadow-2xl transition-all border border-sky-400/25 cursor-pointer hover:shadow-[0_0_20px_rgba(56,189,248,0.4)]"
         >
           <Minimize2 className="w-4 h-4" />
           <span>Exit Presentation Mode</span>

@@ -257,7 +257,7 @@ export default function AIOperationsCenterPage() {
           {/* SIMULATION TIMELINE CONTROLS */}
           <div className="flex items-center space-x-2">
             <span className="text-xs text-slate-400">Timeline:</span>
-            <span className="px-2.5 py-1 rounded bg-purple-950 border border-purple-800 text-purple-300 text-xs font-bold">
+            <span className="px-2.5 py-1 rounded bg-sky-950/60 border border-sky-800/60 text-sky-300 text-xs font-bold font-mono">
               {simulationTime} ({demoStage})
             </span>
             <button
@@ -268,7 +268,7 @@ export default function AIOperationsCenterPage() {
             </button>
             <button
               onClick={resetDemo}
-              className="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-400 hover:text-white text-xs transition-all cursor-pointer"
+              className="px-2.5 py-1 rounded bg-[#101F31] border border-[#1E344A] text-slate-400 hover:text-white text-xs transition-all cursor-pointer"
             >
               <RotateCcw className="w-3 h-3" />
             </button>
@@ -276,10 +276,10 @@ export default function AIOperationsCenterPage() {
         </div>
 
         {/* AGENT EXECUTION TIMELINE BAR */}
-        <div className="p-4 rounded-2xl border border-indigo-900/60 bg-[#070b16] space-y-3 font-mono">
+        <div className="p-4 rounded-2xl border border-[#1E344A] bg-[#101F31] space-y-3 font-mono">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-2">
-              <Activity className="w-4 h-4 text-indigo-400" />
+            <span className="text-xs font-bold text-sky-300 uppercase tracking-wider flex items-center gap-2">
+              <Activity className="w-4 h-4 text-sky-400" />
               END-TO-END AGENT EXECUTION TIMELINE
             </span>
             <span className="text-[10px] text-slate-400">
@@ -296,7 +296,7 @@ export default function AIOperationsCenterPage() {
                     ? 'bg-emerald-950/40 border-emerald-800/80 text-emerald-300'
                     : step.status === 'RUNNING'
                     ? 'bg-amber-950/40 border-amber-800/80 text-amber-300 animate-pulse'
-                    : 'bg-slate-950 border-slate-850 text-slate-500'
+                    : 'bg-[#0B1726] border-[#1E344A] text-slate-500'
                 }`}
               >
                 <span className="font-bold truncate">{step.label}</span>
@@ -312,7 +312,7 @@ export default function AIOperationsCenterPage() {
         <div className="space-y-3 font-mono">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-purple-400" />
+              <Sparkles className="w-4 h-4 text-sky-400" />
               <h3 className="text-xs font-bold uppercase tracking-wider text-white">
                 SPECIALIZED CAPABILITY AGENT CLUSTER (9 AGENTS IN GRAPH)
               </h3>
@@ -332,14 +332,14 @@ export default function AIOperationsCenterPage() {
                   onClick={() => setSelectedAgentIndex(idx)}
                   className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-3 relative overflow-hidden ${
                     isSelected
-                      ? 'border-purple-500 bg-[#0a0e20] shadow-xl shadow-purple-950/40'
-                      : 'border-slate-800 bg-[#070b16] hover:border-slate-700'
+                      ? 'border-sky-500/60 bg-[#13253A] shadow-xl shadow-sky-950/40'
+                      : 'border-[#1E344A] bg-[#101F31] hover:border-slate-700'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2.5">
-                      <div className="p-2 rounded-xl bg-black/40 border border-slate-800">
-                        <Bot className="w-4 h-4 text-purple-400" />
+                      <div className="p-2 rounded-xl bg-[#0B1726] border border-[#1E344A]">
+                        <Bot className="w-4 h-4 text-sky-400" />
                       </div>
                       <div>
                         <h4 className="text-xs font-bold text-white leading-tight">{agent.agent}</h4>
@@ -354,7 +354,7 @@ export default function AIOperationsCenterPage() {
                         ? 'bg-amber-950 border border-amber-800 text-amber-300 animate-pulse'
                         : agent.status === 'FAILED'
                         ? 'bg-red-950 border border-red-800 text-red-300'
-                        : 'bg-slate-900 border border-slate-800 text-slate-500'
+                        : 'bg-[#0B1726] border border-[#1E344A] text-slate-500'
                     }`}>
                       {agent.status}
                     </span>
@@ -364,9 +364,9 @@ export default function AIOperationsCenterPage() {
                     {agent.recommendation}
                   </p>
 
-                  <div className="pt-2 border-t border-slate-850 flex items-center justify-between text-[10px]">
+                  <div className="pt-2 border-t border-[#1E344A] flex items-center justify-between text-[10px]">
                     <span className="text-slate-500">Score: <strong className="text-slate-200">{agent.risk_impact_score || 'N/A'}</strong></span>
-                    <span className="text-purple-400 font-bold flex items-center gap-1">
+                    <span className="text-sky-400 font-bold flex items-center gap-1">
                       Inspect <ArrowRight className="w-3 h-3" />
                     </span>
                   </div>

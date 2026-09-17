@@ -1,30 +1,48 @@
 :root {
-  /* Ultra-Premium National Command Center Color System */
-  --bg-canvas: #030712;
-  --bg-panel: #0b0f19;
-  --bg-card: rgba(11, 15, 25, 0.75);
-  --bg-header: rgba(15, 23, 42, 0.65);
-  
-  /* Borders & 3D Lighting */
-  --border-glass: rgba(30, 41, 59, 0.8);
+  /* BharatOS Master Color System - Emergency Operations Center / Mission Control */
+  --color-primary: #38BDF8;
+  --color-primary-hover: #67D3FA;
+  --color-primary-muted: rgba(56, 189, 248, 0.12);
+
+  --color-background: #07111F;
+  --color-background-secondary: #0B1726;
+  --color-surface: #101F31;
+  --color-surface-elevated: #13253A;
+
+  --color-border: #1E344A;
+  --color-border-subtle: rgba(148, 163, 184, 0.14);
+
+  --color-text-primary: #E8F1F8;
+  --color-text-secondary: #8FA6B8;
+  --color-text-muted: #60788C;
+
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-critical: #EF4444;
+  --color-info: #38BDF8;
+
+  /* Backward Compatibility Token Mappings */
+  --bg-canvas: #07111F;
+  --bg-panel: #0B1726;
+  --bg-card: #101F31;
+  --bg-header: #0B1726;
+
+  --border-glass: #1E344A;
   --border-glass-glow: rgba(56, 189, 248, 0.3);
-  --border-ai-glow: rgba(168, 85, 247, 0.3);
+  --border-ai-glow: rgba(56, 189, 248, 0.3);
 
-  /* Primary Brand & Status Highlights */
-  --color-electric-blue: #38bdf8;
-  --color-telemetry-cyan: #06b6d4;
-  --color-ai-purple: #a855f7;
-  --color-emergency-red: #ef4444;
-  --color-warning-amber: #f59e0b;
-  --color-operational-emerald: #10b981;
+  --color-electric-blue: #38BDF8;
+  --color-telemetry-cyan: #38BDF8;
+  --color-ai-purple: #38BDF8;
+  --color-emergency-red: #EF4444;
+  --color-warning-amber: #F59E0B;
+  --color-operational-emerald: #22C55E;
 
-  /* Typography Colors */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --text-primary: #E8F1F8;
+  --text-secondary: #8FA6B8;
+  --text-muted: #60788C;
 
-  /* Elevation Shadows */
   --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --shadow-electric: 0 0 20px rgba(56, 189, 248, 0.15);
-  --shadow-ai: 0 0 20px rgba(168, 85, 247, 0.2);
+  --shadow-electric: 0 0 20px rgba(56, 189, 248, 0.12);
+  --shadow-ai: 0 0 20px rgba(56, 189, 248, 0.12);
 }
