@@ -33,7 +33,10 @@ export default function CitizenHome() {
   // Dynamic Citizen Safety Status based on shared Vizag simulation state
   const getSafetyStatus = () => {
     switch (demoStage) {
+      case 'T00_NORMAL':
+      case 'T70_RISK_NORMALIZED':
       case 'IDLE':
+      case 'RESOLVED':
         return {
           badge: 'SAFE',
           indicator: '🟢',
@@ -42,6 +45,8 @@ export default function CitizenHome() {
           bgColor: 'bg-emerald-950/40 border-emerald-800/60',
           explanation: 'Normal weather and drainage flow in your sector. All major roadways and underpasses are clear.'
         }
+      case 'T05_WEATHER_SIGNAL':
+      case 'T10_AI_NOWCAST':
       case 'HEAVY_RAIN':
         return {
           badge: 'CAUTION',
@@ -49,10 +54,14 @@ export default function CitizenHome() {
           title: 'WEATHER CAUTION',
           textColor: 'text-yellow-400',
           bgColor: 'bg-yellow-950/40 border-yellow-800/60',
-          explanation: 'Precipitation spike (64 mm/hr) recorded in coastal catchment. Watch for localized water accumulation in low-lying spots.'
+          explanation: 'Precipitation spike (28-64 mm/hr) recorded in coastal catchment. Watch for localized water accumulation in low-lying spots.'
         }
-      case 'WATER_RISING':
+      case 'T15_WARD_RISK':
+      case 'T20_EARLY_WARNING':
+      case 'T25_TRAFFIC_IMPACT':
+      case 'T30_OFFICER_APPROVAL':
       case 'INCIDENT_DETECTED':
+      case 'AI_TRIAGE':
         return {
           badge: 'HIGH RISK',
           indicator: '🟠',
@@ -61,7 +70,8 @@ export default function CitizenHome() {
           bgColor: 'bg-orange-950/50 border-orange-800/60',
           explanation: `Beach Road culvert water level reached ${incident.waterDepthCm} cm. Avoid driving through Sector 4 and coastline bypass corridors.`
         }
-      case 'AI_TRIAGE':
+      case 'T35_WATER_RISING':
+      case 'WATER_RISING':
       case 'OFFICER_APPROVED':
         return {
           badge: 'EVACUATE NOW',
@@ -71,6 +81,9 @@ export default function CitizenHome() {
           bgColor: 'bg-red-950/60 border-red-700/80 shadow-[0_0_30px_rgba(239,68,68,0.3)]',
           explanation: 'Severe waterlogging at Beach Road Sector 4. Non-emergency traffic is being diverted to NH16. Move to upper floors or designated shelter.'
         }
+      case 'T40_RESPONSE_DEPLOYED':
+      case 'T50_DIGITAL_TWIN':
+      case 'T60_WATER_FALLING':
       case 'UNITS_DISPATCHED':
       case 'WATER_DRAINED':
         return {
@@ -80,15 +93,6 @@ export default function CitizenHome() {
           textColor: 'text-cyan-400',
           bgColor: 'bg-cyan-950/40 border-cyan-800/60',
           explanation: 'Emergency vehicles and high-capacity dewatering pump DP-04 are operating on scene. Water depth is actively receding.'
-        }
-      case 'RESOLVED':
-        return {
-          badge: 'SAFE',
-          indicator: '🟢',
-          title: 'YOU ARE SAFE',
-          textColor: 'text-emerald-400',
-          bgColor: 'bg-emerald-950/40 border-emerald-800/60',
-          explanation: 'Water drained and roadway reopened. Normal drainage restored across all sectors.'
         }
       default:
         return {

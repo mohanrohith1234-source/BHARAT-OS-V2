@@ -17,13 +17,25 @@ from app.api.v1.command_centers import router as command_centers_router
 from app.api.v1.facilities import router as facilities_router
 from app.api.v1.admin import router as admin_router
 from app.api.v1.alerts import router as alerts_router
+from app.api.v1.nowcast import router as nowcast_router
+from app.api.v1.warnings import router as warnings_router
+from app.api.v1.events import router as events_router
+from app.api.v1.traffic import router as traffic_router
 
 api_v1_router = APIRouter()
 
 # Register core health checks router
 api_v1_router.include_router(health_router)
 
-# Register legacy and skeleton domain routers to preserve existing backend system functionality
+# Register Unified Event Ingestion & IoT Pipeline router
+api_v1_router.include_router(events_router)
+api_v1_router.include_router(traffic_router)
+
+# Register SIH 2026 Severe Weather Nowcasting and Early Warning routers
+api_v1_router.include_router(nowcast_router)
+api_v1_router.include_router(warnings_router)
+
+# Register domain routers to preserve existing backend system functionality
 api_v1_router.include_router(system_router)
 api_v1_router.include_router(auth_router)
 api_v1_router.include_router(incidents_router)

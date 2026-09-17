@@ -1,0 +1,21 @@
+{
+  "event_id": "INC-HAZARD-7721-B",
+  "category": "traffic_accident",
+  "title": "Stationary Commercial Vehicle Lane Obstruction",
+  "description": "Multi-object tracker detected stationary heavy truck (Track #14) with dwell time exceeding 45 seconds in active northbound lane.",
+  "latitude": 17.7228,
+  "longitude": 83.3072,
+  "address": "VIP Road near Circuit House Junction, Visakhapatnam",
+  "severity": "high",
+  "status": "active",
+  "scenario_id": "YOLO_VISION_PERCEPTION",
+  "extra_data": {
+    "camera_id": "CAM-VIZAG-02",
+    "track_id": 14,
+    "class_name": "truck",
+    "dwell_time_seconds": 46.2,
+    "current_speed_kmh": 0.0,
+    "action_recommended": "DISPATCH_TRAFFIC_PATROL",
+    "provenance": "SIMULATED"
+  }
+}

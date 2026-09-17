@@ -33,7 +33,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
-  Database
+  Database,
+  Radio
 } from 'lucide-react'
 
 import BrandLogo from '../ui/BrandLogo'
@@ -66,7 +67,20 @@ export default function Sidebar() {
 
   const menuSections = [
     {
-      title: 'COMMAND',
+      title: 'PRIMARY OPERATIONS',
+      items: [
+        { id: 'command-center', label: 'Command Center', path: '/dashboard/city', icon: Layers, color: 'text-sky-400' },
+        { id: 'incidents', label: 'Incidents Queue', path: '/citizen/incidents', icon: AlertTriangle, color: 'text-red-400' },
+        { id: 'iot-sensors', label: 'IoT & Sensor Ops', path: '/dashboard/digital-twin', icon: Activity, color: 'text-purple-400', badge: 'LIVE' },
+        { id: 'traffic-intel', label: 'Traffic Intelligence', path: '/dashboard/traffic', icon: Car, color: 'text-amber-400', badge: 'YOLO' },
+        { id: 'ai-ops', label: 'AI Operations', path: '/dashboard/ai-ops', icon: Cpu, color: 'text-indigo-400', badge: 'AGENT' },
+        { id: 'resources', label: 'Resources & Fleet', path: '/citizen/resources', icon: Truck, color: 'text-emerald-400' },
+        { id: 'event-stream', label: 'Event Stream', path: '/dashboard/city#activity', icon: Radio, color: 'text-cyan-400' },
+        { id: 'audit-log', label: 'Audit & System Log', path: '/dashboard/administration', icon: Database, color: 'text-slate-400' }
+      ]
+    },
+    {
+      title: 'COMMAND LEVELS',
       items: [
         { id: 'national-command', label: 'National Command', path: '/dashboard/national', icon: Globe, color: 'text-sky-400' },
         { id: 'state-command', label: 'State Command', path: '/dashboard/state', icon: Building2, color: 'text-indigo-400' },
@@ -74,59 +88,13 @@ export default function Sidebar() {
       ]
     },
     {
-      title: 'FLOOD INTELLIGENCE',
+      title: 'EMERGENCY SECTORS',
       items: [
-        { id: 'flood-overview', label: 'Flood Overview', path: '/dashboard/national#overview', icon: Layers, color: 'text-blue-400' },
-        { id: 'risk-map', label: 'Risk Map', path: '/dashboard/digital-twin#risk', icon: Waves, color: 'text-cyan-400' },
-        { id: 'flood-incidents', label: 'Flood Incidents', path: '/dashboard/city#incidents', icon: AlertTriangle, color: 'text-red-400' },
-        { id: 'early-warnings', label: 'Early Warnings', path: '/dashboard/national#warnings', icon: Wind, color: 'text-amber-400' },
-        { id: 'risk-analysis', label: 'Risk Analysis', path: '/dashboard/city#risk-analysis', icon: TrendingUp, color: 'text-teal-400' },
-        { id: 'rural-intelligence', label: 'Rural Intelligence', path: '/dashboard/rural', icon: CloudRain, color: 'text-sky-300' }
-      ]
-    },
-    {
-      title: 'RESPONSE',
-      items: [
-        { id: 'dispatch', label: 'Dispatch', path: '/dashboard/city?action=dispatch', icon: PhoneCall, color: 'text-pink-400' },
-        { id: 'resources', label: 'Resources', path: '/dashboard/city#resources', icon: Truck, color: 'text-emerald-400' },
-        { id: 'response-teams', label: 'Response Teams', path: '/dashboard/city#resources', icon: Shield, color: 'text-indigo-400' }
-      ]
-    },
-    {
-      title: 'OPERATIONS',
-      items: [
-        { id: 'ops-incidents', label: 'Incidents', path: '/dashboard/city#incidents', icon: AlertTriangle, color: 'text-red-400' },
         { id: 'police', label: 'Police', path: '/dashboard/police', icon: Shield, color: 'text-blue-400' },
-        { id: 'fire', label: 'Fire & Hazmat', path: '/dashboard/fire', icon: Flame, color: 'text-orange-400' },
-        { id: 'healthcare', label: 'Healthcare', path: '/dashboard/healthcare', icon: HeartPulse, color: 'text-emerald-400' },
+        { id: 'fire', label: 'Fire & Rescue', path: '/dashboard/fire', icon: Flame, color: 'text-orange-400' },
         { id: 'ambulance', label: 'Ambulance', path: '/dashboard/ambulance', icon: Truck, color: 'text-red-400' },
-        { id: 'traffic', label: 'Traffic', path: '/dashboard/traffic', icon: Car, color: 'text-amber-400' }
-      ]
-    },
-    {
-      title: 'DIGITAL TWIN',
-      items: [
-        { id: 'flood-twin', label: 'Flood Digital Twin', path: '/dashboard/digital-twin', icon: Cpu, color: 'text-blue-450' },
-        { id: 'sensors', label: 'Sensors', path: '/dashboard/digital-twin#sensors', icon: Activity, color: 'text-purple-400' }
-      ]
-    },
-    {
-      title: 'AI',
-      items: [
-        { id: 'flood-ai', label: 'Flood AI Advisor', path: '/dashboard/ai-ops', icon: Sparkles, color: 'text-purple-300', badge: 'AI' }
-      ]
-    },
-    {
-      title: 'CITIZEN',
-      items: [
-        { id: 'report-flooding', label: 'Report Flooding', path: '/dashboard/city?report=citizen', icon: AlertTriangle, color: 'text-red-500' },
-        { id: 'safety-alerts', label: 'Safety & Alerts', path: '/dashboard/national#safety', icon: BookOpen, color: 'text-sky-300' }
-      ]
-    },
-    {
-      title: 'SYSTEM',
-      items: [
-        { id: 'sync-console', label: 'Sync Console', path: '/dashboard/administration', icon: Database, color: 'text-sky-400' }
+        { id: 'healthcare', label: 'Healthcare', path: '/dashboard/healthcare', icon: HeartPulse, color: 'text-emerald-400' },
+        { id: 'rural-intelligence', label: 'Rural Intelligence', path: '/dashboard/rural', icon: CloudRain, color: 'text-emerald-400' }
       ]
     }
   ]

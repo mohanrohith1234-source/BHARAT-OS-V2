@@ -246,6 +246,23 @@ export default function SosEmergencyPage() {
     // Save to store and IndexedDB
     addIncident(sosIncident)
     await IndexedDbService.saveIncident(sosIncident)
+
+    // Sync directly to Command Center Central Pipeline
+    useVizagDataStore.getState().addCitizenReport({
+      id: incId,
+      source: 'CITIZEN_SOS',
+      citizenName: profile.name || 'Citizen SOS Beacon',
+      phone: profile.phone || '+91 891 2562233',
+      location: manualAddress || activeLocation.address,
+      category: selectedCategory === 'flood' ? 'Flood Rescue' : selectedCategory.toUpperCase(),
+      severity: 'critical',
+      evidenceSummary: `1-Tap SOS Distress Ping. Unit requested: ${assignedUnitName}. Location: ${manualAddress || activeLocation.address}`,
+      aiTriageStatus: 'TRIAGE_PENDING',
+      aiConfidence: '98%',
+      recommendedAction: `Deploy ${assignedUnitName} to ${manualAddress || activeLocation.address}`,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      provenance: isOffline ? 'CACHED' : 'LIVE'
+    })
     
     // Enable Emergency Focus Mode
     setEmergencyMode(true)

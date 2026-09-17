@@ -1,0 +1,26 @@
+{
+  "event_id": "DISPATCH-AMB-8813-001",
+  "event_type": "EMERGENCY_DISPATCHED",
+  "timestamp": "2026-09-17T15:00:00Z",
+  "source": "BHARATOS_YOLO_SIMULATOR",
+  "resource_id": "RES-AMB-021",
+  "external_simulation_id": "AMB-021",
+  "vehicle_type": "AMBULANCE",
+  "origin": {
+    "latitude": 17.7215,
+    "longitude": 83.3055,
+    "label": "Siripuram Circle (Camera CAM-01)"
+  },
+  "destination": {
+    "latitude": 17.7120,
+    "longitude": 83.3180,
+    "label": "King George Hospital (KGH Emergency Wing)"
+  },
+  "priority": "CRITICAL",
+  "route": [
+    "Siripuram Circle",
+    "Asilmetta Flyover",
+    "Jagadamba Junction",
+    "KGH Emergency Gate"
+  ]
+}

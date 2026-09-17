@@ -1,0 +1,13 @@
+# BHARATOS Standalone Traffic & YOLO Simulation Package
+# ======================================================
+# Minimal dependencies required for video streaming, YOLO detection, 
+# traffic analysis, and event integration with BharatOS.
+
+numpy>=1.24.0
+pydantic>=2.0.0
+requests>=2.28.0
+
+# Computer Vision & Deep Learning (YOLOv8)
+# If PyTorch/Ultralytics is not available, the package runs in graceful synthetic/mock mode
+opencv-python>=4.8.0
+ultralytics>=8.0.0

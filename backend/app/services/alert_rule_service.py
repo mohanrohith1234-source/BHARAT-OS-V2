@@ -12,6 +12,7 @@ ALERT_RULES = {
     "water_level": {
         "metric": "water_level",
         "category": "WATER_LEVEL",
+        "incident_category": "Flood",
         "thresholds": [
             {"min_value": 4.5, "severity": "CRITICAL", "title": "Critical Flooding Alert", "description": "Water level breached critical threshold"},
             {"min_value": 4.0, "severity": "HIGH", "title": "High Water Level Alert", "description": "Water level breached warning threshold"}
@@ -20,6 +21,7 @@ ALERT_RULES = {
     "aqi": {
         "metric": "aqi",
         "category": "AIR_QUALITY",
+        "incident_category": "Air Quality",
         "thresholds": [
             {"min_value": 300.0, "severity": "CRITICAL", "title": "Severe AQI Alert", "description": "AQI level is hazardous"},
             {"min_value": 200.0, "severity": "HIGH", "title": "Poor AQI Alert", "description": "AQI level is unhealthy"}
@@ -28,9 +30,64 @@ ALERT_RULES = {
     "temperature": {
         "metric": "temperature",
         "category": "WEATHER",
+        "incident_category": "Fire",
         "thresholds": [
-            {"min_value": 45.0, "severity": "CRITICAL", "title": "Extreme Heat Alert", "description": "Critical ambient temperature recorded"},
-            {"min_value": 40.0, "severity": "HIGH", "title": "High Heat Alert", "description": "Warning level ambient temperature recorded"}
+            {"min_value": 55.0, "severity": "CRITICAL", "title": "Extreme Heat & Fire Risk Alert", "description": "Critical ambient temperature recorded"},
+            {"min_value": 42.0, "severity": "HIGH", "title": "High Heat Alert", "description": "Warning level ambient temperature recorded"}
+        ]
+    },
+    "smoke_density": {
+        "metric": "smoke_density",
+        "category": "FIRE",
+        "incident_category": "Fire",
+        "thresholds": [
+            {"min_value": 60.0, "severity": "CRITICAL", "title": "Critical Smoke Density Alert", "description": "Dense combustion particulate detected"},
+            {"min_value": 35.0, "severity": "HIGH", "title": "Elevated Smoke Warning", "description": "Smoke density breached warning threshold"}
+        ]
+    },
+    "co_gas_ppm": {
+        "metric": "co_gas_ppm",
+        "category": "HAZMAT",
+        "incident_category": "Hazardous Material",
+        "thresholds": [
+            {"min_value": 150.0, "severity": "CRITICAL", "title": "Critical Toxic Gas Alert", "description": "Lethal toxic gas concentration detected"},
+            {"min_value": 50.0, "severity": "HIGH", "title": "Hazardous Gas Leak Warning", "description": "Gas concentration breached threshold"}
+        ]
+    },
+    "gas_leak": {
+        "metric": "gas_leak",
+        "category": "HAZMAT",
+        "incident_category": "Hazardous Material",
+        "thresholds": [
+            {"min_value": 150.0, "severity": "CRITICAL", "title": "Critical Toxic Gas Alert", "description": "Lethal toxic gas concentration detected"},
+            {"min_value": 50.0, "severity": "HIGH", "title": "Hazardous Gas Leak Warning", "description": "Gas concentration breached threshold"}
+        ]
+    },
+    "seismic_acceleration": {
+        "metric": "seismic_acceleration",
+        "category": "SEISMIC",
+        "incident_category": "Earthquake",
+        "thresholds": [
+            {"min_value": 0.35, "severity": "CRITICAL", "title": "Critical Seismic Acceleration Alert", "description": "Severe ground shaking detected"},
+            {"min_value": 0.15, "severity": "HIGH", "title": "Seismic Activity Warning", "description": "Elevated ground vibration detected"}
+        ]
+    },
+    "traffic_congestion_pct": {
+        "metric": "traffic_congestion_pct",
+        "category": "TRAFFIC",
+        "incident_category": "Traffic Disruption",
+        "thresholds": [
+            {"min_value": 85.0, "severity": "CRITICAL", "title": "Severe Traffic Gridlock Alert", "description": "Corridor gridlock detected"},
+            {"min_value": 70.0, "severity": "HIGH", "title": "Heavy Congestion Warning", "description": "Traffic flow rate severely degraded"}
+        ]
+    },
+    "traffic_congestion": {
+        "metric": "traffic_congestion",
+        "category": "TRAFFIC",
+        "incident_category": "Traffic Disruption",
+        "thresholds": [
+            {"min_value": 85.0, "severity": "CRITICAL", "title": "Severe Traffic Gridlock Alert", "description": "Corridor gridlock detected"},
+            {"min_value": 70.0, "severity": "HIGH", "title": "Heavy Congestion Warning", "description": "Traffic flow rate severely degraded"}
         ]
     }
 }
@@ -142,18 +199,29 @@ class AlertRuleService:
             from app.services.incident_service import IncidentService
             from app.schemas.schemas import IncidentCreate
             
+            # Dynamic category & title determination
+            rule_info = ALERT_RULES.get(metric, {})
+            inc_category = rule_info.get("incident_category", "Flood" if metric == "water_level" else "General Emergency")
+            
+            if metric == "water_level":
+                inc_title = f"[REAL IoT ALERT] Critical water level at {node.name}"
+                inc_desc = f"Automatic flood incident generated by BHARATOS IoT sensor '{node.name}'. Reading: {telemetry.value}{telemetry.unit or ''}."
+            else:
+                inc_title = f"[REAL IoT ALERT] {matched_threshold['title']} at {node.name}"
+                inc_desc = f"Automatic {inc_category.lower()} incident generated by BHARATOS sensor '{node.name}'. Reading: {telemetry.value}{telemetry.unit or ''}."
+
             # Deduplication check: check if an active (non-resolved) incident already exists for this node
             existing_incident = db.query(Incident).filter(
                 Incident.status != "resolved",
-                Incident.title == f"[REAL IoT ALERT] Critical water level at {node.name}"
+                Incident.title == inc_title
             ).first()
             
             if not existing_incident:
                 # Create automatic incident
                 incident_in = IncidentCreate(
-                    category="Flood",
-                    title=f"[REAL IoT ALERT] Critical water level at {node.name}",
-                    description=f"Automatic flood incident generated by BHARATOS IoT sensor '{node.name}'. Reading: {telemetry.value}{telemetry.unit or ''}.",
+                    category=inc_category,
+                    title=inc_title,
+                    description=inc_desc,
                     latitude=node.latitude,
                     longitude=node.longitude,
                     address=node.name,

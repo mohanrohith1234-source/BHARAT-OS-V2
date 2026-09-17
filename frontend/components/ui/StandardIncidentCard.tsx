@@ -93,18 +93,14 @@ export default function StandardIncidentCard({
   // Provenance tag styling
   const getProvenanceBadge = (type: ProvenanceType) => {
     switch (type) {
-      case 'LIVE':
+      case 'REAL_INGESTION':
         return 'bg-emerald-950/60 border-emerald-700/60 text-emerald-300 animate-pulse'
-      case 'REAL_IOT':
-        return 'bg-cyan-950/60 border-cyan-700/60 text-cyan-300'
-      case 'VERIFIED':
-        return 'bg-blue-950/60 border-blue-700/60 text-blue-300'
-      case 'SIMULATION':
+      case 'PROTOTYPE_SIMULATION':
         return 'bg-amber-950/60 border-amber-700/60 text-amber-300'
-      case 'AI_DERIVED':
-        return 'bg-purple-950/60 border-purple-700/60 text-purple-300'
       case 'CACHED':
         return 'bg-slate-900 border-slate-800 text-slate-400'
+      case 'REFERENCE':
+        return 'bg-sky-950/60 border-sky-700/60 text-sky-300'
       default:
         return 'bg-slate-900 border-slate-800 text-slate-400'
     }

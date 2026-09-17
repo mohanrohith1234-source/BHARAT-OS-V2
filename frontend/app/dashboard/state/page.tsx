@@ -322,7 +322,7 @@ export default function StateDashboardPage() {
                           </td>
                           <td className="py-2.5 px-3">
                             {isPilot ? (
-                              <span className="text-[9px] font-mono text-sky-400 font-bold">REAL_IOT & TWIN</span>
+                              <span className="text-[9px] font-mono text-sky-400 font-bold">PROTOTYPE_SIMULATION</span>
                             ) : (
                               <span className="text-[9px] font-mono text-slate-600">DATA PENDING</span>
                             )}

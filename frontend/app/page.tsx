@@ -124,25 +124,25 @@ export default function HomeLandingPage() {
           {/* Left Branding */}
           <div className="flex items-center space-x-3">
             <BrandLogo size="md" />
-            <span className="hidden sm:inline-block text-[9px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-sky-950/60 border border-sky-800/40 text-sky-400">
-              INDIA-SCALE PROTOTYPE
+            <span className="hidden sm:inline-block text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded bg-purple-950/60 border border-purple-800/40 text-purple-300">
+              PROTOTYPE • SIMULATION MODE
             </span>
           </div>
 
           {/* Center Nav Links */}
           <nav className="hidden lg:flex items-center space-x-7 text-[11px] font-semibold tracking-[0.12em] text-slate-400 font-mono antialiased">
             <Link href="/" className="text-sky-400 border-b-2 border-sky-500 pb-1 px-0.5">HOME</Link>
-            <a href="#vizag-proof" className="hover:text-white transition-colors py-1">PLATFORM</a>
+            <Link href="/dashboard/district" className="hover:text-white transition-colors py-1">COMMAND CENTER</Link>
             <Link href="/dashboard/digital-twin" className="hover:text-white transition-colors py-1">DIGITAL TWIN</Link>
-            <Link href="/dashboard/national" className="hover:text-white transition-colors py-1">COMMAND CENTER</Link>
+            <Link href="/dashboard/ai-ops" className="hover:text-white transition-colors py-1">AI OPERATIONS</Link>
             <Link href="/citizen" className="hover:text-white transition-colors py-1">CITIZEN PORTAL</Link>
-            <a href="#built-for-india" className="hover:text-white transition-colors py-1">ABOUT / TECHNOLOGY</a>
+            <Link href="/dashboard/administration" className="hover:text-white transition-colors py-1">DATA ADAPTERS</Link>
           </nav>
 
           {/* Right Action Controls */}
           <div className="flex items-center space-x-3">
             <Link 
-              href="/dashboard/national" 
+              href="/dashboard/district" 
               className="hidden sm:inline-flex items-center justify-center space-x-1.5 px-3.5 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-slate-700 text-xs font-bold font-mono transition-all"
             >
               <Compass className="w-3.5 h-3.5 text-sky-400" />
@@ -173,93 +173,70 @@ export default function HomeLandingPage() {
             {/* LEFT PANEL: BharatOS Positioning & Dual Entry CTA */}
             <div className="lg:col-span-4 flex flex-col justify-start space-y-5 min-w-0">
               
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-[10px] font-bold tracking-wider font-mono uppercase w-fit">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[10px] font-bold tracking-wider font-mono uppercase w-fit">
                 <Shield className="w-3 h-3" />
-                <span>INDIA-SCALE AI EMERGENCY PLATFORM</span>
+                <span>PROTOTYPE FOR SMART INDIA HACKATHON</span>
               </div>
 
               <div className="space-y-2">
                 <h1 className="text-3xl sm:text-4xl xl:text-[2.5rem] font-black tracking-tight leading-[1.12] text-white">
                   BHARATOS<br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500">
-                    AI-POWERED EMERGENCY COMMAND & DIGITAL TWIN OS
+                    AI-POWERED EMERGENCY OPERATIONS & COORDINATION
                   </span>
                 </h1>
                 <p className="text-xs sm:text-sm font-bold font-mono text-cyan-400 tracking-wider">
-                  Detect. Predict. Decide. Approve. Respond. Resolve.
+                  Predict locally. Warn early. Prepare intelligently. Respond effectively.
                 </p>
               </div>
 
               <p className="text-xs sm:text-[13px] text-slate-300 leading-relaxed font-normal">
-                BharatOS is an AI-powered emergency operations platform that connects weather intelligence, flood and IoT sensing, traffic intelligence, emergency services, citizens and a spatial Digital Twin through a human-in-the-loop response workflow. Flood resilience is the primary SIH use case, with Visakhapatnam serving as the working demonstration.
+                From emergency signals to coordinated response — BharatOS helps command centers understand incidents, coordinate departments, allocate resources, and execute response plans with human-in-the-loop oversight.
               </p>
 
               {/* Core Feature Checklist */}
               <div className="grid grid-cols-2 gap-2 text-[10.5px] font-mono text-slate-300">
                 <div className="flex items-center space-x-1.5">
                   <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                  <span>Real IoT Sensing</span>
+                  <span>Citizen Signal Triage</span>
                 </div>
                 <div className="flex items-center space-x-1.5">
                   <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                  <span>LangGraph Multi-Agent</span>
+                  <span>Multi-Agent Planning</span>
                 </div>
                 <div className="flex items-center space-x-1.5">
                   <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                  <span>Human-in-the-Loop</span>
+                  <span>Resource Matching</span>
                 </div>
                 <div className="flex items-center space-x-1.5">
                   <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                  <span>Spatial Digital Twin</span>
+                  <span>Officer Sign-Off (HITL)</span>
                 </div>
               </div>
 
               {/* Access Portal Dual Entry CTA Block */}
               <div className="pt-2 space-y-3 w-full">
                 <div className="flex items-center space-x-2 text-[9.5px] font-mono uppercase tracking-widest text-slate-400 font-bold select-none">
-                  <span className="text-sky-400">CHOOSE ACCESS PORTAL</span>
+                  <span className="text-sky-400">PROTOTYPE ACCESS CONTROLS</span>
                   <div className="h-px flex-1 bg-slate-800" />
                 </div>
 
                 <div className="grid grid-cols-1 gap-2.5 w-full">
-                  {/* GOVERNMENT COMMAND CENTER BUTTON */}
+                  {/* PRIMARY CTA: OPEN COMMAND CENTER */}
                   <Link
-                    href="/dashboard/national"
-                    className="w-full group flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-blue-900/40 via-blue-950/30 to-slate-900/80 border border-blue-600/40 hover:border-blue-400 text-left shadow-lg hover:shadow-blue-900/20 transition-all hover:-translate-y-0.5"
+                    href="/dashboard/district"
+                    className="w-full group flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-blue-900/60 via-blue-950/40 to-slate-900/90 border border-sky-500/40 hover:border-sky-400 text-left shadow-lg hover:shadow-sky-900/30 transition-all hover:-translate-y-0.5"
                   >
                     <div className="flex items-center space-x-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 text-lg shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-sky-400 text-lg shrink-0">
                         🏛
                       </div>
                       <div className="space-y-0.5 min-w-0">
                         <div className="text-xs sm:text-[13px] font-black tracking-wide text-white font-mono uppercase truncate">
-                          GOVERNMENT COMMAND CENTER
+                          OPEN COMMAND CENTER
                         </div>
                         <p className="text-[10px] text-slate-400 font-mono truncate">
-                          National • State • District • City Operations
-                        </p>
-                      </div>
-                    </div>
-                    <div className="w-7 h-7 rounded-lg bg-blue-500/10 group-hover:bg-blue-500/25 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 ml-2 transition-colors">
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                    </div>
-                  </Link>
-
-                  {/* CITIZEN PORTAL BUTTON */}
-                  <Link
-                    href="/citizen"
-                    className="w-full group flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-sky-950/40 via-slate-900/70 to-slate-900/90 border border-sky-600/40 hover:border-sky-400 text-left shadow-lg hover:shadow-sky-900/20 transition-all hover:-translate-y-0.5"
-                  >
-                    <div className="flex items-center space-x-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-sky-400 text-lg shrink-0">
-                        👤
-                      </div>
-                      <div className="space-y-0.5 min-w-0">
-                        <div className="text-xs sm:text-[13px] font-black tracking-wide text-white font-mono uppercase truncate">
-                          CITIZEN PORTAL
-                        </div>
-                        <p className="text-[10px] text-slate-400 font-mono truncate">
-                          Crowdsourced Reports • Safe Exit • SOS Alerts
+                          Incident Command • Resource Matching • Multi-Agency Dispatch
                         </p>
                       </div>
                     </div>
@@ -268,25 +245,48 @@ export default function HomeLandingPage() {
                     </div>
                   </Link>
 
-                  {/* EXPLORE DIGITAL TWIN SECONDARY BUTTON */}
+                  {/* SECONDARY CTA: RUN EMERGENCY SIMULATION */}
                   <Link
-                    href="/dashboard/digital-twin"
+                    href="/dashboard/district?action=simulate"
+                    className="w-full group flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-purple-950/50 via-slate-900/80 to-slate-900/90 border border-purple-500/40 hover:border-purple-400 text-left shadow-lg hover:shadow-purple-900/30 transition-all hover:-translate-y-0.5"
+                  >
+                    <div className="flex items-center space-x-3 min-w-0">
+                      <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 text-lg shrink-0">
+                        ⚡
+                      </div>
+                      <div className="space-y-0.5 min-w-0">
+                        <div className="text-xs sm:text-[13px] font-black tracking-wide text-white font-mono uppercase truncate">
+                          RUN EMERGENCY SIMULATION
+                        </div>
+                        <p className="text-[10px] text-slate-400 font-mono truncate">
+                          Launch Vizag Urban Flood Scenario & Decision Flow
+                        </p>
+                      </div>
+                    </div>
+                    <div className="w-7 h-7 rounded-lg bg-purple-500/10 group-hover:bg-purple-500/25 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 ml-2 transition-colors">
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
+                  </Link>
+
+                  {/* CITIZEN PORTAL BUTTON */}
+                  <Link
+                    href="/citizen"
                     className="w-full group flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-left transition-all"
                   >
                     <div className="flex items-center space-x-2.5 min-w-0">
-                      <Map className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <User className="w-4 h-4 text-sky-400 shrink-0" />
                       <span className="text-[11px] font-mono font-bold text-slate-300 group-hover:text-white uppercase">
-                        EXPLORE DIGITAL TWIN
+                        CITIZEN SAFETY PORTAL (SOS & REPORT)
                       </span>
                     </div>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-transform" />
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-sky-400 group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                 </div>
 
                 <div className="flex items-center justify-between text-[9px] font-mono text-slate-500 px-1 pt-1 select-none">
                   <Link href="/login" className="hover:text-sky-400 transition-colors flex items-center space-x-1">
                     <Lock className="w-2.5 h-2.5" />
-                    <span>Officer Login</span>
+                    <span>Demo Officer Login</span>
                   </Link>
                   <Link href="/citizen/sos" className="text-red-400 hover:text-red-300 font-bold transition-colors flex items-center space-x-1">
                     <AlertTriangle className="w-2.5 h-2.5" />
@@ -295,6 +295,7 @@ export default function HomeLandingPage() {
                 </div>
               </div>
             </div>
+
 
             {/* CENTER PANEL: UNCLIPPED COMPLETE INDIA MAP */}
             <div className="lg:col-span-5 flex flex-col space-y-3 min-w-0 w-full">
@@ -1030,7 +1031,104 @@ export default function HomeLandingPage() {
                 </li>
               </ul>
             </div>
+          </div>
 
+          {/* External Data Adapters Section */}
+          <div className="rounded-2xl border border-slate-800 bg-[#060a13] p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-900 pb-3">
+              <div>
+                <h3 className="text-sm font-bold font-mono text-white uppercase tracking-wider">
+                  EXTERNAL DATA ADAPTERS (PROTOTYPE ARCHITECTURE)
+                </h3>
+                <p className="text-xs text-slate-400">Standardized ingest adapters ready for departmental integration:</p>
+              </div>
+              <span className="text-[9.5px] font-mono px-2.5 py-1 rounded bg-purple-950/60 border border-purple-800/40 text-purple-300 font-bold self-start sm:self-auto">
+                DEMO ADAPTER MODE
+              </span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left font-mono text-xs">
+                <thead>
+                  <tr className="border-b border-slate-900 text-slate-500 uppercase text-[10px]">
+                    <th className="py-2.5 px-3">External Source</th>
+                    <th className="py-2.5 px-3">Integration Status</th>
+                    <th className="py-2.5 px-3">Data Mode</th>
+                    <th className="py-2.5 px-3">Protocol / Interface</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-900/60 text-slate-300">
+                  <tr className="hover:bg-slate-950/40">
+                    <td className="py-3 px-3 font-bold text-white flex items-center gap-2">
+                      <CloudRain className="w-4 h-4 text-sky-400" />
+                      <span>IMD Weather Telemetry</span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 text-[10px] font-bold">
+                        READY
+                      </span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/50 text-amber-300 text-[10px] font-bold">
+                        SIMULATED
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 text-slate-400">Open-Meteo REST API + Doppler Radar Adapter</td>
+                  </tr>
+                  <tr className="hover:bg-slate-950/40">
+                    <td className="py-3 px-3 font-bold text-white flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-indigo-400" />
+                      <span>NDMA Disaster Data</span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 text-[10px] font-bold">
+                        READY
+                      </span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/50 text-amber-300 text-[10px] font-bold">
+                        SIMULATED
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 text-slate-400">CAPv1.2 XML Alert Ingest Pipeline</td>
+                  </tr>
+                  <tr className="hover:bg-slate-950/40">
+                    <td className="py-3 px-3 font-bold text-white flex items-center gap-2">
+                      <Map className="w-4 h-4 text-teal-400" />
+                      <span>GIS / ISRO Bhuvan</span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 text-[10px] font-bold">
+                        READY
+                      </span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/50 text-amber-300 text-[10px] font-bold">
+                        SIMULATED
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 text-slate-400">WMS / GeoJSON Ward Boundary & Terrain Vector</td>
+                  </tr>
+                  <tr className="hover:bg-slate-950/40">
+                    <td className="py-3 px-3 font-bold text-white flex items-center gap-2">
+                      <Radio className="w-4 h-4 text-red-400" />
+                      <span>Emergency Signal (ERSS 112)</span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 text-[10px] font-bold">
+                        READY
+                      </span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/50 text-amber-300 text-[10px] font-bold">
+                        SIMULATED
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 text-slate-400">Webhook Event Gateway + Citizen Mobile SOS</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 

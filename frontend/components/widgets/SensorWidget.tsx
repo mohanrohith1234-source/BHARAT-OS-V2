@@ -62,7 +62,7 @@ export default function SensorWidget() {
                 value: 48.0,
                 unit: 'cm',
                 observed_at: new Date().toISOString(),
-                source_type: 'REAL_IOT'
+                source_type: 'REAL_INGESTION'
               }
             },
             {
@@ -76,7 +76,7 @@ export default function SensorWidget() {
                 value: 22.4,
                 unit: 'cm',
                 observed_at: new Date().toISOString(),
-                source_type: 'SIMULATION'
+                source_type: 'PROTOTYPE_SIMULATION'
               }
             }
           ] as any)
@@ -117,7 +117,7 @@ export default function SensorWidget() {
   }
 
   const isNodeOffline = (node: BackendDigitalTwinNode) => {
-    if (node.last_telemetry?.source_type !== 'REAL_IOT') return false
+    if (node.last_telemetry?.source_type !== 'REAL_INGESTION') return false
     const observedStr = node.last_telemetry?.observed_at
     if (!observedStr) return false
     const lastTime = new Date(observedStr).getTime()
@@ -161,7 +161,7 @@ export default function SensorWidget() {
     }).join(', ')
   }
 
-  const hasRealIoT = nodes.some(n => n.last_telemetry?.source_type === 'REAL_IOT' && !isNodeOffline(n))
+  const hasRealIngestion = nodes.some(n => n.last_telemetry?.source_type === 'REAL_INGESTION' && !isNodeOffline(n))
 
   return (
     <div className="glass-panel rounded-2xl p-5 flex flex-col space-y-4">
@@ -171,7 +171,7 @@ export default function SensorWidget() {
           <h4 className="text-sm font-bold text-white tracking-wide">IoT Telemetry Gauges</h4>
         </div>
         <span className="text-[9px] font-bold px-2 py-0.5 rounded font-mono uppercase tracking-wider bg-blue-950/40 border border-blue-900/30 text-blue-400">
-          {hasRealIoT ? 'Live API Data • LIVE IoT ACTIVE' : 'Live API Data • SIMULATED'}
+          {hasRealIngestion ? 'Live API Data • REAL_INGESTION' : 'Live API Data • PROTOTYPE_SIMULATION'}
         </span>
       </div>
 
@@ -202,13 +202,13 @@ export default function SensorWidget() {
                   <div className="min-w-0 flex-1 pr-2">
                     <div className="flex items-center space-x-1.5 truncate">
                       <h5 className="text-xs font-bold text-white truncate">{node.name}</h5>
-                      {node.last_telemetry?.source_type === 'REAL_IOT' || node.id === '847ac10b-58cc-4372-a567-0e02b2c3d486' ? (
+                      {node.last_telemetry?.source_type === 'REAL_INGESTION' ? (
                         <span className="text-[8px] font-bold px-1.5 py-0.2 rounded bg-emerald-950 border border-emerald-700 text-emerald-300 font-mono shrink-0">
-                          REAL IoT
+                          REAL_INGESTION
                         </span>
                       ) : (
                         <span className="text-[8px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-slate-800 text-slate-500 shrink-0">
-                          SIMULATED
+                          PROTOTYPE_SIMULATION
                         </span>
                       )}
                     </div>
@@ -225,9 +225,9 @@ export default function SensorWidget() {
                 {selectedNodeId === node.id && (
                   <div className="mt-3 pt-3 border-t border-slate-850 w-full space-y-2.5">
                     <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono block">
-                      {node.last_telemetry?.source_type === 'REAL_IOT'
-                        ? 'Historical Trend (Last 30 Cycles) [REAL IoT]'
-                        : 'Historical Trend (Last 30 Cycles) [SIMULATED]'}
+                      {node.last_telemetry?.source_type === 'REAL_INGESTION'
+                        ? 'Historical Trend (Last 30 Cycles) [REAL_INGESTION]'
+                        : 'Historical Trend (Last 30 Cycles) [PROTOTYPE_SIMULATION]'}
                     </span>
                     {historyLoading ? (
                       <div className="py-6 flex justify-center items-center text-[10px] text-slate-400 animate-pulse font-mono">

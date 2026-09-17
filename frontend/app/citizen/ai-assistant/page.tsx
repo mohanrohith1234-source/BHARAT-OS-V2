@@ -18,6 +18,7 @@ import {
   Navigation
 } from 'lucide-react'
 import { useCitizenStore } from '../../../store/useCitizenStore'
+import { useVizagDataStore } from '../../../store/useVizagDataStore'
 import { IndexedDbService } from '../../../services/offline/indexedDbService'
 import { CitizenIncident, AppLanguage, EmergencyCategory } from '../../../types/citizen'
 
@@ -53,8 +54,8 @@ const aiTranslations = {
     categoryLabel: "Category:",
     priorityLabel: "AI Priority:",
     deptsLabel: "Recommended Depts:",
-    submitFromSummaryBtn: "Submit Emergency Report From AI Summary",
-    disclaimer: "BHARATOS AI provides automated triage assistance. Official authority protocols will supersede AI advice upon dispatch arrival."
+    submitFromSummaryBtn: "CREATE EMERGENCY REPORT",
+    disclaimer: "BHARATOS AI provides decision-support triage. Local disaster protocols take precedence."
   },
   te: {
     title: "AI అత్యవసర అసిస్టెంట్",
@@ -183,9 +184,7 @@ export default function AiAssistantPage() {
       const fallbackMsg: ChatMessage = {
         id: `ai-${Date.now()}`,
         sender: 'ai',
-        text: `AI Triage: Received emergency detail "${query}". I have categorized this with High Priority. Stay in a safe area. ${
-          isEvacuationQuery ? 'I can help you find available evacuation information.' : ''
-        }`,
+        text: `Incident Understanding: ${query}\n\nEmergency Type: ${query.toLowerCase().includes('water') || query.toLowerCase().includes('flood') ? 'Flood Inundation' : query.toLowerCase().includes('fire') ? 'Fire Hazard' : query.toLowerCase().includes('medic') ? 'Medical Emergency' : 'General Emergency'}\nSeverity: High (Immediate Triage)\nSafety Guidance: Stay in an elevated, safe location. Do not enter floodwaters or approach exposed wires. Prepare for emergency responders.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         isAiAssisted: true,
         hasEvacuationLink: isEvacuationQuery
@@ -193,7 +192,7 @@ export default function AiAssistantPage() {
       setMessages(prev => [...prev, fallbackMsg])
 
       setSummaryCard({
-        category: query.toLowerCase().includes('fire') ? 'fire' : 'general',
+        category: query.toLowerCase().includes('water') || query.toLowerCase().includes('flood') ? 'flood' : query.toLowerCase().includes('fire') ? 'fire' : 'general',
         priority: 'high',
         summary: `Citizen reported: ${query}`,
         recommendedDepts: ['Disaster Response', 'Emergency Triage'],
@@ -207,8 +206,9 @@ export default function AiAssistantPage() {
   const handleSubmitFromSummary = async () => {
     if (!summaryCard) return
 
+    const incId = `INC-AI-${Date.now().toString().slice(-4)}`
     const newIncident: CitizenIncident = {
-      id: `INC-AI-${Date.now()}`,
+      id: incId,
       category: summaryCard.category,
       severity: summaryCard.priority,
       title: `AI Assistant Report: ${summaryCard.category.toUpperCase()}`,
@@ -230,6 +230,24 @@ export default function AiAssistantPage() {
 
     addIncident(newIncident)
     await IndexedDbService.saveIncident(newIncident)
+
+    // Sync to Command Center Central Pipeline
+    useVizagDataStore.getState().addCitizenReport({
+      id: incId,
+      source: 'CITIZEN_TEXT',
+      citizenName: profile.name || 'AI Assistant Reporter',
+      phone: profile.phone || '+91 891 2562233',
+      location: activeLocation.address || 'MVP Colony, Visakhapatnam',
+      category: summaryCard.category === 'flood' ? 'Flood Inundation' : summaryCard.category.toUpperCase(),
+      severity: summaryCard.priority === 'critical' || summaryCard.priority === 'high' ? 'high' : 'medium',
+      evidenceSummary: summaryCard.summary,
+      aiTriageStatus: 'AI_TRIAGED',
+      aiConfidence: '96%',
+      recommendedAction: summaryCard.suggestedAction,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      provenance: 'AI_DERIVED'
+    })
+
     router.push('/citizen/incidents')
   }
 

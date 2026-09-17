@@ -17,19 +17,32 @@ export default function MasterDemoBar() {
     incident 
   } = useVizagDataStore()
 
-  const stageDescriptions: Record<DemoStage, { title: string; color: string; badge: string }> = {
-    IDLE: { title: 'Baseline Monitoring — Normal Hydrological & Traffic Flow', color: 'text-slate-400', badge: 'IDLE' },
-    HEAVY_RAIN: { title: 'Precipitation Inflow (64mm/hr) — Coastal Catchment Rising', color: 'text-blue-400', badge: 'HEAVY RAIN' },
-    WATER_RISING: { title: 'Sensor #1 Culvert Level 42cm (Threshold 35cm) — Alert Triggered', color: 'text-amber-400', badge: 'WATER RISING' },
-    INCIDENT_DETECTED: { title: 'INC-1042 Auto-Generated — Beach Road Outfall Flooded', color: 'text-red-400', badge: 'INCIDENT LOGGED' },
-    AI_TRIAGE: { title: 'AI Flood Agent Evaluates: Divert Traffic, Stage Dewatering Pump DP-04', color: 'text-purple-400', badge: 'AI TRIAGE' },
-    OFFICER_APPROVED: { title: 'Human Operator Sign-Off Confirmed — Emergency Dispatch Authorized', color: 'text-emerald-400', badge: 'OFFICER SIGN-OFF' },
-    UNITS_DISPATCHED: { title: 'Multi-Agency En Route: P-305 (Diversion), FT-12 (Pump), A-21 (EMS)', color: 'text-cyan-400', badge: 'UNITS EN ROUTE' },
-    WATER_DRAINED: { title: 'Dewatering Pump DP-04 Operating — Water Level Receding to 18cm', color: 'text-teal-400', badge: 'PUMPING ACTIVE' },
-    RESOLVED: { title: 'Incident Resolved — Road Reopened, Normal Drainage Restored', color: 'text-emerald-400', badge: 'RESOLVED' }
+  const stageDescriptions: Record<string, { title: string; color: string; badge: string }> = {
+    T00_NORMAL: { title: 'T+00: Baseline Monitoring — Radar & Outfall Flow Normal', color: 'text-slate-400', badge: 'T+00 NORMAL' },
+    T05_WEATHER_SIGNAL: { title: 'T+05: Radar Convective Band Intensifies (28 mm/h)', color: 'text-blue-400', badge: 'T+05 WEATHER' },
+    T10_AI_NOWCAST: { title: 'T+10: AI Nowcast Activated — 4-Horizon Trajectory Generated', color: 'text-purple-400', badge: 'T+10 NOWCAST' },
+    T15_WARD_RISK: { title: 'T+15: Ward 12 Culvert Level 36cm (Threshold 35cm) — HIGH RISK', color: 'text-amber-400', badge: 'T+15 RISK' },
+    T20_EARLY_WARNING: { title: 'T+20: Multi-Agency Early Warning Issued (Citizens & Response)', color: 'text-orange-400', badge: 'T+20 WARNING' },
+    T25_TRAFFIC_IMPACT: { title: 'T+25: Traffic Congestion Predicted; NH16 Bypass Detour Staged', color: 'text-amber-300', badge: 'T+25 TRAFFIC' },
+    T30_OFFICER_APPROVAL: { title: 'T+30: Officer Human Sign-Off Confirmed — Preparedness Authorized', color: 'text-emerald-400', badge: 'T+30 APPROVED' },
+    T35_WATER_RISING: { title: 'T+35: Inundation Depth 48cm — Beach Road Barrier Closed', color: 'text-red-400', badge: 'T+35 FLOOD' },
+    T40_RESPONSE_DEPLOYED: { title: 'T+40: Multi-Agency En Route: FT-12 (Pump), A-21 (EMS), P-305 (Detour)', color: 'text-cyan-400', badge: 'T+40 DEPLOYED' },
+    T50_DIGITAL_TWIN: { title: 'T+50: Dewatering Pump DP-04 Operating on Scene — Tracking on Twin', color: 'text-teal-400', badge: 'T+50 TWIN' },
+    T60_WATER_FALLING: { title: 'T+60: Pump DP-04 Operating — Water Receding to 22cm', color: 'text-emerald-400', badge: 'T+60 RECEDING' },
+    T70_RISK_NORMALIZED: { title: 'T+70: Scene Secured — Roadway Reopened, Normal Baseline Restored', color: 'text-emerald-400', badge: 'T+70 NORMALIZED' },
+    // Aliases for backwards compatibility
+    IDLE: { title: 'T+00: Baseline Monitoring — Normal Hydrological Flow', color: 'text-slate-400', badge: 'T+00 NORMAL' },
+    HEAVY_RAIN: { title: 'T+05: Radar Inflow Rising (28 mm/h)', color: 'text-blue-400', badge: 'T+05 WEATHER' },
+    WATER_RISING: { title: 'T+35: Inundation Depth 48cm — Water Rising', color: 'text-red-400', badge: 'T+35 FLOOD' },
+    INCIDENT_DETECTED: { title: 'T+15: Ward 12 Culvert Sump Level Escalates — HIGH RISK', color: 'text-amber-400', badge: 'T+15 RISK' },
+    AI_TRIAGE: { title: 'T+20: Early Warning Issued across Agencies', color: 'text-orange-400', badge: 'T+20 WARNING' },
+    OFFICER_APPROVED: { title: 'T+30: Officer Human Sign-Off Confirmed', color: 'text-emerald-400', badge: 'T+30 APPROVED' },
+    UNITS_DISPATCHED: { title: 'T+40: Units En Route: FT-12, A-21, P-305', color: 'text-cyan-400', badge: 'T+40 DEPLOYED' },
+    WATER_DRAINED: { title: 'T+60: Water Receding to 22cm', color: 'text-teal-400', badge: 'T+60 RECEDING' },
+    RESOLVED: { title: 'T+70: Incident Resolved — Scene Secured', color: 'text-emerald-400', badge: 'T+70 NORMALIZED' }
   }
 
-  const currentInfo = stageDescriptions[demoStage] || stageDescriptions.IDLE
+  const currentInfo = stageDescriptions[demoStage] || stageDescriptions.T00_NORMAL
 
   return (
     <aside aria-label="Master Scenario Simulator" className="fixed bottom-7 right-8 z-[90] max-w-2xl w-full bg-[#050816]/95 border border-sky-500/30 rounded-2xl p-3.5 shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl transition-all">
@@ -76,7 +89,7 @@ export default function MasterDemoBar() {
 
         {/* Action Controls */}
         <div className="flex items-center space-x-1.5 shrink-0">
-          {!incident.humanSignOff && (demoStage === 'AI_TRIAGE' || demoStage === 'INCIDENT_DETECTED') && (
+          {!incident.humanSignOff && ['T15_WARD_RISK', 'T20_EARLY_WARNING', 'T25_TRAFFIC_IMPACT', 'T30_OFFICER_APPROVAL', 'AI_TRIAGE', 'INCIDENT_DETECTED'].includes(demoStage) && (
             <button
               onClick={() => approveIncidentAction('Duty Commander (Badge #104)')}
               className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-[10px] font-bold flex items-center gap-1 shadow-lg shadow-emerald-900/30 transition-all active:scale-95 animate-pulse"

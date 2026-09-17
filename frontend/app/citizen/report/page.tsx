@@ -32,6 +32,7 @@ import {
   X
 } from 'lucide-react'
 import { useCitizenStore } from '../../../store/useCitizenStore'
+import { useVizagDataStore } from '../../../store/useVizagDataStore'
 import { IndexedDbService } from '../../../services/offline/indexedDbService'
 import {
   EmergencyCategory,
@@ -353,6 +354,23 @@ function ReportEmergencyForm() {
     addIncident(incidentPayload)
     await IndexedDbService.saveIncident(incidentPayload)
 
+    // Sync to Command Center Central Pipeline
+    useVizagDataStore.getState().addCitizenReport({
+      id: incId,
+      source: photo ? 'CITIZEN_PHOTO' : voiceNote ? 'CITIZEN_VOICE' : 'CITIZEN_TEXT',
+      citizenName: profile.name || 'Citizen Reporter',
+      phone: profile.phone || '+91 891 2562233',
+      location: manualAddress || activeLocation.address,
+      category: category === 'flood' ? `Flood (${floodSubtype})` : category.toUpperCase(),
+      severity: category === 'flood' || category === 'medical' ? 'high' : 'medium',
+      evidenceSummary: `${title || description} • Affected citizens: ~${affectedCount}`,
+      aiTriageStatus: 'TRIAGE_PENDING',
+      aiConfidence: '94%',
+      recommendedAction: `Deploy ${category === 'flood' ? 'Municipal Sump Dewatering Team DP-04' : 'First Responder'} to ${manualAddress || activeLocation.address}`,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      provenance: isOffline ? 'CACHED' : 'LIVE'
+    })
+
     setTimeout(() => {
       setIsSubmitting(false)
       setSubmittedIncident(incidentPayload)
@@ -378,57 +396,23 @@ function ReportEmergencyForm() {
 
           <div className="space-y-1">
             <span className="text-[9.5px] font-mono font-bold px-2.5 py-0.5 rounded bg-slate-950 border border-slate-800 text-slate-300 uppercase tracking-widest">
-              {submittedIncident.isOfflineSaved ? 'SAVED LOCALLY' : 'RECEIPT CONFIRMED'}
+              {submittedIncident.isOfflineSaved ? 'SAVED LOCALLY' : 'INCIDENT RECEIVED'}
             </span>
             <h2 className="text-lg font-black text-white font-mono uppercase tracking-wide pt-1">
               {t.successTitle}
             </h2>
             <p className="text-xs text-slate-300 font-mono">
-              {t.ticketLabel} <span className="text-sky-400 font-bold text-sm">{submittedIncident.id}</span>
+              Incident ID: <span className="text-sky-400 font-bold text-sm">{submittedIncident.id}</span>
             </p>
           </div>
 
-          {/* 6-Stage Lifecycle Progress Display */}
-          <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-850 space-y-2.5 text-left">
-            <div className="flex items-center justify-between text-[10px] font-mono font-bold text-slate-400">
-              <span className="flex items-center gap-1 text-slate-300">
-                <Clock className="w-3 h-3 text-sky-400" />
-                {t.lifecycleTitle}
-              </span>
-              <span className="text-amber-400 uppercase">AWAITING OFFICER APPROVAL</span>
-            </div>
-
-            <div className="grid grid-cols-6 gap-1 pt-1 font-mono">
-              {LIFECYCLE_STAGES.map((step, idx) => {
-                const isCurrent = idx === 1 // AI Triage
-                const isPassed = idx === 0  // Report
-                return (
-                  <div key={step.id} className="text-center space-y-1">
-                    <div className={`h-2 rounded-full transition-all ${
-                      isCurrent 
-                        ? 'bg-amber-400 animate-pulse' 
-                        : isPassed 
-                        ? 'bg-emerald-500' 
-                        : 'bg-slate-800'
-                    }`} />
-                    <span className={`text-[8px] uppercase block truncate ${
-                      isCurrent ? 'text-amber-300 font-bold' : isPassed ? 'text-emerald-400' : 'text-slate-500'
-                    }`}>
-                      {step.label}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* AI TRIAGE & SENSOR CORRELATION PANEL (AI_DERIVED) */}
-          <div className="p-4 rounded-2xl bg-indigo-950/20 border border-indigo-900/50 space-y-3 text-left">
-            <div className="flex items-center justify-between border-b border-indigo-900/40 pb-2">
+          {/* AI INCIDENT ANALYSIS PANEL */}
+          <div className="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-900/60 space-y-3.5 text-left">
+            <div className="flex items-center justify-between border-b border-indigo-900/50 pb-2">
               <div className="flex items-center space-x-2">
                 <Bot className="w-4 h-4 text-indigo-400" />
                 <span className="text-xs font-mono font-bold text-indigo-300 uppercase tracking-wider">
-                  AI-DERIVED EMERGENCY TRIAGE
+                  AI INCIDENT ANALYSIS
                 </span>
               </div>
               <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-950/80 border border-indigo-800/60 text-indigo-300">
@@ -436,38 +420,75 @@ function ReportEmergencyForm() {
               </span>
             </div>
 
-            <div className="space-y-2 text-xs font-mono">
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="text-slate-400">Classified Threat:</span>
-                <span className="text-white font-bold uppercase">
-                  {submittedIncident.category === 'flood' ? `Flood Inundation (${floodSubtype.replace(/_/g, ' ')})` : submittedIncident.category}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs font-mono">
+              <div className="p-2.5 rounded-xl bg-black/40 border border-indigo-950/80">
+                <span className="text-[9px] text-slate-400 uppercase block">Incident Type</span>
+                <span className="text-white font-bold uppercase truncate block">
+                  {submittedIncident.category === 'flood' ? `Flood (${floodSubtype})` : submittedIncident.category}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="text-slate-400">Telemetry Corroboration:</span>
-                <span className="text-sky-400 font-bold">Beach Rd Culvert (+45cm) Correlated</span>
+              <div className="p-2.5 rounded-xl bg-black/40 border border-indigo-950/80">
+                <span className="text-[9px] text-slate-400 uppercase block">Severity</span>
+                <span className="text-amber-400 font-bold uppercase block">
+                  {submittedIncident.severity.toUpperCase()}
+                </span>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-black/40 border border-indigo-950/80 space-y-1.5 text-[11px]">
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
-                  Observed Hazards & Impact:
-                </span>
-                <ul className="text-slate-300 space-y-1 list-disc list-inside text-[10.5px]">
-                  <li>Rapid stormwater accumulation on primary coastal carriageway</li>
-                  <li>Estimated {affectedCount} citizen(s) in direct vicinity</li>
-                  <li>Potential road blockage for emergency bypass transit</li>
-                </ul>
+              <div className="p-2.5 rounded-xl bg-black/40 border border-indigo-950/80">
+                <span className="text-[9px] text-slate-400 uppercase block">Risk Level</span>
+                <span className="text-red-400 font-bold uppercase block">HIGH (78/100)</span>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-amber-950/30 border border-amber-900/40 space-y-1 text-[11px]">
-                <span className="text-[10px] text-amber-300 font-bold uppercase tracking-wider block">
-                  Recommended Action & Routing:
+              <div className="p-2.5 rounded-xl bg-black/40 border border-indigo-950/80 sm:col-span-2">
+                <span className="text-[9px] text-slate-400 uppercase block">Affected Area</span>
+                <span className="text-slate-200 font-bold truncate block">
+                  {submittedIncident.location.address}
                 </span>
-                <p className="text-slate-300 text-[10.5px] leading-relaxed">
-                  Route to GVMC Dewatering Unit DP-04 & alert Suryabagh Traffic Police for perimeter diversions.
-                </p>
               </div>
+
+              <div className="p-2.5 rounded-xl bg-black/40 border border-indigo-950/80">
+                <span className="text-[9px] text-slate-400 uppercase block">People Affected</span>
+                <span className="text-cyan-400 font-bold block">~{affectedCount} Citizens</span>
+              </div>
+            </div>
+
+            {/* RECOMMENDED DEPARTMENTS */}
+            <div className="space-y-1.5 pt-1">
+              <span className="text-[10px] text-slate-400 font-mono font-bold uppercase tracking-wider block">
+                RECOMMENDED DEPARTMENTS:
+              </span>
+              <div className="flex flex-wrap gap-2 text-[10.5px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-sky-950/80 border border-sky-800/60 text-sky-300 font-semibold flex items-center gap-1.5">
+                  <Shield className="w-3 h-3 text-sky-400" />
+                  Disaster Management (GVMC / NDRF)
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-amber-950/80 border border-amber-800/60 text-amber-300 font-semibold flex items-center gap-1.5">
+                  <Car className="w-3 h-3 text-amber-400" />
+                  Traffic Police (Diversion)
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-red-950/80 border border-red-800/60 text-red-300 font-semibold flex items-center gap-1.5">
+                  <Flame className="w-3 h-3 text-red-400" />
+                  Fire & Rescue (Dewatering Pump)
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-emerald-950/80 border border-emerald-800/60 text-emerald-300 font-semibold flex items-center gap-1.5">
+                  <LifeBuoy className="w-3 h-3 text-emerald-400" />
+                  Medical (108 Paramedic Standby)
+                </span>
+              </div>
+            </div>
+
+            {/* RECOMMENDED RESPONSE */}
+            <div className="p-3 rounded-xl bg-amber-950/25 border border-amber-900/40 space-y-1.5 text-xs font-mono">
+              <span className="text-[10px] text-amber-300 font-bold uppercase tracking-wider block">
+                RECOMMENDED RESPONSE:
+              </span>
+              <ul className="text-slate-300 space-y-1 text-[11px] list-disc list-inside">
+                <li>Dispatch dewatering pump unit DP-04 to outfall drainage sump</li>
+                <li>Stage traffic diversion toward NH16 Bypass corridor</li>
+                <li>Issue hyper-local alert to citizens in Ward 12 catchment</li>
+                <li>Await Duty Commander authorization before force deployment</li>
+              </ul>
             </div>
           </div>
 

@@ -145,14 +145,14 @@ export default function DigitalTwinPage() {
 
   // Static DB nodes
   const dbNodeMarkers: MapMarker[] = nodes.map(node => {
-    const isRealIoT = node.id === '847ac10b-58cc-4372-a567-0e02b2c3d486' || node.name?.toLowerCase().includes('beach road')
+    const isRealIngestion = node.last_telemetry?.source_type === 'REAL_INGESTION' || node.id === '847ac10b-58cc-4372-a567-0e02b2c3d486'
     return {
       id: `node-${node.id}`,
       position: [node.latitude, node.longitude] as [number, number],
-      title: isRealIoT 
-        ? `⚡ [REAL IoT] ${node.name}` 
-        : (node.type === 'weather' ? `⛈️ [OPEN DATA] ${node.name}` : `🌊 [SIMULATED] ${node.name}`),
-      description: `Hydrological Sensor Node • Status: ${node.status} • Source: ${isRealIoT ? 'REAL_IOT' : 'SIMULATED'} • Value: ${typeof node.last_telemetry === 'object' ? JSON.stringify(node.last_telemetry) : (node.last_telemetry || 'N/A')}`,
+      title: isRealIngestion 
+        ? `⚡ [REAL_INGESTION] ${node.name}` 
+        : (node.type === 'weather' ? `⛈️ [REFERENCE] ${node.name}` : `🌊 [PROTOTYPE_SIMULATION] ${node.name}`),
+      description: `Hydrological Sensor Node • Status: ${node.status} • Source: ${isRealIngestion ? 'REAL_INGESTION' : 'PROTOTYPE_SIMULATION'} • Value: ${typeof node.last_telemetry === 'object' ? JSON.stringify(node.last_telemetry) : (node.last_telemetry || 'N/A')}`,
       category: node.status === 'critical' ? 'critical' as const : node.status === 'warning' ? 'high' as const : 'info' as const
     }
   })
@@ -162,21 +162,21 @@ export default function DigitalTwinPage() {
     {
       id: 'sim-sensor-beach',
       position: [17.7210, 83.3180] as [number, number],
-      title: `🌊 [REAL_IOT] ${vizagSensors['beach-node-1'].name}`,
+      title: `🌊 [PROTOTYPE_SIMULATION] ${vizagSensors['beach-node-1'].name}`,
       description: `Level: ${vizagSensors['beach-node-1'].levelCm}cm (Threshold: ${vizagSensors['beach-node-1'].thresholdCm}cm) • Drain: ${vizagSensors['beach-node-1'].drainLevelPct}% • Flow: ${vizagSensors['beach-node-1'].flowRateLps} L/s • Status: ${vizagSensors['beach-node-1'].status}`,
       category: vizagSensors['beach-node-1'].status === 'CRITICAL' ? 'critical' as const : vizagSensors['beach-node-1'].status === 'WARNING' ? 'high' as const : 'info' as const
     },
     {
       id: 'sim-sensor-mvp',
       position: [17.7340, 83.3320] as [number, number],
-      title: `🌊 [REAL_IOT] ${vizagSensors['mvp-node-2'].name}`,
+      title: `🌊 [PROTOTYPE_SIMULATION] ${vizagSensors['mvp-node-2'].name}`,
       description: `Level: ${vizagSensors['mvp-node-2'].levelCm}cm • Drain: ${vizagSensors['mvp-node-2'].drainLevelPct}% • Flow: ${vizagSensors['mvp-node-2'].flowRateLps} L/s • Status: ${vizagSensors['mvp-node-2'].status}`,
       category: vizagSensors['mvp-node-2'].status === 'CRITICAL' ? 'critical' as const : vizagSensors['mvp-node-2'].status === 'WARNING' ? 'high' as const : 'info' as const
     },
     {
       id: 'sim-sensor-mudasarlova',
       position: [17.7550, 83.2950] as [number, number],
-      title: `🌊 [VERIFIED] ${vizagSensors['mudasarlova-4'].name}`,
+      title: `🌊 [REFERENCE] ${vizagSensors['mudasarlova-4'].name}`,
       description: `Level: ${vizagSensors['mudasarlova-4'].levelCm}cm • Drain: ${vizagSensors['mudasarlova-4'].drainLevelPct}% • Flow: ${vizagSensors['mudasarlova-4'].flowRateLps} L/s • Status: ${vizagSensors['mudasarlova-4'].status}`,
       category: vizagSensors['mudasarlova-4'].status === 'CRITICAL' ? 'critical' as const : 'info' as const
     }
@@ -285,9 +285,9 @@ export default function DigitalTwinPage() {
         {/* Page Header with Live Simulation Sync Indicator */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <PageHeader
-            title="Visakhapatnam Digital Twin Spatial Platform"
-            description="Interactive 3D/2D GIS spatial map framework mapping live sensors, emergency assets, hazard overlays, and incident playback timeline."
-            breadcrumbs={[{ label: 'Home' }, { label: 'Digital Twin' }]}
+            title="Weather Impact Digital Twin — Visakhapatnam Platform"
+            description="Hyper-local GIS spatial digital twin simulating real-time and nowcasted weather inundation, culvert telemetry, emergency fleet tracking, and evacuation corridors."
+            breadcrumbs={[{ label: 'Home' }, { label: 'Severe Weather' }, { label: 'Digital Twin' }]}
           />
           <div className="flex items-center space-x-2 shrink-0 self-start sm:self-auto bg-[#0B0F19] border border-sky-500/30 px-3 py-1.5 rounded-xl font-mono text-xs">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />

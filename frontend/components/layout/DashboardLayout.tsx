@@ -189,15 +189,15 @@ export default function DashboardLayout({
                     ))}
                   </nav>
 
-                  {/* Operational Terminal ID indicator */}
-                  <div className="flex items-center space-x-3.5 text-[9px] font-mono font-bold text-slate-500">
-                    <span className="flex items-center space-x-1 bg-slate-950/60 border border-slate-900 rounded px-1.5 py-0.5">
-                      <Terminal className="w-3 h-3 text-sky-500" />
-                      <span>TERMINAL NODE: VZG-NEOC-L4</span>
+                  {/* Operational Prototype Status Badges */}
+                  <div className="flex items-center space-x-2.5 text-[9px] font-mono font-bold">
+                    <span className="flex items-center space-x-1 bg-purple-950/50 border border-purple-800/40 text-purple-300 rounded px-2 py-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+                      <span>PROTOTYPE • SIMULATION MODE</span>
                     </span>
-                    <span className="flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span>SECURE PIPELINE LINKED</span>
+                    <span className="flex items-center space-x-1.5 bg-sky-950/50 border border-sky-800/40 text-sky-300 rounded px-2 py-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      <span>AI-ASSISTED DECISION SUPPORT</span>
                     </span>
                   </div>
 

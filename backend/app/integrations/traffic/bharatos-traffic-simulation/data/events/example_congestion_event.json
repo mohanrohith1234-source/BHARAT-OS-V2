@@ -1,0 +1,20 @@
+{
+  "event_id": "INC-CONG-9901-A",
+  "category": "severe_congestion",
+  "title": "Severe Traffic Gridlock Detected at Siripuram Junction",
+  "description": "YOLO Traffic Camera CAM-01 recorded persistent vehicle queue exceeding 28.5 PCU with average flow speed under 6.2 km/h across arterial approaches.",
+  "latitude": 17.7215,
+  "longitude": 83.3055,
+  "address": "Siripuram Junction Approach, Visakhapatnam",
+  "severity": "critical",
+  "status": "active",
+  "scenario_id": "YOLO_VISION_PERCEPTION",
+  "extra_data": {
+    "camera_id": "CAM-VIZAG-01",
+    "total_vehicles_counted": 34,
+    "pcu_density": 28.5,
+    "average_speed_kmh": 6.2,
+    "queue_count": 18,
+    "provenance": "SIMULATED"
+  }
+}
