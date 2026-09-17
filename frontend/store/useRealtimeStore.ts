@@ -61,8 +61,8 @@ export const useRealtimeStore = create<RealtimeState>((set, get) => {
     reconnectAttempt: 0,
 
     connect: (token: string) => {
-      if (!token) return
-      currentToken = token
+      const activeToken = token || 'public-guest-token'
+      currentToken = activeToken
 
       // If already connected or connecting, don't create a duplicate connection
       if (ws && (ws.readyState === WebSocket.CONNECTING || ws.readyState === WebSocket.OPEN)) {

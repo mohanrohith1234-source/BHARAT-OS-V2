@@ -60,3 +60,13 @@
   border: 1px solid var(--border-ai-glow);
   box-shadow: var(--shadow-ai);
 }
+
+/* Clean Keyless Dark Command Center Leaflet Tile Filter */
+.dark-command-tiles .leaflet-tile {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3);
+}
+
+.dark-street-tiles .leaflet-tile {
+  filter: brightness(0.75) invert(0.9) contrast(1.5) hue-rotate(190deg);
+}
+

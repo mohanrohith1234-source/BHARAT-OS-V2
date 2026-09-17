@@ -91,7 +91,7 @@ const INITIAL_RESOURCES: EmergencyResource[] = [
     status: 'available',
     latitude: 17.7122,
     longitude: 83.3150,
-    dataSource: 'VERIFIED'
+    dataSource: 'REFERENCE'
   },
   {
     id: 'res-2',
@@ -104,7 +104,7 @@ const INITIAL_RESOURCES: EmergencyResource[] = [
     status: 'available',
     latitude: 17.7311,
     longitude: 83.3245,
-    dataSource: 'VERIFIED'
+    dataSource: 'REFERENCE'
   },
   {
     id: 'res-3',
@@ -117,7 +117,7 @@ const INITIAL_RESOURCES: EmergencyResource[] = [
     status: 'available',
     latitude: 17.7123,
     longitude: 83.3012,
-    dataSource: 'VERIFIED'
+    dataSource: 'REFERENCE'
   },
   {
     id: 'res-4',
@@ -130,7 +130,7 @@ const INITIAL_RESOURCES: EmergencyResource[] = [
     status: 'available',
     latitude: 17.7345,
     longitude: 83.3190,
-    dataSource: 'VERIFIED'
+    dataSource: 'REFERENCE'
   },
   {
     id: 'res-5',
@@ -143,7 +143,7 @@ const INITIAL_RESOURCES: EmergencyResource[] = [
     status: 'available',
     latitude: 17.7380,
     longitude: 83.3260,
-    dataSource: 'VERIFIED'
+    dataSource: 'REFERENCE'
   }
 ]
 

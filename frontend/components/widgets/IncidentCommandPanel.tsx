@@ -117,10 +117,10 @@ export default function IncidentCommandPanel() {
 
   // Derive evidence chain components
   const hasYolo = incident.evidence?.detections && incident.evidence.detections.length > 0
-  const hasIot = incident.waterDepthCm > 30 || incident.sourceType === 'IOT_SENSOR'
+  const hasIot = (incident.waterDepthCm && incident.waterDepthCm > 30) || incident.sourceType === 'IOT_SENSOR'
   const probableCause = hasYolo 
     ? 'Vehicle Collision & Traffic Bottleneck' 
-    : (hasIot ? 'Culvert Outfall Inundation Overtopping' : 'Multi-Sensor Anomaly Breach')
+    : (hasIot ? 'Culvert Outfall Inundation Overtopping' : 'CAUSE UNCONFIRMED — FIELD VERIFICATION REQUIRED')
   const confidenceScore = incident.aiConfidence || 94.6
   const verificationStatus = 'FIELD VERIFICATION REQUIRED'
 

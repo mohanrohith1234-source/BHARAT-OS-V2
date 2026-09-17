@@ -369,7 +369,7 @@ export default function IncidentTrackerPage({ params }: { params: Promise<{ id: 
         </span>
 
         <div className="space-y-3 font-mono text-xs relative pl-4 border-l border-slate-850">
-          {incident.timeline.map((evt, i) => (
+          {(incident.timeline || []).map((evt, i) => (
             <div key={i} className="relative space-y-0.5">
               <div className="absolute -left-[21px] top-1 h-2.5 w-2.5 rounded-full bg-sky-400 border border-slate-950" />
               <div className="flex items-center justify-between text-slate-400 text-[10px]">

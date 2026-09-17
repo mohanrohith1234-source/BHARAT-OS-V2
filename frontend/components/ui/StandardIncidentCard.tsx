@@ -60,7 +60,7 @@ export default function StandardIncidentCard({
   confidence = 94,
   humanSignOff = false,
   signedBy,
-  provenance = 'SIMULATION',
+  provenance = 'PROTOTYPE_SIMULATION',
   technicalDetails,
   onAuthorize
 }: StandardIncidentCardProps) {

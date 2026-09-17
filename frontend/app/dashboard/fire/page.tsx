@@ -189,7 +189,7 @@ export default function FireOperationsPage() {
               </div>
               <div className="flex items-center space-x-2 text-[9px] text-slate-400 font-bold bg-slate-950 px-2 py-0.5 rounded border border-slate-900">
                 <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse inline-block mr-1.5" />
-                <span>GPS Feeds Synchronized ({simulationTime})</span>
+                <span>SIMULATED GPS TELEMETRY ({simulationTime})</span>
               </div>
             </div>
 

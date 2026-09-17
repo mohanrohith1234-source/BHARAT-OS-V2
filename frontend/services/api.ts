@@ -382,6 +382,46 @@ export const apiService = {
     })
   },
 
+  // 4b. GET Incident Intelligence
+  async getIncidentIntelligence(id: string): Promise<any> {
+    try {
+      return await apiFetch<any>(`${API_BASE_URL}/incidents/${id}/intelligence`)
+    } catch (err) {
+      console.warn('Failed to fetch incident intelligence:', err)
+      return null
+    }
+  },
+
+  // 4c. GET Incident Timeline
+  async getIncidentTimeline(id: string): Promise<any[]> {
+    try {
+      return await apiFetch<any[]>(`${API_BASE_URL}/incidents/${id}/timeline`)
+    } catch (err) {
+      console.warn('Failed to fetch incident timeline:', err)
+      return []
+    }
+  },
+
+  // 4d. GET Incident Actions
+  async getIncidentActions(id: string): Promise<any[]> {
+    try {
+      return await apiFetch<any[]>(`${API_BASE_URL}/incidents/${id}/actions`)
+    } catch (err) {
+      console.warn('Failed to fetch incident actions:', err)
+      return []
+    }
+  },
+
+  // 4e. GET Incident Plan Versions
+  async getIncidentPlanVersions(id: string): Promise<any[]> {
+    try {
+      return await apiFetch<any[]>(`${API_BASE_URL}/incidents/${id}/plan-versions`)
+    } catch (err) {
+      console.warn('Failed to fetch plan versions:', err)
+      return []
+    }
+  },
+
   // 5. Assign Incident
   async assignIncident(id: string, departmentId: string, notes?: string): Promise<any> {
     return apiFetch<any>(`${API_BASE_URL}/incidents/${id}/assign`, {

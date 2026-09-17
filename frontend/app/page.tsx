@@ -55,10 +55,10 @@ export default function HomeLandingPage() {
     {
       id: 'flood',
       title: 'Urban Flood Response',
-      badge: 'PRIMARY SIH FOCUS',
+      badge: 'PRIMARY SIH DEMONSTRATION',
       badgeColor: 'text-cyan-400 bg-cyan-950/60 border-cyan-800/50',
-      inputs: 'Open-Meteo Weather + Beach Road ESP32 IoT Gauge + Flood AI + Traffic Cameras',
-      outputs: 'Inundation forecast, storm culvert breach alert, emergency pump allocation, green corridor routing',
+      inputs: 'Open-Meteo Weather + Connected IoT Gauge + Flood AI + Simulated Traffic Cameras',
+      outputs: 'Inundation forecast, storm culvert breach alert, emergency pump allocation, AI-recommended green corridor',
       actionUrl: '/dashboard/city?scenario=flood',
       actionText: 'RUN VIZAG FLOOD SCENARIO'
     },
@@ -98,7 +98,7 @@ export default function HomeLandingPage() {
       badge: 'MOBILITY INTELLIGENCE',
       badgeColor: 'text-amber-400 bg-amber-950/60 border-amber-800/50',
       inputs: 'Simulated CCTV Feed + Vehicle Detection AI + Intersection Signal Telemetry',
-      outputs: 'Congestion heatmap, dynamic traffic signal override, green corridor for emergency responders',
+      outputs: 'Congestion heatmap, simulated green-wave signal operation, AI-recommended green corridor',
       actionUrl: '/dashboard/digital-twin',
       actionText: 'VIEW TRAFFIC MESH'
     }
@@ -164,7 +164,7 @@ export default function HomeLandingPage() {
       <main className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-24 relative z-10">
 
         {/* ========================================================================= */}
-        {/* 1. HERO SECTION & 2. INDIA-SCALE NATIONAL NETWORK */}
+        {/* SECTION 1 — HERO & ARCHITECTURAL SCOPE */}
         {/* ========================================================================= */}
         <section id="national-network" className="space-y-6 scroll-mt-24">
           
@@ -175,7 +175,7 @@ export default function HomeLandingPage() {
               
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[10px] font-bold tracking-wider font-mono uppercase w-fit">
                 <Shield className="w-3 h-3" />
-                <span>PROTOTYPE FOR SMART INDIA HACKATHON</span>
+                <span>PROTOTYPE • SIMULATION MODE</span>
               </div>
 
               <div className="space-y-2">
@@ -245,7 +245,7 @@ export default function HomeLandingPage() {
                     </div>
                   </Link>
 
-                  {/* SECONDARY CTA: RUN EMERGENCY SIMULATION */}
+                  {/* SECONDARY CTA: RUN VISAKHAPATNAM SIMULATION */}
                   <Link
                     href="/dashboard/district?action=simulate"
                     className="w-full group flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-purple-950/50 via-slate-900/80 to-slate-900/90 border border-purple-500/40 hover:border-purple-400 text-left shadow-lg hover:shadow-purple-900/30 transition-all hover:-translate-y-0.5"
@@ -256,7 +256,7 @@ export default function HomeLandingPage() {
                       </div>
                       <div className="space-y-0.5 min-w-0">
                         <div className="text-xs sm:text-[13px] font-black tracking-wide text-white font-mono uppercase truncate">
-                          RUN EMERGENCY SIMULATION
+                          RUN VISAKHAPATNAM SIMULATION
                         </div>
                         <p className="text-[10px] text-slate-400 font-mono truncate">
                           Launch Vizag Urban Flood Scenario & Decision Flow
@@ -276,7 +276,7 @@ export default function HomeLandingPage() {
                     <div className="flex items-center space-x-2.5 min-w-0">
                       <User className="w-4 h-4 text-sky-400 shrink-0" />
                       <span className="text-[11px] font-mono font-bold text-slate-300 group-hover:text-white uppercase">
-                        CITIZEN SAFETY PORTAL (SOS & REPORT)
+                        CITIZEN SAFETY LAYER (SOS & REPORT)
                       </span>
                     </div>
                     <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-sky-400 group-hover:translate-x-0.5 transition-transform" />
@@ -296,7 +296,6 @@ export default function HomeLandingPage() {
               </div>
             </div>
 
-
             {/* CENTER PANEL: UNCLIPPED COMPLETE INDIA MAP */}
             <div className="lg:col-span-5 flex flex-col space-y-3 min-w-0 w-full">
               <IndiaDigitalTwin />
@@ -305,7 +304,7 @@ export default function HomeLandingPage() {
               <div className="w-full flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 rounded-xl border border-slate-900 bg-slate-950/80 backdrop-blur-md text-[9px] font-mono text-slate-300">
                 <span className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-400" /> 28 States Mesh</span>
                 <span className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-400" /> 8 UT Geometries</span>
-                <span className="flex items-center gap-1.5"><Check className="w-3 h-3 text-cyan-400" /> 5-Tier Command</span>
+                <span className="flex items-center gap-1.5"><Check className="w-3 h-3 text-cyan-400" /> 5-Tier Command Stack</span>
                 <span className="flex items-center gap-1.5"><Check className="w-3 h-3 text-purple-400" /> Multi-Agent AI</span>
               </div>
             </div>
@@ -319,33 +318,69 @@ export default function HomeLandingPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 3. VISAKHAPATNAM WORKING DEMONSTRATION */}
+        {/* SECTION 2 — HOW BHARATOS WORKS (9-STEP OPERATIONAL CHAIN) */}
+        {/* ========================================================================= */}
+        <section id="workflow" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
+              HOW BHARATOS WORKS
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 font-mono">
+              The complete operational pipeline from initial signal ingestion to verified incident resolution.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-9 gap-2 font-mono">
+            {[
+              { step: '01', title: 'SIGNALS', desc: 'IoT, Weather, CCTV & Citizen SOS', color: 'text-cyan-400 border-cyan-800' },
+              { step: '02', title: 'DETECTION', desc: 'Threshold breach & anomaly trigger', color: 'text-sky-400 border-sky-800' },
+              { step: '03', title: 'INTELLIGENCE', desc: 'Spatial-temporal evidence graph', color: 'text-blue-400 border-blue-800' },
+              { step: '04', title: 'RISK & IMPACT', desc: 'Population & road exposure index', color: 'text-indigo-400 border-indigo-800' },
+              { step: '05', title: 'AI RECOMMEND', desc: 'Resource & green corridor plan', color: 'text-purple-400 border-purple-800' },
+              { step: '06', title: 'HUMAN APPROVAL', desc: 'Officer sign-off (APPROVE/REJECT)', color: 'text-amber-400 border-amber-800' },
+              { step: '07', title: 'RESPONSE', desc: 'Multi-department fleet dispatch', color: 'text-emerald-400 border-emerald-800' },
+              { step: '08', title: 'MONITOR', desc: 'Telemetry change & reassessment', color: 'text-teal-400 border-teal-800' },
+              { step: '09', title: 'RESOLVE', desc: 'Incident closed & audit recorded', color: 'text-slate-300 border-slate-700' }
+            ].map((item) => (
+              <div key={item.step} className={`p-3 rounded-xl border bg-[#0B0F19]/80 space-y-1 text-center flex flex-col justify-between ${item.color}`}>
+                <div>
+                  <span className="text-[9px] font-bold block opacity-75">STEP {item.step}</span>
+                  <h4 className="text-xs font-black text-white uppercase mt-0.5">{item.title}</h4>
+                </div>
+                <p className="text-[9.5px] text-slate-400 leading-tight mt-1">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* SECTION 3 — VISAKHAPATNAM WORKING DEMONSTRATION */}
         {/* ========================================================================= */}
         <section id="vizag-proof" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold font-mono uppercase">
               <MapPin className="w-3 h-3" />
-              <span>SIH WORKING PROOF PILOT</span>
+              <span>WORKING PROTOTYPE • VISAKHAPATNAM</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
               VISAKHAPATNAM — WORKING DEMONSTRATION
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 font-mono">
-              Real + Verified Geography | Working IoT | Traffic Simulation | AI Decision Pipeline | Digital Twin
+              Weather + IoT + Traffic + AI Decision Pipeline + Digital Twin
             </p>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl mx-auto">
-              While BharatOS provides the architectural framework for India-scale disaster governance, our fully functioning hardware-integrated pilot is operational for Visakhapatnam (GVMC), linking real physical culvert gauges, weather intelligence, and urban response.
+              A working Visakhapatnam prototype demonstrates how live data, simulated IoT, traffic intelligence, AI reasoning and operational workflows can work together in a unified emergency command environment.
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
             {[
-              { title: 'Flood Intelligence', desc: 'Beach Road storm drain telemetry & culvert outfalls', icon: Waves, badge: 'REAL IoT + AI' },
+              { title: 'Flood Intelligence', desc: 'Beach Road storm drain telemetry & culvert outfalls', icon: Waves, badge: 'CONNECTED SENSOR' },
               { title: 'Weather Intelligence', desc: 'Live Open-Meteo precipitation & storm tracking', icon: CloudRain, badge: 'LIVE API' },
-              { title: 'Traffic Intelligence', desc: 'Simulated CCTV vehicle counts & congestion prediction', icon: Car, badge: 'SIMULATION' },
-              { title: 'IoT Monitoring', desc: 'ESP32 + HC-SR04 physical water-level sensor node', icon: Activity, badge: 'REAL HARDWARE' },
+              { title: 'Traffic Intelligence', desc: 'Simulated CCTV vehicle counts & congestion prediction', icon: Car, badge: 'PROTOTYPE SIMULATION' },
+              { title: 'IoT Monitoring', desc: 'ESP32 + ultrasonic water-level sensor telemetry', icon: Activity, badge: 'CONNECTED SENSOR' },
               { title: 'Emergency Response', desc: 'Ambulance, Fire tender, and Police cordon dispatch', icon: Truck, badge: 'HUMAN APPROVAL' },
-              { title: 'Digital Twin', desc: '2D/3D spatial map of GVMC wards, facilities & assets', icon: Map, badge: 'VERIFIED GIS' }
+              { title: 'Digital Twin', desc: '2D/3D spatial map of GVMC wards, facilities & assets', icon: Map, badge: 'REFERENCE GIS' }
             ].map((card) => {
               const Icon = card.icon
               return (
@@ -385,124 +420,48 @@ export default function HomeLandingPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 4. DETECT → PREDICT → RESPOND WORKFLOW */}
+        {/* SECTION 4 — AI COMMAND LAYER */}
         {/* ========================================================================= */}
-        <section id="workflow" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+        <section id="ai-layer" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
           <div className="text-center max-w-2xl mx-auto space-y-2">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-bold font-mono uppercase">
+              <Cpu className="w-3 h-3" />
+              <span>SPECIALIST AGENTS ➔ COORDINATOR ➔ OPERATIONAL RECOMMENDATION</span>
+            </div>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              FROM DETECTION TO RESOLUTION
+              AI COMMAND LAYER
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 font-mono">
-              10-step synchronized operational pipeline from initial hazard sensing to verified closure.
+              Specialized domain capability agents orchestrating decision support.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { step: '01', title: 'Multi-Source Sensing', desc: 'Weather, ESP32 IoT, CCTV simulation, citizen reports', type: 'INPUT' },
-              { step: '02', title: 'AI Detection', desc: 'Real-time threshold breach & anomaly identification', type: 'AI COGNITION' },
-              { step: '03', title: 'AI Prediction', desc: 'Inundation forecast & traffic congestion timeline', type: 'AI PREDICTION' },
-              { step: '04', title: 'Impact Assessment', desc: 'Hospital access, blocked roads, and village exposure', type: 'IMPACT EVAL' },
-              { step: '05', title: 'AI Recommendation', desc: 'LangGraph multi-agency resource & diversion plan', type: 'AI ADVISORY' },
-              { step: '06', title: 'Human Approval', desc: 'Commander review: Approve, Modify, or Reject', type: 'SAFETY GATE' },
-              { step: '07', title: 'Dispatch Action', desc: 'ERSS 112, fire, police & healthcare mobilization', type: 'EXECUTION' },
-              { step: '08', title: 'Live Tracking', desc: 'Real-time vehicle GPS & spatial status monitoring', type: 'TELEMETRY' },
-              { step: '09', title: 'Digital Twin Sync', desc: 'Live operational visualization on 2D/3D mesh', type: 'SPATIAL TWIN' },
-              { step: '10', title: 'Resolution & Audit', desc: 'Water recedes, road restored, immutable logs saved', type: 'RESOLVED' }
-            ].map((item) => (
-              <div key={item.step} className="p-3.5 rounded-xl border border-slate-800/80 bg-[#0B0F19]/70 space-y-2 flex flex-col justify-between">
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-mono text-cyan-400 font-bold">STEP {item.step}</span>
-                    <span className="text-[8px] font-mono px-1 py-0.2 rounded bg-slate-900 border border-slate-800 text-slate-400">
-                      {item.type}
-                    </span>
+              { name: 'Flood Intelligence', desc: 'Detects water-level changes, culvert backflow, and predicts flood inundation risk.', icon: Waves, color: 'text-cyan-400' },
+              { name: 'Weather Intelligence', desc: 'Analyzes real-time Open-Meteo precipitation, storm trajectory, and cloud cover.', icon: CloudRain, color: 'text-blue-400' },
+              { name: 'Traffic Intelligence', desc: 'Analyzes vehicle detection, queue density, congestion hotspots, and road impact.', icon: Car, color: 'text-amber-400' },
+              { name: 'Fire & Rescue Intelligence', desc: 'Evaluates structural hazard parameters, hydrant proximity, and rescue staging.', icon: Flame, color: 'text-red-400' },
+              { name: 'Healthcare Intelligence', desc: 'Coordinates hospital surge capacity, ICU bed reserves, and ambulance handoffs.', icon: HeartPulse, color: 'text-emerald-400' },
+              { name: 'Routing Intelligence', desc: 'Calculates emergency response corridors, obstacle bypasses, and evacuation paths.', icon: Navigation, color: 'text-purple-400' },
+              { name: 'Coordinator Agent', desc: 'Combines specialist agent intelligence into a unified emergency response recommendation.', icon: Sparkles, color: 'text-pink-400' }
+            ].map((agent) => {
+              const Icon = agent.icon
+              return (
+                <div key={agent.name} className="p-4 rounded-xl border border-slate-800/80 bg-[#0B0F19]/70 space-y-3">
+                  <div className="flex items-center space-x-2.5">
+                    <Icon className={`w-4 h-4 ${agent.color}`} />
+                    <h4 className="text-xs font-bold font-mono text-white uppercase">{agent.name}</h4>
                   </div>
-                  <h4 className="text-xs font-bold font-mono text-white">{item.title}</h4>
-                  <p className="text-[10px] text-slate-400 leading-snug">{item.desc}</p>
+                  <p className="text-[10.5px] text-slate-400 leading-snug">{agent.desc}</p>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* 5. FLOOD + TRAFFIC INTEGRATION SHOWCASE */}
-        {/* ========================================================================= */}
-        <section id="flood-traffic" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
-          <div className="text-center max-w-3xl mx-auto space-y-2">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-bold font-mono uppercase">
-              <Waves className="w-3 h-3" />
-              <span>CORE CROSS-DOMAIN INTEGRATION</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              FLOOD + TRAFFIC INTELLIGENCE
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-mono">
-              Synchronizing hydrological rise with urban mobility to maintain emergency medical and evacuation corridors.
-            </p>
-          </div>
-
-          {/* Visual Step-by-Step Flow */}
-          <div className="rounded-2xl border border-slate-800 bg-[#070c18] p-6 lg:p-8 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              
-              {/* Step A */}
-              <div className="p-4 rounded-xl border border-cyan-900/50 bg-cyan-950/20 space-y-2">
-                <span className="text-[9px] font-mono text-cyan-400 font-bold">1. WEATHER & SENSORS</span>
-                <h4 className="text-xs font-bold text-white">Rainfall & Water Rise</h4>
-                <p className="text-[10.5px] text-slate-400 leading-relaxed">
-                  Open-Meteo reports 48mm/hr rain. Beach Road ESP32 gauge detects water depth surge to 4.65m (breaching critical threshold).
-                </p>
-              </div>
-
-              {/* Step B */}
-              <div className="p-4 rounded-xl border border-blue-900/50 bg-blue-950/20 space-y-2">
-                <span className="text-[9px] font-mono text-blue-400 font-bold">2. FLOOD & TRAFFIC AI</span>
-                <h4 className="text-xs font-bold text-white">Dual AI Prediction</h4>
-                <p className="text-[10.5px] text-slate-400 leading-relaxed">
-                  Flood AI predicts culvert backflow in 15 mins. Traffic AI identifies 140 vehicles queued on Beach Road with impassable inundation.
-                </p>
-              </div>
-
-              {/* Step C */}
-              <div className="p-4 rounded-xl border border-purple-900/50 bg-purple-950/20 space-y-2">
-                <span className="text-[9px] font-mono text-purple-400 font-bold">3. COORDINATOR AI</span>
-                <h4 className="text-xs font-bold text-white">Combined Assessment</h4>
-                <p className="text-[10.5px] text-slate-400 leading-relaxed">
-                  Coordinator Agent synthesizes: King George Hospital ambulance corridor is blocked. Recommends diversion via MVP Double Road.
-                </p>
-              </div>
-
-              {/* Step D */}
-              <div className="p-4 rounded-xl border border-amber-900/50 bg-amber-950/20 space-y-2">
-                <span className="text-[9px] font-mono text-amber-400 font-bold">4. HUMAN APPROVAL</span>
-                <h4 className="text-xs font-bold text-white">Commander Review</h4>
-                <p className="text-[10.5px] text-slate-400 leading-relaxed">
-                  Operations Commander reviews diversion corridor and pump allocation. Explicitly approves dispatch via one click.
-                </p>
-              </div>
-
-              {/* Step E */}
-              <div className="p-4 rounded-xl border border-emerald-900/50 bg-emerald-950/20 space-y-2">
-                <span className="text-[9px] font-mono text-emerald-400 font-bold">5. TWIN & RESOLUTION</span>
-                <h4 className="text-xs font-bold text-white">Execution & Cleared</h4>
-                <p className="text-[10.5px] text-slate-400 leading-relaxed">
-                  Police close Beach Road sector, pumps deployed, ambulances rerouted via green corridor. Digital Twin tracks resolution.
-                </p>
-              </div>
-
-            </div>
-
-            <div className="pt-3 border-t border-slate-900 flex flex-wrap items-center justify-between text-[10px] font-mono text-slate-400">
-              <span className="text-cyan-400 font-bold">FLOW SUMMARY:</span>
-              <span>WEATHER ➔ ESP32 SENSOR ➔ FLOOD AI ➔ TRAFFIC AI ➔ COORDINATOR AI ➔ HUMAN APPROVAL ➔ DISPATCH ➔ RESOLVED</span>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 6. HUMAN-IN-THE-LOOP SAFETY ARCHITECTURE */}
+        {/* SECTION 5 — HUMAN-IN-THE-LOOP SAFETY GATE */}
         {/* ========================================================================= */}
         <section id="human-in-the-loop" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
           <div className="text-center max-w-3xl mx-auto space-y-2">
@@ -543,7 +502,7 @@ export default function HomeLandingPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
                 <span className="text-[9px] font-mono text-slate-500 uppercase">FLOOD SEVERITY</span>
-                <div className="text-sm font-bold text-red-400 font-mono">HIGH (Depth 4.65m)</div>
+                <div className="text-sm font-bold text-red-400 font-mono">HIGH (Depth 48cm)</div>
               </div>
               <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
                 <span className="text-[9px] font-mono text-slate-500 uppercase">TRAFFIC IMPACT</span>
@@ -561,19 +520,19 @@ export default function HomeLandingPage() {
               <ul className="space-y-1.5 text-xs text-slate-300 font-mono">
                 <li className="flex items-start space-x-2">
                   <span className="text-cyan-400 font-bold">1.</span>
-                  <span>Divert westbound traffic onto MVP Double Road; set traffic signals to flashing amber.</span>
+                  <span>Divert westbound traffic onto MVP Double Road via AI-recommended green corridor.</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-cyan-400 font-bold">2.</span>
-                  <span>Dispatch 2 GVMC Submersible Drainage Pumps (Asset #PUMP-04, #PUMP-07) to sector 4 outfall.</span>
+                  <span>Dispatch High-Volume Dewatering Pump DP-04 to sector 4 outfall.</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-cyan-400 font-bold">3.</span>
-                  <span>Reserve green corridor for 108 Ambulances heading to King George Hospital.</span>
+                  <span>Reserve emergency corridor for 108 Ambulances heading to King George Hospital.</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-cyan-400 font-bold">4.</span>
-                  <span>Broadcast localized evacuation warning in Telugu and English to 1,200 citizen devices in Ward 12.</span>
+                  <span>Broadcast localized evacuation warning in Telugu and English to Ward 12 citizens.</span>
                 </li>
               </ul>
             </div>
@@ -608,19 +567,19 @@ export default function HomeLandingPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 7. VISAKHAPATNAM DIGITAL TWIN */}
+        {/* SECTION 6 — SPATIAL TWIN & MULTI-DEPARTMENT RESPONSE */}
         {/* ========================================================================= */}
         <section id="digital-twin" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
           <div className="text-center max-w-3xl mx-auto space-y-2">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-bold font-mono uppercase">
               <Map className="w-3 h-3" />
-              <span>SPATIAL MUNICIPAL TWIN</span>
+              <span>SPATIAL MUNICIPAL TWIN & COORDINATION</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              VISAKHAPATNAM DIGITAL TWIN
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
+              MULTI-DEPARTMENT RESPONSE
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 font-mono">
-              Live spatial synthesis of urban topography, sensor gauges, emergency assets, and incident perimeters.
+              Coordinate the departments and resources required for each incident.
             </p>
           </div>
 
@@ -628,22 +587,22 @@ export default function HomeLandingPage() {
             
             <div className="p-6 rounded-2xl border border-slate-800 bg-[#0B0F19]/80 space-y-4">
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 border border-emerald-800 text-emerald-400 font-bold">
-                REAL & VERIFIED INFRASTRUCTURE
+                REFERENCE GIS & INFRASTRUCTURE
               </span>
               <h4 className="text-base font-bold text-white">Physical Topography</h4>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Rendered with verified OpenStreetMap geometries for Visakhapatnam, mapping King George Hospital, Care Hospital, Fire HQ, Police Stations, and Beach Road culvert sluice gates.
+                Rendered with reference OpenStreetMap geometries for Visakhapatnam, mapping King George Hospital, Care Hospital, Fire HQ, Police Stations, and Beach Road culvert sluice gates.
               </p>
               <div className="text-[10px] font-mono text-slate-400 space-y-1">
-                <div>• Verified GVMC municipal boundaries</div>
-                <div>• 14 validated healthcare centers</div>
-                <div>• Beach Road physical sensor node</div>
+                <div>• Reference GVMC municipal boundaries</div>
+                <div>• Healthcare & emergency facilities</div>
+                <div>• Beach Road culvert sensor location</div>
               </div>
             </div>
 
             <div className="p-6 rounded-2xl border border-slate-800 bg-[#0B0F19]/80 space-y-4">
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950 border border-amber-800 text-amber-400 font-bold">
-                SIMULATION & OPERATIONAL FEEDS
+                PROTOTYPE SIMULATION FEEDS
               </span>
               <h4 className="text-base font-bold text-white">Controlled Telemetry</h4>
               <p className="text-xs text-slate-300 leading-relaxed">
@@ -680,79 +639,105 @@ export default function HomeLandingPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 8. AI COMMAND LAYER */}
+        {/* SECTION 7 — DATA & PROVENANCE */}
         {/* ========================================================================= */}
-        <section id="ai-layer" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
+        <section id="data-layer" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              AI COMMAND LAYER
+              DATA & PROVENANCE LAYER
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 font-mono">
-              Seven specialized cognitive agents coordinating operational decisions via LangGraph.
+              Transparent separation between live public feeds, reference data, and prototype simulation.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { name: 'Flood Intelligence', desc: 'Detects water-level changes, culvert backflow, and predicts flood inundation risk.', icon: Waves, color: 'text-cyan-400' },
-              { name: 'Weather Intelligence', desc: 'Analyzes real-time Open-Meteo precipitation, storm trajectory, and cloud cover.', icon: CloudRain, color: 'text-blue-400' },
-              { name: 'Traffic Intelligence', desc: 'Analyzes vehicle detection, queue density, congestion hotspots, and road impact.', icon: Car, color: 'text-amber-400' },
-              { name: 'Fire & Rescue Intelligence', desc: 'Evaluates structural hazard parameters, hydrant proximity, and rescue staging.', icon: Flame, color: 'text-red-400' },
-              { name: 'Healthcare Intelligence', desc: 'Coordinates hospital surge capacity, ICU bed reserves, and ambulance handoffs.', icon: HeartPulse, color: 'text-emerald-400' },
-              { name: 'Routing Intelligence', desc: 'Calculates emergency response corridors, obstacle bypasses, and evacuation paths.', icon: Navigation, color: 'text-purple-400' },
-              { name: 'Coordinator Agent', desc: 'Combines specialist agent intelligence into a unified NDMA-compliant recommendation.', icon: Sparkles, color: 'text-pink-400' }
-            ].map((agent) => {
-              const Icon = agent.icon
-              return (
-                <div key={agent.name} className="p-4 rounded-xl border border-slate-800/80 bg-[#0B0F19]/70 space-y-3">
-                  <div className="flex items-center space-x-2.5">
-                    <Icon className={`w-4 h-4 ${agent.color}`} />
-                    <h4 className="text-xs font-bold font-mono text-white uppercase">{agent.name}</h4>
-                  </div>
-                  <p className="text-[10.5px] text-slate-400 leading-snug">{agent.desc}</p>
-                </div>
-              )
-            })}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            {/* Column 1: LIVE / CONNECTED INPUTS */}
+            <div className="p-5 rounded-2xl border border-emerald-900/50 bg-[#05111b] space-y-3">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <h3 className="text-xs font-bold font-mono text-emerald-400 uppercase tracking-wider">[ LIVE / CONNECTED INPUTS ]</h3>
+              </div>
+              <p className="text-[11px] text-slate-400">Connected external public and hardware feeds:</p>
+              <ul className="space-y-1.5 text-xs font-mono text-slate-300">
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                  <span>Open-Meteo Global Weather Telemetry</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                  <span>Central CPCB Air Quality Index (AQI)</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                  <span>OpenStreetMap Dynamic Overpass API</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                  <span>Connected ESP32 IoT Water Level Gauge</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 2: REFERENCE DATA */}
+            <div className="p-5 rounded-2xl border border-cyan-900/50 bg-[#051124] space-y-3">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <h3 className="text-xs font-bold font-mono text-cyan-400 uppercase tracking-wider">[ REFERENCE DATA ]</h3>
+              </div>
+              <p className="text-[11px] text-slate-400">Authentic reference geographic and facility baselines:</p>
+              <ul className="space-y-1.5 text-xs font-mono text-slate-300">
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
+                  <span>Visakhapatnam Ward & Road Geometries</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
+                  <span>Reference Hospitals (KGH, Care, Apollo)</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
+                  <span>Police Stations & Fire Station Locations</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
+                  <span>NRSC VIC Hydrological Historical Records</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: PROTOTYPE SIMULATION */}
+            <div className="p-5 rounded-2xl border border-amber-900/50 bg-[#160f08] space-y-3">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-amber-400" />
+                <h3 className="text-xs font-bold font-mono text-amber-400 uppercase tracking-wider">[ PROTOTYPE SIMULATION ]</h3>
+              </div>
+              <p className="text-[11px] text-slate-400">Controlled demonstration scenarios and mock vectors:</p>
+              <ul className="space-y-1.5 text-xs font-mono text-slate-300">
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span>Simulated CCTV Traffic Computer Vision</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span>Emergency Vehicle GPS & Patrol Vectors</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span>Drainage Sluice Gate Actuator Simulation</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span>Simulated Resource Pool Availability</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* 9. EMERGENCY OPERATIONS */}
-        {/* ========================================================================= */}
-        <section id="operations" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              EMERGENCY OPERATIONS
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-mono">
-              Operational capability cards across the core disaster management functions.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-            {[
-              { title: 'Incidents', desc: 'Triage & lifecycle tracking', icon: AlertCircle, color: 'text-red-400' },
-              { title: 'Police', desc: 'Perimeters & traffic cordons', icon: Shield, color: 'text-blue-400' },
-              { title: 'Fire & Hazmat', desc: 'Pumping tenders & rescue', icon: Flame, color: 'text-amber-400' },
-              { title: 'Healthcare', desc: 'Hospital surge & bed capacity', icon: Building2, color: 'text-emerald-400' },
-              { title: 'Ambulance', desc: 'Fleet dispatch & routing', icon: HeartPulse, color: 'text-teal-400' },
-              { title: 'Traffic', desc: 'Signal control & diversions', icon: Car, color: 'text-yellow-400' },
-              { title: 'Emergency Dispatch', desc: 'ERSS 112 multi-agency orders', icon: PhoneCall, color: 'text-pink-400' }
-            ].map((op) => {
-              const Icon = op.icon
-              return (
-                <div key={op.title} className="p-3.5 rounded-xl border border-slate-800 bg-[#0B0F19]/60 flex flex-col justify-between space-y-2 text-center items-center">
-                  <Icon className={`w-5 h-5 ${op.color}`} />
-                  <h4 className="text-[11px] font-bold font-mono text-white uppercase">{op.title}</h4>
-                  <p className="text-[9px] text-slate-400">{op.desc}</p>
-                </div>
-              )
-            })}
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* SCENARIO SIMULATOR (5 SIH PLAYBOOKS) */}
+        {/* SECTION 8 — SCENARIO PLAYBOOK SIMULATOR */}
         {/* ========================================================================= */}
         <section id="simulator" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
           <div className="text-center max-w-2xl mx-auto space-y-2">
@@ -816,13 +801,13 @@ export default function HomeLandingPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 10. RURAL FLOOD & EVACUATION */}
+        {/* SECTION 9 — RURAL INTELLIGENCE (EXTENDED CAPABILITY) */}
         {/* ========================================================================= */}
         <section id="rural-flood" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
           <div className="text-center max-w-3xl mx-auto space-y-2">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold font-mono uppercase">
               <Wheat className="w-3 h-3" />
-              <span>SIH PROBLEM EXTENSION</span>
+              <span>EXTENDED DISASTER RESILIENCE CAPABILITY</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               RURAL FLOOD INTELLIGENCE & EVACUATION
@@ -843,11 +828,6 @@ export default function HomeLandingPage() {
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                   Rural Visakhapatnam is modeled using 2,275 verified observations from the NRSC VIC hydrological model. The system dynamically computes Z-score precipitation anomalies, percentile risk breaches ($P_{75}, P_{90}, P_{99}$), and crop-specific waterlogging advisories for Paddy, Maize, and Sugarcane.
                 </p>
-                <div className="flex flex-wrap gap-2 text-[10px] font-mono text-slate-400">
-                  <span className="px-2 py-1 rounded bg-slate-900 border border-slate-800">Dynamic Month Selection (Jan–Jun)</span>
-                  <span className="px-2 py-1 rounded bg-slate-900 border border-slate-800">0.0–60.0 mm/day Slider</span>
-                  <span className="px-2 py-1 rounded bg-slate-900 border border-slate-800">3×3 Origami Field Simulator</span>
-                </div>
               </div>
 
               <div className="p-5 rounded-xl border border-emerald-900/40 bg-emerald-950/10 space-y-3">
@@ -887,253 +867,7 @@ export default function HomeLandingPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 11. CITIZEN OS */}
-        {/* ========================================================================= */}
-        <section id="citizen-os" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
-          <div className="text-center max-w-3xl mx-auto space-y-2">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-[10px] font-bold font-mono uppercase">
-              <User className="w-3 h-3" />
-              <span>PUBLIC INTERACTION LAYER</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              CITIZEN OS
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-mono">
-              Report ➔ Alert ➔ Guidance ➔ Safe Exit ➔ SOS
-            </p>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl mx-auto">
-              Citizen reports can become operational inputs to BharatOS, while approved emergency actions generate citizen alerts and evacuation guidance.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-            {[
-              { title: 'Report Flooding', desc: 'Geotagged crowdsourced incident submission with photo and water depth', href: '/citizen/report', icon: FileText, color: 'text-red-400' },
-              { title: 'Public Alerts', desc: 'Hyperlocal multilingual hydrological notifications & warnings', href: '/citizen/alerts', icon: Bell, color: 'text-amber-400' },
-              { title: 'Safety Guidance', desc: 'NDMA disaster playbooks, flood safety precautions & first aid', href: '/citizen/guidance', icon: BookOpen, color: 'text-emerald-400' },
-              { title: 'Safe-Exit Routing', desc: 'Turn-by-turn dynamic evacuation routes away from flooded culverts', href: '/citizen/safe-exit', icon: Navigation, color: 'text-cyan-400' },
-              { title: '1-Tap SOS Beacon', desc: 'Direct emergency beacon dispatching GPS coordinates to ERSS 112', href: '/citizen/sos', icon: AlertTriangle, color: 'text-rose-400' }
-            ].map((item) => {
-              const Icon = item.icon
-              return (
-                <Link
-                  key={item.title}
-                  href={item.href}
-                  className="p-4 rounded-xl border border-slate-800/80 bg-[#0B0F19]/70 hover:border-sky-500/50 hover:bg-[#0c1428] transition-all flex flex-col justify-between space-y-3 group"
-                >
-                  <div className="space-y-2">
-                    <Icon className={`w-5 h-5 ${item.color}`} />
-                    <h4 className="text-xs font-bold font-mono text-white group-hover:text-sky-300 transition-colors">{item.title}</h4>
-                    <p className="text-[10.5px] text-slate-400 leading-snug">{item.desc}</p>
-                  </div>
-                  <span className="text-[9px] font-mono text-sky-400 font-bold flex items-center space-x-1">
-                    <span>EXPLORE</span>
-                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                  </span>
-                </Link>
-              )
-            })}
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 12. DATA & INTEGRATION LAYER */}
-        {/* ========================================================================= */}
-        <section id="data-layer" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              DATA & INTEGRATION LAYER
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-mono">
-              Transparent separation between live public feeds, verified infrastructure, and controlled simulation.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            {/* Column 1: LIVE */}
-            <div className="p-5 rounded-2xl border border-emerald-900/50 bg-[#05111b] space-y-3">
-              <div className="flex items-center space-x-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <h3 className="text-xs font-bold font-mono text-emerald-400 uppercase tracking-wider">[ LIVE ] SOURCES</h3>
-              </div>
-              <p className="text-[11px] text-slate-400">Real-time connected external public and hardware feeds:</p>
-              <ul className="space-y-1.5 text-xs font-mono text-slate-300">
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
-                  <span>Open-Meteo Global Weather Telemetry</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
-                  <span>Central CPCB Air Quality Index (AQI)</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
-                  <span>OpenStreetMap Dynamic Overpass API</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
-                  <span>Physical ESP32 ultrasonic water gauge (when online)</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 2: VERIFIED */}
-            <div className="p-5 rounded-2xl border border-cyan-900/50 bg-[#051124] space-y-3">
-              <div className="flex items-center space-x-2">
-                <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                <h3 className="text-xs font-bold font-mono text-cyan-400 uppercase tracking-wider">[ VERIFIED ] DATASETS</h3>
-              </div>
-              <p className="text-[11px] text-slate-400">Authentic reference geographic and facility databases:</p>
-              <ul className="space-y-1.5 text-xs font-mono text-slate-300">
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
-                  <span>Visakhapatnam (GVMC) Ward & Road Network</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
-                  <span>Verified Hospitals (KGH, Care, Apollo)</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
-                  <span>Police Stations & Fire Station Locations</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-cyan-400 shrink-0" />
-                  <span>NRSC VIC Hydrological 2,275 Historical Records</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 3: SIMULATION */}
-            <div className="p-5 rounded-2xl border border-amber-900/50 bg-[#160f08] space-y-3">
-              <div className="flex items-center space-x-2">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                <h3 className="text-xs font-bold font-mono text-amber-400 uppercase tracking-wider">[ SIMULATION ] DATA</h3>
-              </div>
-              <p className="text-[11px] text-slate-400">Controlled demonstration scenarios and mock vectors:</p>
-              <ul className="space-y-1.5 text-xs font-mono text-slate-300">
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
-                  <span>Simulated CCTV Traffic Computer Vision</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
-                  <span>Emergency Vehicle GPS & Patrol Vectors</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
-                  <span>Drainage Sluice Gate Actuator Simulation</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <Check className="w-3 h-3 text-amber-400 shrink-0" />
-                  <span>Simulated Resource Pool Counts</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* External Data Adapters Section */}
-          <div className="rounded-2xl border border-slate-800 bg-[#060a13] p-6 space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-900 pb-3">
-              <div>
-                <h3 className="text-sm font-bold font-mono text-white uppercase tracking-wider">
-                  EXTERNAL DATA ADAPTERS (PROTOTYPE ARCHITECTURE)
-                </h3>
-                <p className="text-xs text-slate-400">Standardized ingest adapters ready for departmental integration:</p>
-              </div>
-              <span className="text-[9.5px] font-mono px-2.5 py-1 rounded bg-purple-950/60 border border-purple-800/40 text-purple-300 font-bold self-start sm:self-auto">
-                DEMO ADAPTER MODE
-              </span>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left font-mono text-xs">
-                <thead>
-                  <tr className="border-b border-slate-900 text-slate-500 uppercase text-[10px]">
-                    <th className="py-2.5 px-3">External Source</th>
-                    <th className="py-2.5 px-3">Integration Status</th>
-                    <th className="py-2.5 px-3">Data Mode</th>
-                    <th className="py-2.5 px-3">Protocol / Interface</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-900/60 text-slate-300">
-                  <tr className="hover:bg-slate-950/40">
-                    <td className="py-3 px-3 font-bold text-white flex items-center gap-2">
-                      <CloudRain className="w-4 h-4 text-sky-400" />
-                      <span>IMD Weather Telemetry</span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 text-[10px] font-bold">
-                        READY
-                      </span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/50 text-amber-300 text-[10px] font-bold">
-                        SIMULATED
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-slate-400">Open-Meteo REST API + Doppler Radar Adapter</td>
-                  </tr>
-                  <tr className="hover:bg-slate-950/40">
-                    <td className="py-3 px-3 font-bold text-white flex items-center gap-2">
-                      <Shield className="w-4 h-4 text-indigo-400" />
-                      <span>NDMA Disaster Data</span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 text-[10px] font-bold">
-                        READY
-                      </span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/50 text-amber-300 text-[10px] font-bold">
-                        SIMULATED
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-slate-400">CAPv1.2 XML Alert Ingest Pipeline</td>
-                  </tr>
-                  <tr className="hover:bg-slate-950/40">
-                    <td className="py-3 px-3 font-bold text-white flex items-center gap-2">
-                      <Map className="w-4 h-4 text-teal-400" />
-                      <span>GIS / ISRO Bhuvan</span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 text-[10px] font-bold">
-                        READY
-                      </span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/50 text-amber-300 text-[10px] font-bold">
-                        SIMULATED
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-slate-400">WMS / GeoJSON Ward Boundary & Terrain Vector</td>
-                  </tr>
-                  <tr className="hover:bg-slate-950/40">
-                    <td className="py-3 px-3 font-bold text-white flex items-center gap-2">
-                      <Radio className="w-4 h-4 text-red-400" />
-                      <span>Emergency Signal (ERSS 112)</span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 text-[10px] font-bold">
-                        READY
-                      </span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className="px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/50 text-amber-300 text-[10px] font-bold">
-                        SIMULATED
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-slate-400">Webhook Event Gateway + Citizen Mobile SOS</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 13. BUILT FOR INDIA. PROVEN IN VISAKHAPATNAM. */}
+        {/* SECTION 10 — INDIA-SCALE ARCHITECTURE */}
         {/* ========================================================================= */}
         <section id="built-for-india" className="space-y-8 border-t border-slate-900/80 pt-16 scroll-mt-20">
           <div className="rounded-3xl border border-slate-800 bg-gradient-to-b from-[#081122] to-[#040813] p-8 lg:p-12 text-center space-y-6">
@@ -1141,10 +875,10 @@ export default function HomeLandingPage() {
               INDIA-SCALE ARCHITECTURE
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-              BUILT FOR INDIA. PROVEN IN VISAKHAPATNAM.
+              BUILT FOR INDIA. DEMONSTRATED IN VISAKHAPATNAM.
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              BharatOS establishes an enterprise architectural hierarchy spanning 28 States, 8 Union Territories, and multi-tier command layers, validated through our physical and operational deployment in Visakhapatnam.
+              BharatOS establishes an enterprise architectural hierarchy spanning 28 States, 8 Union Territories, and multi-tier command layers, demonstrated through our Visakhapatnam operational prototype environment.
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-4 font-mono text-center">
@@ -1168,10 +902,10 @@ export default function HomeLandingPage() {
 
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
               <Link
-                href="/dashboard/national"
+                href="/dashboard/district"
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 text-white font-mono text-xs font-bold transition-all shadow-lg"
               >
-                ENTER COMMAND CENTER
+                OPEN COMMAND CENTER
               </Link>
               <Link
                 href="/citizen"
@@ -1186,7 +920,7 @@ export default function HomeLandingPage() {
       </main>
 
       {/* ========================================================================= */}
-      {/* 14. FOOTER */}
+      {/* SECTION 11 — FOOTER */}
       {/* ========================================================================= */}
       <footer className="border-t border-slate-900/80 bg-[#040711] mt-24 py-12 relative z-10 select-none">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -1199,7 +933,7 @@ export default function HomeLandingPage() {
                 BharatOS is an AI-powered emergency command and spatial Digital Twin operating system designed for disaster resilience and human-approved multi-agency response.
               </p>
               <div className="text-[10px] font-mono text-cyan-400 font-bold">
-                Detect. Predict. Decide. Approve. Respond. Resolve.
+                Predict locally. Warn early. Prepare intelligently. Respond effectively.
               </div>
             </div>
 
@@ -1214,7 +948,7 @@ export default function HomeLandingPage() {
                 <Link href="/dashboard/digital-twin" className="block text-slate-400 hover:text-white transition-colors">Digital Twin</Link>
               </div>
               <div className="space-y-2">
-                <h5 className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">CITIZEN PORTAL</h5>
+                <h5 className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">CITIZEN SAFETY LAYER</h5>
                 <Link href="/citizen" className="block text-slate-400 hover:text-white transition-colors">Citizen Home</Link>
                 <Link href="/citizen/report" className="block text-slate-400 hover:text-white transition-colors">Report Hazard</Link>
                 <Link href="/citizen/safe-exit" className="block text-slate-400 hover:text-white transition-colors">Safe-Exit Routing</Link>
@@ -1227,15 +961,18 @@ export default function HomeLandingPage() {
             <div className="md:col-span-4 space-y-2 text-xs text-slate-400 font-mono">
               <h5 className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">HACKATHON DEMO PROTOTYPE</h5>
               <p className="text-[11px] leading-relaxed">
-                BharatOS is engineered for prototype demonstration at Smart India Hackathon (SIH 2026). Incorporates real ESP32 IoT sensing, NRSC VIC hydrological modeling, and LangGraph multi-agent orchestration.
+                BharatOS is engineered for prototype demonstration at Smart India Hackathon (SIH 2026). Incorporates connected ESP32 IoT sensing, NRSC VIC hydrological modeling, and LangGraph multi-agent orchestration.
               </p>
+              <div className="text-[10px] text-slate-500 pt-1">
+                AI-assisted emergency decision support • Prototype / Simulation
+              </div>
             </div>
 
           </div>
 
           <div className="border-t border-slate-900 pt-6 flex flex-col sm:flex-row items-center justify-between text-[9.5px] font-mono text-slate-500">
             <div>BHARATOS © 2026 • AI-POWERED EMERGENCY COMMAND & DIGITAL TWIN OS</div>
-            <div className="mt-2 sm:mt-0">ALL OPERATIONAL DISPATCHES REQUIRE EXPLICIT OPERATOR CONFIRMATION</div>
+            <div className="mt-2 sm:mt-0 uppercase">ALL OPERATIONAL DISPATCHES REQUIRE EXPLICIT OPERATOR CONFIRMATION</div>
           </div>
         </div>
       </footer>

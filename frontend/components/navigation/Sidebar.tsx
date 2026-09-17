@@ -69,13 +69,13 @@ export default function Sidebar() {
     {
       title: 'PRIMARY OPERATIONS',
       items: [
-        { id: 'command-center', label: 'Command Center', path: '/dashboard/city', icon: Layers, color: 'text-sky-400' },
-        { id: 'incidents', label: 'Incidents Queue', path: '/citizen/incidents', icon: AlertTriangle, color: 'text-red-400' },
+        { id: 'command-center', label: 'Command Center', path: '/dashboard/district', icon: Layers, color: 'text-sky-400' },
+        { id: 'incidents', label: 'Incidents Queue', path: '/dashboard/district#incidents', icon: AlertTriangle, color: 'text-red-400' },
         { id: 'iot-sensors', label: 'IoT & Sensor Ops', path: '/dashboard/digital-twin', icon: Activity, color: 'text-purple-400', badge: 'LIVE' },
         { id: 'traffic-intel', label: 'Traffic Intelligence', path: '/dashboard/traffic', icon: Car, color: 'text-amber-400', badge: 'YOLO' },
         { id: 'ai-ops', label: 'AI Operations', path: '/dashboard/ai-ops', icon: Cpu, color: 'text-indigo-400', badge: 'AGENT' },
-        { id: 'resources', label: 'Resources & Fleet', path: '/citizen/resources', icon: Truck, color: 'text-emerald-400' },
-        { id: 'event-stream', label: 'Event Stream', path: '/dashboard/city#activity', icon: Radio, color: 'text-cyan-400' },
+        { id: 'resources', label: 'Resources & Fleet', path: '/dashboard/district#resources', icon: Truck, color: 'text-emerald-400' },
+        { id: 'event-stream', label: 'Event Stream', path: '/dashboard/district#activity', icon: Radio, color: 'text-cyan-400' },
         { id: 'audit-log', label: 'Audit & System Log', path: '/dashboard/administration', icon: Database, color: 'text-slate-400' }
       ]
     },

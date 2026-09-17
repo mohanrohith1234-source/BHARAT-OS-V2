@@ -222,9 +222,9 @@ export default function HealthcareOperationsPage() {
           </div>
 
           <div className="flex items-center space-x-6">
-            <div className="hidden lg:flex items-center space-x-2 text-[10px] font-mono text-slate-455 bg-slate-950/60 border border-slate-900 rounded-lg px-2.5 py-1">
+            <div className="hidden lg:flex items-center space-x-2 text-[10px] font-mono text-slate-400 bg-slate-950/60 border border-slate-900 rounded-lg px-2.5 py-1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>MEDICAL WAN LINKED</span>
+              <span>REFERENCE FACILITY DATA • PROTOTYPE_SIMULATION</span>
             </div>
             <div className="hidden md:flex items-center space-x-1.5 text-[10px] font-mono text-slate-400">
               <CloudRain className="w-3.5 h-3.5 text-sky-400" />

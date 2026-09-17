@@ -168,7 +168,7 @@ export default function DashboardLayout({
                   {/* Breadcrumb Path list */}
                   <nav className="flex items-center space-x-1.5 font-medium text-slate-400">
                     <Link 
-                      href="/dashboard/city" 
+                      href="/dashboard/district" 
                       className="hover:text-slate-200 transition-colors flex items-center space-x-1"
                     >
                       <Home className="w-3.5 h-3.5" />

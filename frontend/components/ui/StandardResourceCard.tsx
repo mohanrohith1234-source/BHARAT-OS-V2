@@ -45,7 +45,7 @@ export default function StandardResourceCard({
   speed,
   batteryFuel,
   currentAssignment,
-  provenance = 'SIMULATION',
+  provenance = 'PROTOTYPE_SIMULATION',
   isSelected = false,
   onClick
 }: StandardResourceCardProps) {

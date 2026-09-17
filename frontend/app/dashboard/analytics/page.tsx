@@ -48,7 +48,7 @@ export default function StrategicAnalyticsPage() {
   }, [])
 
   // Dynamically calculate pie categories from active database incidents
-  const categoryCounts = incidents.reduce((acc: Record<string, number>, inc) => {
+  const categoryCounts = (Array.isArray(incidents) ? incidents : []).reduce((acc: Record<string, number>, inc) => {
     const cat = String(inc.category || 'Other').trim()
     const capitalized = cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase()
     acc[capitalized] = (acc[capitalized] || 0) + 1

@@ -157,3 +157,96 @@ async def release_resource(
     incident = IncidentService.get_incident(db, incident_id)
     await event_service.publish_resource_released(db, released_allocation, resource, incident)
     return released_allocation
+
+@router.get("/{incident_id}/intelligence")
+def get_incident_intelligence(
+    incident_id: uuid.UUID,
+    db: Session = Depends(get_db),
+):
+    from app.services.intelligence_engine_service import IntelligenceEngineService
+    intel = IntelligenceEngineService.get_incident_intelligence(db, incident_id)
+    if not intel:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Incident intelligence record not found")
+    return intel
+
+@router.get("/prioritized/operational")
+def list_prioritized_incidents(
+    db: Session = Depends(get_db),
+):
+    from app.services.intelligence_engine_service import IntelligenceEngineService
+    return IntelligenceEngineService.get_prioritized_incidents(db)
+
+@router.get("/{incident_id}/timeline")
+def get_incident_timeline(
+    incident_id: uuid.UUID,
+    db: Session = Depends(get_db),
+):
+    from app.services.operational_control_service import OperationalControlService
+    return OperationalControlService.get_incident_timeline(db, incident_id)
+
+@router.get("/{incident_id}/actions")
+def get_response_actions(
+    incident_id: uuid.UUID,
+    db: Session = Depends(get_db),
+):
+    from app.services.operational_control_service import OperationalControlService
+    return OperationalControlService.get_response_actions(db, incident_id)
+
+@router.get("/{incident_id}/plan-versions")
+def get_plan_versions(
+    incident_id: uuid.UUID,
+    db: Session = Depends(get_db),
+):
+    from app.services.operational_control_service import OperationalControlService
+    return OperationalControlService.get_plan_versions(db, incident_id)
+
+@router.post("/{incident_id}/actions/{action_id}/transition")
+def transition_action_state(
+    incident_id: uuid.UUID,
+    action_id: str,
+    payload: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    from app.services.operational_control_service import OperationalControlService
+    new_state = payload.get("new_state", "READY")
+    notes = payload.get("notes", "")
+    res = OperationalControlService.transition_action_state(db, incident_id, action_id, new_state, actor_id=current_user.id if current_user else None, notes=notes)
+    if res.get("status") == "error":
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=res["message"])
+    return res
+
+@router.post("/{incident_id}/resources/{resource_id}/reserve")
+def reserve_resource(
+    incident_id: uuid.UUID,
+    resource_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    from app.services.operational_control_service import OperationalControlService
+    res = OperationalControlService.reserve_resource(db, incident_id, resource_id)
+    if res.get("status") == "error":
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=res["message"])
+    return res
+
+@router.post("/{incident_id}/resolve-gate")
+def verify_resolution_gate(
+    incident_id: uuid.UUID,
+    db: Session = Depends(get_db),
+):
+    from app.services.operational_control_service import OperationalControlService
+    return OperationalControlService.verify_resolution_gate(db, incident_id)
+
+@router.post("/{incident_id}/reopen")
+def reopen_incident(
+    incident_id: uuid.UUID,
+    payload: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    from app.services.operational_control_service import OperationalControlService
+    reason = payload.get("reason", "Reopened by operational officer")
+    res = OperationalControlService.reopen_incident(db, incident_id, reason, actor_id=current_user.id if current_user else None)
+    if res.get("status") == "error":
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=res["message"])
+    return res

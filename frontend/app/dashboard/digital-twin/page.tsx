@@ -52,11 +52,11 @@ export default function DigitalTwinPage() {
       apiService.getDigitalTwinConnections()
     ]).then(([incidentsRes, facilitiesRes, resourcesRes, nodesRes, connectionsRes]) => {
       if (!isMounted) return
-      setIncidents(incidentsRes)
-      setFacilities(facilitiesRes.items || [])
-      setResources(resourcesRes.items || [])
-      setNodes(nodesRes.items || [])
-      setConnections(connectionsRes.items || [])
+      setIncidents(Array.isArray(incidentsRes) ? incidentsRes : [])
+      setFacilities(facilitiesRes?.items || [])
+      setResources(resourcesRes?.items || [])
+      setNodes(nodesRes?.items || [])
+      setConnections(connectionsRes?.items || [])
       setLoading(false)
     }).catch(err => {
       console.error("Failed to load digital twin data", err)
